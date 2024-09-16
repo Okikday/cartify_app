@@ -1,4 +1,4 @@
-# cartify
+# cartify app
 
 An E-Commerce app for shopping.
 
