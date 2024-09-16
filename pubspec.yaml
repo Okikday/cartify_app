@@ -1,0 +1,37 @@
+name: cartify
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  another_flushbar: ^1.12.30
+  dio: ^5.7.0
+  fluentui_system_icons: ^1.1.257
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  flutter_svg: ^2.0.10+1
+  google_fonts: ^6.2.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  url_launcher: ^6.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  
+
+flutter:
+  uses-material-design: true
+
+
+
+  #-ASSETS
+  assets:
+    - assets/icons/
+    - assets/images/
+
