@@ -3,6 +3,7 @@ import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/authentication/verify_code.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -17,20 +18,28 @@ class SignUp extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 24),
+            padding: const EdgeInsets.only(top: 12),
             child: Column(
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: 12, right: 24, ),
-                  child: Align(alignment: Alignment.topLeft, child: BackButton()),
+                  child: Row(
+                    children: [
+                      const Align(alignment: Alignment.topLeft, child: BackButton()),
+                      Expanded(child: Padding(
+                        padding: const EdgeInsets.only(right: 36),
+                        child: ConstantWidgets.text(context, "Sign up", align: TextAlign.center, adjustSize: 4, fontWeight: FontWeight.bold,),
+                      ))
+                    ],
+                  ),
                 ),
 
-                SizedBox(height: screenHeight * 0.01,),
+                SizedBox(height: screenHeight * 0.02,),
 
                 //Top Text
                 Padding(
                   padding: const EdgeInsets.only(left: 24, right: 24, ),
-                  child: ConstantWidgets.text(context, "Create a new account", fontSize: 36, fontWeight: FontWeight.bold),
+                  child: ConstantWidgets.text(context, "Create a new account", fontSize: 36, fontWeight: FontWeight.bold, color: CartifyColors.premiumGold),
                 ),
 
                 SizedBox(height: screenHeight * 0.05,),
@@ -65,7 +74,7 @@ class SignUp extends StatelessWidget {
                 SizedBox(height: screenHeight * 0.05,),
 
                 CustomElevatedButton(
-                  onClick: (){},
+                  onClick: (){DeviceUtils.pushMaterialPage(context, const VerifyCode());},
                   screenWidth: 90,
                   label: "Sign up",
                   textSize: 16,

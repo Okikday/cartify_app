@@ -6,6 +6,7 @@ import 'package:cartify/common/widgets/custom_Textfield.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/authentication/sign_up.dart';
+import 'package:cartify/views/main_screen.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class SignIn extends StatelessWidget {
             child: Column(
               children: [
                 //Top Text
-                ConstantWidgets.text(context, "Login to your account", fontSize: 36, fontWeight: FontWeight.bold),
+                ConstantWidgets.text(context, "Login to your account", fontSize: 36, fontWeight: FontWeight.bold, color: CartifyColors.premiumGold),
 
                 SizedBox(
                   height: screenHeight * 0.05,
@@ -57,7 +58,7 @@ class SignIn extends StatelessWidget {
                   height: screenHeight * 0.025,
                 ),
                 CustomElevatedButton(
-                  onClick: (){},
+                  onClick: (){DeviceUtils.pushMaterialPage(context, MainScreen());},
                   screenWidth: 90,
                   label: "Sign in",
                   textSize: 16,
