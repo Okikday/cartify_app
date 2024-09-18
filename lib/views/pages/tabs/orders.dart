@@ -1,3 +1,4 @@
+import 'package:cartify/views/pages/elements/home_search_bar.dart';
 import 'package:flutter/material.dart';
 
 class Orders extends StatelessWidget {
@@ -5,6 +6,8 @@ class Orders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Center(
+      child: HomeSearchBar(),
+    );
   }
 }
