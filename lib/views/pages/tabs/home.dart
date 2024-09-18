@@ -11,25 +11,25 @@ class Home extends StatelessWidget {
       headerSliverBuilder: (context, isScrolled) => [
         SliverAppBar(
           elevation: 10,
-          collapsedHeight: 64, // Collapsed height of the app bar
-          expandedHeight: 64,  // Maintain the same height when expanded
+          collapsedHeight: 64,
+          expandedHeight: 64,
           floating: false,
           pinned: true,
           automaticallyImplyLeading: false,
           flexibleSpace: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               var top = constraints.biggest.height;
-              var movementOffset = (top - 64) / 64; // Calculate how much movement we want, using the collapsed height as a reference.
+              var movementOffset = (top - 64) / 64; 
 
               return FlexibleSpaceBar(
                 titlePadding: const EdgeInsets.all(0),
                 title: Transform.translate(
-                  // Move content slightly upward as you scroll
-                  offset: Offset(0, -movementOffset * 20), // Moves the widget up by a max of 20px
+                  
+                  offset: Offset(0, -movementOffset * 20),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: SizedBox(
-                      height: 64, // Maintain a consistent height for the button and search bar
+                      height: 64,
                       child: Row(
                         children: [
                           HomeDrawerButton(),
