@@ -37,18 +37,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavBar(currentIndex: currentIndex, onTap: (index){setState(() => tabController.index = currentIndex = index);},),
-      body: SafeArea(
-        child: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: tabController,
-          children: const [
-          Tab(child: Home(),),
-          Tab(child: Categories(),),
-          Tab(child: Orders(),),
-          Tab(child: Wishlists(),),
-          Tab(child: Account(),),
-        ])
-      ),
+      body: TabBarView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: tabController,
+        children: const [
+        Tab(child: Home(),),
+        Tab(child: Categories(),),
+        Tab(child: Orders(),),
+        Tab(child: Wishlists(),),
+        Tab(child: Account(),),
+      ]),
     );
   }
 }
