@@ -39,6 +39,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       bottomNavigationBar: BottomNavBar(currentIndex: currentIndex, onTap: (index){setState(() => tabController.index = currentIndex = index);},),
       body: SafeArea(
         child: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
           controller: tabController,
           children: const [
           Tab(child: Home(),),
