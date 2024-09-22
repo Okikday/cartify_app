@@ -1,3 +1,4 @@
+import 'package:cartify/views/pages/elements/product_card.dart';
 import 'package:flutter/material.dart';
 
 class Orders extends StatelessWidget {
@@ -6,7 +7,7 @@ class Orders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-
+      child: ProductCard(),
     );
   }
 }

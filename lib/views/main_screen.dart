@@ -40,11 +40,11 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       body: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
         controller: tabController,
-        children: const [
-        Tab(child: Home(),),
-        Tab(child: Categories(),),
-        Tab(child: Orders(),),
-        Tab(child: Wishlists(),),
+        children: [
+        const Tab(child: Home(),),
+        const Tab(child: Categories(),),
+        const Tab(child: Orders(),),
+        const Tab(child: Wishlists(),),
         Tab(child: Account(),),
       ]),
     );
