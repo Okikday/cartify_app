@@ -12,7 +12,7 @@ class ProductCategories extends StatelessWidget {
     required this.topic,
     required this.list,
   });
-  //ProductCategories name, location, rating, asset
+  //ProductCategories name, description, assetName
  
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class ProductCategories extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   for (int i = 0; i < list.length; i++) 
-                  ProductCategoriesBox(productName: list[i][0], description: list[i][1], assetName: list[i][2], first: i == 0 ? true : false, last: i == list.length-1 ? true : false,),
+                  ProductCategoriesBox(productName: list[i]["name"], description: list[i]["description"], assetName: list[i]["assetName"], price: list[i]["price"], first: i == 0 ? true : false, last: i == list.length-1 ? true : false,),
                 ],
               ),
             ),
@@ -59,6 +59,7 @@ class ProductCategoriesBox extends StatelessWidget {
   final String productName;
   final String description;
   final String assetName;
+  final String price;
   final bool? first;
   final bool? last;
   const ProductCategoriesBox({
@@ -66,6 +67,7 @@ class ProductCategoriesBox extends StatelessWidget {
     required this.productName,
     required this.description,
     required this.assetName,
+    required this.price,
     this.first = false,
     this.last = false,
   });
@@ -89,6 +91,7 @@ class ProductCategoriesBox extends StatelessWidget {
               width: 140,
               height: 140,
               decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 121, 111, 76).withAlpha(75),
                 borderRadius: BorderRadius.circular(18),
                 image: DecorationImage(
                   fit: BoxFit.cover,
@@ -107,6 +110,7 @@ class ProductCategoriesBox extends StatelessWidget {
             const SizedBox(height: 4,),
             ConstantWidgets.text(context, description, color: CartifyColors.battleshipGrey),
             const SizedBox(height: 8,),
+            ConstantWidgets.text(context, price, color: Colors.greenAccent, fontWeight: FontWeight.bold),
           ],
         ),
             ),

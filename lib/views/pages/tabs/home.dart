@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/utils/device_utils.dart';
@@ -18,42 +16,26 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController tabController;
 
   Map<int, Map<String, String>> slidableMap = {
-  0: {
-    "assetName":
-        "https://media.istockphoto.com/id/2037146628/photo/modern-simple-small-kitchen-corner-in-the-grey-and-white-kitchen-kitchen.webp?b=1&s=612x612&w=0&k=20&c=yQzn-X6UVVG56Bhfx3Z_0zElN7FMZ770iQwwRR80z4A=",
-    "topic": "Modern Kitchen Essentials at Great Prices",
-    "description":
-        "Upgrade your kitchen with sleek, modern appliances that fit your budget.",
-    "imgSrc": "online"
-  },
-
-  1: {
-    "assetName": "assets/images/home_slider_1.jpg",
-    "topic": "Discover Your Style with Modern Interiors",
-    "description":
-        "Explore our curated collection of home decor to elevate your living space with contemporary designs.",
-    "imgSrc": "offline"
-  },
-
-  2: {
-    "assetName":
-        "https://media.istockphoto.com/id/1328130815/photo/yellow-kitchen-appliances-on-yellow-background-set-of-home-kitchen-technics.webp?b=1&s=612x612&w=0&k=20&c=XbLMYvkYKeyDqWYOwer6Aejwz4IOsBP6_qG8BrlHT5E=",
-    "topic": "Grab the Best Electronics Deals Now",
-    "description":
-        "Take advantage of our exclusive discounts on top-notch electronics. Don't miss out!",
-    "imgSrc": "online"
-  },
-};
-
-static const List products = [
-    ["Oscar Barbershop","\$449.99", "assets/images/home_slider_1.jpg"],
-    ["Old Town", "\$449.99", "assets/images/home_slider_2.jpg"],
-    ["NYC Barber Shop", "\$449.99", "assets/images/home_slider_1.jpg"],
-    ["Smartstyle", "\$449.99", "assets/images/home_slider_2.jpg"],
-    ["Barber Republic", "\$449.99", "assets/images/home_slider_1.jpg"],
-    ["Stylofista", "\$449.99", "assets/images/home_slider_2.jpg"]
-  ];
-
+    0: {
+      "assetName": "assets/images/electronics_2.png",
+      "topic": "Grab the Best Electronics Deals Now",
+      "description": "Take advantage of our exclusive discounts on top-notch electronics. Don't miss out!",
+      "imgSrc": "offline"
+    },
+    1: {
+      "assetName": "assets/images/home_slider_1.jpg",
+      "topic": "Discover Your Style with Modern Interiors",
+      "description": "Explore our curated collection of home decor to elevate your living space with contemporary designs.",
+      "imgSrc": "offline"
+    },
+    2: {
+      "assetName":
+          "assets/images/kitchen_appliance.png",
+      "topic": "Modern Kitchen Essentials at Great Prices",
+      "description": "Upgrade your kitchen with sleek, modern appliances that fit your budget.",
+      "imgSrc": "offline"
+    },
+  };
 
   @override
   void initState() {
@@ -67,16 +49,17 @@ static const List products = [
     return NestedScrollView(
       headerSliverBuilder: (context, isScrolled) => [
         SliverAppBar(
-          collapsedHeight: 64,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          collapsedHeight: 56,
           expandedHeight: 250,
           floating: false,
           pinned: true,
           automaticallyImplyLeading: false,
           flexibleSpace: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              final double currentHeight = constraints.biggest.height;
+              double currentHeight = constraints.biggest.height;
               const double expandedHeight = 250;
-              const double collapsedHeight = 64;
+              const double collapsedHeight = 56;
               final double paddingTop = (currentHeight - collapsedHeight) / (expandedHeight - collapsedHeight) * 16;
 
               return FlexibleSpaceBar(
@@ -93,7 +76,6 @@ static const List products = [
                               assetName: slidableMap[i]!["assetName"]!,
                               topic: slidableMap[i]!["topic"] ?? "not found",
                               description: slidableMap[i]!["description"] ?? "not found",
-                              tabController: tabController,
                               imgSrc: slidableMap[i]!["imgSrc"] ?? "not found",
                             ),
                           ),
@@ -104,88 +86,147 @@ static const List products = [
                       left: 16,
                       child: TabPageSelector(
                         controller: tabController,
-                        color: CartifyColors.lightGray,
-                        selectedColor: Colors.white,
+                        color: CartifyColors.lightPremiumGold,
+                        selectedColor: CartifyColors.premiumGold,
                         indicatorSize: 14,
                       ),
                     ),
                   ],
                 ),
-                titlePadding: EdgeInsets.only(top: paddingTop), // Adjust the top padding dynamically
+                titlePadding: EdgeInsets.only(top: paddingTop + 8), // Adjust the top padding dynamically
                 title: Align(
                   alignment: Alignment.topCenter,
-                  child: TopBar(
-                    iconColor: DeviceUtils.isDarkMode(context) == true
-                        ? (currentHeight <= 90 ? Colors.white : Colors.white)
-                        : (currentHeight <= 90 ? Colors.black : Colors.white),
-                  ),
+                  child: TopBar(),
                 ),
               );
             },
           ),
         ),
       ],
-      body: const Column(
-        children: [
-          ProductCategories(topic: "New arrivals", list: products)
-        ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(36)),
+          child: Column(
+            children: [
+          
+              ProductCategories(topic: "Trending", list: [
+                {
+                  "name": "Iphone 15 pro max",
+                  "description": "Brand new",
+                  "assetName": "assets/images/iphone_15_pm_nobg.png",
+                  "price" : "#1,700,000"
+                },
+                 {
+                  "name": "Iphone 15 pro max",
+                  "description": "Brand new",
+                  "assetName": "assets/images/iphone_15_pm_nobg.png",
+                  "price" : "#1,700,000"
+                },
+                 {
+                  "name": "Iphone 15 pro max",
+                  "description": "Brand new",
+                  "assetName": "assets/images/iphone_15_pm.jpg",
+                  "price" : "#1,700,000"
+                }
+              ],)
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
 class TopBar extends StatelessWidget {
-  final Color iconColor;
-  const TopBar({super.key, required this.iconColor});
+  const TopBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = DeviceUtils.isDarkMode(context);
+
+    // Define frosty background color based on dark mode
+    Color frostyBackground = isDarkMode 
+      ? Colors.white.withOpacity(0.2) 
+      : Colors.black.withOpacity(0.2);
+
     return SizedBox(
       height: 64,
-      child: Row(
-        children: [
-          Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 28, left: 12, right: 12),
+        child: Row(
+          children: [
+            Expanded(
               child: Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.only(left: 4, right: 16),
-            child: IconButton(
-              icon: const Icon(FluentIcons.list_24_filled, color: Colors.white),
-              onPressed: () {},
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: frostyBackground, // Frosty background
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: IconButton(
+                    color: Colors.white,
+                    icon: const Icon(FluentIcons.list_24_filled,),
+                    onPressed: () {},
+                  ),
+                ),
+              ),
             ),
-          )),
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.shopping_bag_outlined, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
+            Container(
+              decoration: BoxDecoration(
+                color: frostyBackground, // Frosty background
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: IconButton(
+                color: Colors.white,
+                icon: const Icon(Icons.search),
+                onPressed: () {},
+              ),
+            ),
+            const SizedBox(width: 8), // Add some spacing
+            Container(
+              decoration: BoxDecoration(
+                color: frostyBackground, // Frosty background
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: IconButton(
+                color: Colors.white,
+                icon: const Icon(Icons.shopping_bag_outlined),
+                onPressed: () {},
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
+
 class BgWidget extends StatelessWidget {
   final String assetName;
   final String topic;
   final String description;
-  final TabController tabController;
   final String imgSrc;
 
-  const BgWidget({super.key, required this.assetName, required this.topic, required this.description, required this.tabController, required this.imgSrc});
+  const BgWidget({super.key, required this.assetName, required this.topic, required this.description, required this.imgSrc});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
-        Container(
-          decoration: BoxDecoration(image: DecorationImage(image: imgSrc == "online" ? NetworkImage(assetName) : AssetImage(assetName), fit: BoxFit.cover, filterQuality: FilterQuality.medium)),
+        ColorFiltered(
+          colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.srcATop),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.black,
+                image: DecorationImage(
+                    image: imgSrc == "online" ? NetworkImage(assetName) : AssetImage(assetName), fit: BoxFit.cover,)),
+          ),
         ),
         Container(
-          padding: const EdgeInsets.only(top: 64, left: 16, right: 16),
+          padding: const EdgeInsets.only(top: 80, left: 16, right: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -201,3 +242,4 @@ class BgWidget extends StatelessWidget {
     );
   }
 }
+

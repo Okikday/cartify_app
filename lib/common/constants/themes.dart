@@ -18,7 +18,7 @@ class CartifyThemes{
     brightness: Brightness.dark,
     useMaterial3: true,
     textTheme: GoogleFonts.notoSansTextTheme(),
-    scaffoldBackgroundColor: CartifyColors.jetBlack
+    scaffoldBackgroundColor: CartifyColors.jetBlack,
   );
 
 }

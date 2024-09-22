@@ -11,6 +11,11 @@ class CartifyColors{
   static const Color lightGray = Color(0xFFD3D3D3);
   static const Color battleshipGrey = Color(0xFF868A8D);
 
+  static const Color lightPremiumGold = Color(0xFFF5EED6);
+
+
+  static const Color aliceBlue = Color(0xFFEAF1F7);
+
   static const Color jetBlack = Color(0xFF343434);
   static const Color ebonyBlack = Color(0xFF0C0C0C);
   static const Color charcoalBlack = Color(0xFF333333);
