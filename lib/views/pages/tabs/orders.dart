@@ -43,7 +43,7 @@ class Orders extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ConstantWidgets.text(context, "iPhone 15 pro max", fontSize: 14),
+                          ConstantWidgets.text(context, "iPhone 15 pro Max", fontSize: 14),
                           SizedBox(
                             width: 30,
                             height: 30,
