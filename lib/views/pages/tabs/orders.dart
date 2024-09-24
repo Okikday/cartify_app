@@ -31,7 +31,7 @@ class Orders extends StatelessWidget {
               children: [
                 ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 300),
-                    child: ClipRRect(borderRadius: BorderRadius.circular(8), child: Image.asset("assets/images/iphone_15_pm.jpg"))),
+                    child: ClipRRect(borderRadius: BorderRadius.circular(8), child: Image.asset("assets/images/iphone_15_pm.jpg"), )),
                 const SizedBox(
                   width: 8,
                 ),
