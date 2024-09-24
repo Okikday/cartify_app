@@ -3,16 +3,16 @@ import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:flutter/material.dart';
 
-class ProductCategories extends StatelessWidget {
+class ProductForYou extends StatelessWidget {
   final String topic;
   final List list;
 
-  const ProductCategories({
+  const ProductForYou({
     super.key,
     required this.topic,
     required this.list,
   });
-  //ProductCategories name, description, assetName
+  //ProductForYou name, description, assetName
  
   @override
   Widget build(BuildContext context) {
@@ -21,22 +21,21 @@ class ProductCategories extends StatelessWidget {
       width: screenWidth,
       child: Column(
         children: [
-          const SizedBox(height: 16,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: ConstantWidgets.text(context, topic, fontSize: 20)
+                  padding: const EdgeInsets.only(left: 16),
+                  child: ConstantWidgets.text(context, topic, fontSize: 16)
                 ),
               Padding(
-                padding: const EdgeInsets.only(right: 12),
-                  child: ConstantWidgets.text(context, "See all")
+                padding: const EdgeInsets.only(right: 16),
+                  child: ConstantWidgets.text(context, "See all", color: CartifyColors.lightGray)
                   
                   ),
             ],
           ),
-          const SizedBox(height: 8,),
+          const SizedBox(height: 4,),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
@@ -44,7 +43,7 @@ class ProductCategories extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   for (int i = 0; i < list.length; i++) 
-                  ProductCategoriesBox(productName: list[i]["name"], description: list[i]["description"], assetName: list[i]["assetName"], price: list[i]["price"], first: i == 0 ? true : false, last: i == list.length-1 ? true : false,),
+                  ProductForYouBox(productName: list[i]["name"], description: list[i]["description"], assetName: list[i]["assetName"], price: list[i]["price"], first: i == 0 ? true : false, last: i == list.length-1 ? true : false,),
                 ],
               ),
             ),
@@ -55,14 +54,14 @@ class ProductCategories extends StatelessWidget {
   }
 }
 
-class ProductCategoriesBox extends StatelessWidget {
+class ProductForYouBox extends StatelessWidget {
   final String productName;
   final String description;
   final String assetName;
   final String price;
   final bool? first;
   final bool? last;
-  const ProductCategoriesBox({
+  const ProductForYouBox({
     super.key,
     required this.productName,
     required this.description,
@@ -76,7 +75,7 @@ class ProductCategoriesBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return
       Padding(
-        padding: EdgeInsets.fromLTRB(first == true ? 8 : 8, 8, last == true ? 12 : 8, 8),
+        padding: EdgeInsets.fromLTRB(first == true ? 12 : 8, 8, last == true ? 12 : 8, 8),
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(

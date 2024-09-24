@@ -92,9 +92,9 @@ class DeviceUtils {
         duration: const Duration(milliseconds: 1500),
         animationDuration: const Duration(milliseconds: 750),
         flushbarPosition: FlushbarPosition.BOTTOM,
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        borderRadius: BorderRadius.circular(8),
-        backgroundColor: Colors.black.withOpacity(0.8),
+        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+        borderRadius: BorderRadius.circular(36),
+        backgroundColor: Colors.black.withOpacity(0.9),
         padding: const EdgeInsets.all(16),
       ).show(context);
     }

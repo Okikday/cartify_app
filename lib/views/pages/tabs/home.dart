@@ -1,7 +1,10 @@
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
+import 'package:cartify/common/widgets/custom_textfield.dart';
 import 'package:cartify/utils/device_utils.dart';
-import 'package:cartify/views/pages/elements/product_categories.dart';
+import 'package:cartify/views/pages/elements/product_card.dart';
+import 'package:cartify/views/pages/elements/product_for_you.dart';
+import 'package:cartify/views/pages/elements/search_overlay.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -29,13 +32,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       "imgSrc": "offline"
     },
     2: {
-      "assetName":
-          "assets/images/kitchen_appliance.png",
+      "assetName": "assets/images/kitchen_appliance.png",
       "topic": "Modern Kitchen Essentials at Great Prices",
       "description": "Upgrade your kitchen with sleek, modern appliances that fit your budget.",
       "imgSrc": "offline"
     },
   };
+
+  static const List<Map<String, String>> productCategoriesList = [
+    {"name": "Iphone 15 pro max", "description": "Brand new", "assetName": "assets/images/iphone_15_pm_nobg.png", "price": "#1,700,000"},
+    {"name": "Iphone 15 pro max", "description": "Brand new", "assetName": "assets/images/iphone_15_pm_nobg.png", "price": "#1,700,000"},
+    {"name": "Iphone 15 pro max", "description": "Brand new", "assetName": "assets/images/iphone_15_pm.jpg", "price": "#1,700,000"}
+  ];
 
   @override
   void initState() {
@@ -109,27 +117,61 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(36)),
           child: Column(
             children: [
-          
-              ProductCategories(topic: "Trending", list: [
-                {
-                  "name": "Iphone 15 pro max",
-                  "description": "Brand new",
-                  "assetName": "assets/images/iphone_15_pm_nobg.png",
-                  "price" : "#1,700,000"
-                },
-                 {
-                  "name": "Iphone 15 pro max",
-                  "description": "Brand new",
-                  "assetName": "assets/images/iphone_15_pm_nobg.png",
-                  "price" : "#1,700,000"
-                },
-                 {
-                  "name": "Iphone 15 pro max",
-                  "description": "Brand new",
-                  "assetName": "assets/images/iphone_15_pm.jpg",
-                  "price" : "#1,700,000"
-                }
-              ],)
+              const SizedBox(
+                height: 16,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: Row(
+                  children: [
+                    
+                    Expanded(
+                      child: CustomTextfield(
+                        backgroundColor: Colors.white,
+                        borderRadius: 24,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.black,
+                        ),
+                        hint: "Search a product",
+                        hintStyle: TextStyle(color: Colors.black),
+                        pixelHeight: 52,
+                        ontap: () {
+                          PrimaryScrollController.of(context).animateTo(240, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+                          print("Overlay");
+                          SearchOverlay().showOverlay(context);
+                        },
+                        
+                      ),
+                    ),
+                    const SizedBox(width: 8,),
+                    IconButton(onPressed: (){}, icon: Icon(Icons.filter_list_rounded, color: Colors.black,), style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.lightGray)),),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              ProductForYou(
+                topic: "Recommended for you",
+                list: productCategoriesList,
+              ),
+              Divider(),
+              Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: ConstantWidgets.text(context, "Trending", fontSize: 20)
+                ),
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                  child: IconButton(onPressed: (){}, icon: Icon(Icons.list))
+                  
+                  ),
+            ],
+          ),
+              for (int i = 0; i < 9; i++) ProductCard()
             ],
           ),
         ),
@@ -146,9 +188,7 @@ class TopBar extends StatelessWidget {
     bool isDarkMode = DeviceUtils.isDarkMode(context);
 
     // Define frosty background color based on dark mode
-    Color frostyBackground = isDarkMode 
-      ? Colors.white.withOpacity(0.2) 
-      : Colors.black.withOpacity(0.2);
+    Color frostyBackground = isDarkMode ? Colors.white.withOpacity(0.2) : Colors.black.withOpacity(0.2);
 
     return SizedBox(
       height: 64,
@@ -166,7 +206,9 @@ class TopBar extends StatelessWidget {
                   ),
                   child: IconButton(
                     color: Colors.white,
-                    icon: const Icon(FluentIcons.list_24_filled,),
+                    icon: const Icon(
+                      FluentIcons.list_24_filled,
+                    ),
                     onPressed: () {},
                   ),
                 ),
@@ -202,7 +244,6 @@ class TopBar extends StatelessWidget {
   }
 }
 
-
 class BgWidget extends StatelessWidget {
   final String assetName;
   final String topic;
@@ -222,7 +263,9 @@ class BgWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.black,
                 image: DecorationImage(
-                    image: imgSrc == "online" ? NetworkImage(assetName) : AssetImage(assetName), fit: BoxFit.cover,)),
+                  image: imgSrc == "online" ? NetworkImage(assetName) : AssetImage(assetName),
+                  fit: BoxFit.cover,
+                )),
           ),
         ),
         Container(
@@ -242,4 +285,3 @@ class BgWidget extends StatelessWidget {
     );
   }
 }
-

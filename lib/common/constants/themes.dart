@@ -10,6 +10,7 @@ class CartifyThemes{
     useMaterial3: true,
     textTheme: GoogleFonts.notoSansTextTheme(),
     scaffoldBackgroundColor: CartifyColors.antiFlashWhite,
+    
   );
 
   static ThemeData darkTheme = ThemeData(

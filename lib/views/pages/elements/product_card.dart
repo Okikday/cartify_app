@@ -10,29 +10,42 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = DeviceUtils.getScreenWidth(context);
     return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(16),
+      margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
+        color: CartifyColors.lightGray.withOpacity(0.1),
         border: Border.all(width: 2, color: CartifyColors.lightGray),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: IntrinsicHeight(
         child: Row(
           children: [
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 200),
-              child: Image.asset("assets/images/iphone_15_pm.jpg")),
-            Container(
-              child: Column(
-                children: [
-                  ConstantWidgets.text(context, "#1,700,000"),
-                  ConstantWidgets.text(context, "Iphone 15 Pro max"),
-                  ConstantWidgets.text(context, "tags"),
-                ],
+            ClipRRect(
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 200),
+                child: Image.asset("assets/images/iphone_15_pm.jpg")),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right:16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ConstantWidgets.text(context, "#1,700,000", fontSize: 16, color: CartifyColors.premiumGold),
+                    const SizedBox(height: 8,),
+                    ConstantWidgets.text(context, "iPhone 15 Pro max", fontSize: 12),
+                    const SizedBox(height: 8,),
+                    ConstantWidgets.text(context, "tags tags sold out available", color: CartifyColors.battleshipGrey),
+                  ],
+                ),
               ),
             ),
 
-            IconButton(onPressed: (){}, icon: Icon(Icons.bookmark_add_outlined))
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: IconButton(onPressed: (){},  icon: Icon(Icons.bookmark_add_outlined, color: Colors.black,), style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.lightGray)),),
+            )
           ],
           ),
       ),

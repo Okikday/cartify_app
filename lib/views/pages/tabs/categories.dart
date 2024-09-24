@@ -8,30 +8,28 @@ class Categories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          const SizedBox(height: kToolbarHeight),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: ConstantWidgets.text(
-                context,
-                "What would you like to shop?",
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+    return Column(
+      children: [
+        const SizedBox(height: kToolbarHeight),
+        Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: ConstantWidgets.text(
+              context,
+              "What would you like to shop?",
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 24),
-          SizedBox(
-            height: DeviceUtils.getScreenHeight(context),
-            child: GridScreen(),
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 24),
+        SizedBox(
+        
+          height: DeviceUtils.getScreenHeight(context) * 0.8,
+          child: GridScreen(),
+        ),
+      ],
     );
   }
 }
@@ -66,7 +64,8 @@ class GridScreen extends StatelessWidget {
         mainAxisSpacing: 12, // Vertical space between grid items
         childAspectRatio: 0.8, // Aspect ratio for grid items
       ),
-      physics: const NeverScrollableScrollPhysics(), // Disable internal scrolling
+      physics: const BouncingScrollPhysics(), // Disable internal scrolling
+      scrollDirection: Axis.vertical,
       itemCount: categories.length,
       itemBuilder: (context, index) {
         return Column(

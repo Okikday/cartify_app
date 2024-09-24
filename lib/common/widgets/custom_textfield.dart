@@ -11,6 +11,7 @@ class CustomTextfield extends StatefulWidget {
   final bool alwaysShowSuffixIcon;   //If you always want to show the password icon, if false, it only shows when Textfield has focus and has suffixIcon
   final String defaultText;    //Default text on the Textfield 
   final void Function()? ontap;   //Action when you tap the Textfield
+  final void Function()? onTapOutside;
   final Function(String text)? onchanged;   //Action if there's any change to Textfield content, also returns the text
   final TextInputType? keyboardType;
   final Widget? suffixIcon;
@@ -35,6 +36,7 @@ class CustomTextfield extends StatefulWidget {
     this.alwaysShowSuffixIcon = false,
     this.defaultText = "",
     this.ontap,
+    this.onTapOutside,
     this.onchanged,
     this.keyboardType,
     this.suffixIcon,
@@ -127,9 +129,9 @@ class _TextFieldState extends State<CustomTextfield> {
         },
         onTap: (){
           refreshSuffixIconState();
-          widget.ontap;
+          if(widget.ontap != null) widget.ontap!();
         },
-        onTapOutside: (e){focusNode.unfocus(); widget.alwaysShowSuffixIcon != true ? refreshSuffixIconState() : (){};},
+        onTapOutside: (e){focusNode.unfocus(); widget.alwaysShowSuffixIcon != true ? refreshSuffixIconState() : (){}; if(widget.onTapOutside != null) widget.onTapOutside!();},
         style: widget.inputTextStyle ?? const TextStyle(color: Colors.black),
         cursorColor: Colors.black,
         cursorRadius: const Radius.circular(12),
