@@ -1,11 +1,12 @@
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
+import 'package:cartify/data/test_data.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/pages/elements/home_space_bar_bg.dart';
 import 'package:cartify/views/pages/elements/product_card.dart';
 import 'package:cartify/views/pages/elements/product_for_you.dart';
-import 'package:cartify/views/pages/elements/search_overlay.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:cartify/views/pages/elements/top_bar.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -15,40 +16,19 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class _HomeState extends State<Home> with TickerProviderStateMixin {
   late TabController tabController;
-
-  Map<int, Map<String, String>> slidableMap = {
-    0: {
-      "assetName": "assets/images/electronics_2.png",
-      "topic": "Grab the Best Electronics Deals Now",
-      "description": "Take advantage of our exclusive discounts on top-notch electronics. Don't miss out!",
-      "imgSrc": "offline"
-    },
-    1: {
-      "assetName": "assets/images/home_slider_1.jpg",
-      "topic": "Discover Your Style with Modern Interiors",
-      "description": "Explore our curated collection of home decor to elevate your living space with contemporary designs.",
-      "imgSrc": "offline"
-    },
-    2: {
-      "assetName": "assets/images/kitchen_appliance.png",
-      "topic": "Modern Kitchen Essentials at Great Prices",
-      "description": "Upgrade your kitchen with sleek, modern appliances that fit your budget.",
-      "imgSrc": "offline"
-    },
-  };
-
-  static const List<Map<String, String>> productCategoriesList = [
-    {"name": "Iphone 15 pro max", "description": "Brand new", "assetName": "assets/images/iphone_15_pm_nobg.png", "price": "#1,700,000"},
-    {"name": "Iphone 15 pro max", "description": "Brand new", "assetName": "assets/images/iphone_15_pm_nobg.png", "price": "#1,700,000"},
-    {"name": "Iphone 15 pro max", "description": "Brand new", "assetName": "assets/images/iphone_15_pm.jpg", "price": "#1,700,000"}
-  ];
+  late AnimationController opacAnimController;
+  late Animation<double> opacAnim;
+  final List<Map<String, String>> slidableMap = TestData.slidableMap;
+  final List<Map<String, String>> productCategoriesList = TestData.productCategoriesList;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: slidableMap.length, vsync: this);
+    opacAnimController = AnimationController(vsync: this, duration: Duration(milliseconds: 150));
+    opacAnim = Tween<double>(begin: 0.2, end: 1).animate(opacAnimController);
   }
 
   @override
@@ -80,11 +60,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         SizedBox(
                           height: expandedHeight,
                           child: Tab(
-                            child: BgWidget(
-                              assetName: slidableMap[i]!["assetName"]!,
-                              topic: slidableMap[i]!["topic"] ?? "not found",
-                              description: slidableMap[i]!["description"] ?? "not found",
-                              imgSrc: slidableMap[i]!["imgSrc"] ?? "not found",
+                            child: HomeSpaceBarBg(
+                              assetName: slidableMap[i]["assetName"]!,
+                              topic: slidableMap[i]["topic"] ?? "not found",
+                              description: slidableMap[i]["description"] ?? "not found",
+                              imgSrc: slidableMap[i]["imgSrc"] ?? "not found",
                             ),
                           ),
                         )
@@ -95,14 +75,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       child: TabPageSelector(
                         controller: tabController,
                         color: CartifyColors.lightPremiumGold,
-                        selectedColor: CartifyColors.premiumGold,
+                        selectedColor: CartifyColors.royalBlue,
                         indicatorSize: 14,
                       ),
                     ),
                   ],
                 ),
                 titlePadding: EdgeInsets.only(top: paddingTop + 8), // Adjust the top padding dynamically
-                title: Align(
+                title: const Align(
                   alignment: Alignment.topCenter,
                   child: TopBar(),
                 ),
@@ -111,177 +91,131 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ),
         ),
       ],
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(36)),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Row(
-                  children: [
-                    
-                    Expanded(
-                      child: CustomTextfield(
-                        backgroundColor: Colors.white,
-                        borderRadius: 24,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.black,
-                        ),
-                        hint: "Search a product",
-                        hintStyle: TextStyle(color: Colors.black),
-                        pixelHeight: 52,
-                        ontap: () {
-                          PrimaryScrollController.of(context).animateTo(240, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
-                          print("Overlay");
-                          SearchOverlay().showOverlay(context);
-                        },
-                        
-                      ),
-                    ),
-                    const SizedBox(width: 8,),
-                    IconButton(onPressed: (){}, icon: Icon(Icons.filter_list_rounded, color: Colors.black,), style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.lightGray)),),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              ProductForYou(
-                topic: "Recommended for you",
-                list: productCategoriesList,
-              ),
-              Divider(),
-              Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: ConstantWidgets.text(context, "Trending", fontSize: 20)
-                ),
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                  child: IconButton(onPressed: (){}, icon: Icon(Icons.list))
-                  
-                  ),
-            ],
-          ),
-              for (int i = 0; i < 9; i++) ProductCard()
-            ],
-          ),
-        ),
+      body: HomeBody(
+        productCategoriesList: productCategoriesList,
+        opacAnimController: opacAnimController,
+        opacAnim: opacAnim,
       ),
     );
   }
 }
 
-class TopBar extends StatelessWidget {
-  const TopBar({super.key});
+class HomeBody extends StatelessWidget {
+  final AnimationController opacAnimController;
+  final Animation<double> opacAnim;
+  const HomeBody({
+    super.key,
+    required this.productCategoriesList,
+    required this.opacAnimController,
+    required this.opacAnim,
+  });
+
+  final List<Map<String, String>> productCategoriesList;
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = DeviceUtils.isDarkMode(context);
-
-    // Define frosty background color based on dark mode
-    Color frostyBackground = isDarkMode ? Colors.white.withOpacity(0.2) : Colors.black.withOpacity(0.2);
-
-    return SizedBox(
-      height: 64,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 28, left: 12, right: 12),
-        child: Row(
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(36),
+        ),
+        child: Column(
           children: [
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: frostyBackground, // Frosty background
-                    borderRadius: BorderRadius.circular(10),
+            const SizedBox(
+              height: 24,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Row(
+                children: [
+                  homeSearchBar(context),
+                  const SizedBox(
+                    width: 8,
                   ),
-                  child: IconButton(
-                    color: Colors.white,
-                    icon: const Icon(
-                      FluentIcons.list_24_filled,
-                    ),
+                  IconButton(
                     onPressed: () {},
+                    icon: Icon(
+                      Icons.filter_list_rounded,
+                      color: Colors.black,
+                    ),
+                    style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.lightPremiumGold)),
                   ),
-                ),
+                ],
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: frostyBackground, // Frosty background
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: IconButton(
-                color: Colors.white,
-                icon: const Icon(Icons.search),
-                onPressed: () {},
+            const SizedBox(
+              height: 24,
+            ),
+            ProductForYou(
+              topic: "Recommended for you",
+              list: productCategoriesList,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Divider(
+                color: CartifyColors.lightGray,
               ),
             ),
-            const SizedBox(width: 8), // Add some spacing
-            Container(
-              decoration: BoxDecoration(
-                color: frostyBackground, // Frosty background
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: IconButton(
-                color: Colors.white,
-                icon: const Icon(Icons.shopping_bag_outlined),
-                onPressed: () {},
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ConstantWidgets.text(context, "Trending", fontSize: 20),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.grid_view_rounded,
+                      color: Colors.black,
+                    ),
+                    style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.lightPremiumGold)),
+                  ),
+                ],
               ),
             ),
+            for (int i = 0; i < 9; i++) ProductCard()
           ],
         ),
       ),
     );
   }
-}
 
-class BgWidget extends StatelessWidget {
-  final String assetName;
-  final String topic;
-  final String description;
-  final String imgSrc;
-
-  const BgWidget({super.key, required this.assetName, required this.topic, required this.description, required this.imgSrc});
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.hardEdge,
-      children: [
-        ColorFiltered(
-          colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.srcATop),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.black,
-                image: DecorationImage(
-                  image: imgSrc == "online" ? NetworkImage(assetName) : AssetImage(assetName),
-                  fit: BoxFit.cover,
-                )),
-          ),
+  Expanded homeSearchBar(BuildContext context) {
+    return Expanded(
+      child: CustomTextfield(
+        backgroundColor: CartifyColors.lightGray,
+        borderRadius: 24,
+        prefixIcon: Icon(
+          Icons.search,
+          color: Colors.black,
         ),
-        Container(
-          padding: const EdgeInsets.only(top: 80, left: 16, right: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ConstantWidgets.text(context, topic, fontSize: 28, fontWeight: FontWeight.bold, color: CartifyColors.antiFlashWhite),
-              const SizedBox(
-                height: 16,
-              ),
-              ConstantWidgets.text(context, description, color: Colors.white),
-            ],
-          ),
-        )
-      ],
+        hint: "Search a product",
+        hintStyle: TextStyle(color: Colors.black),
+        pixelHeight: 52,
+        ontap: () {
+          PrimaryScrollController.of(context).jumpTo(240);
+          print("Overlay");
+          // SearchOverlay().showOverlay(context, opacAnim, opacAnimController);
+          // opacAnimController.forward();
+
+          // showBottomSheet(
+          //     context: context,
+          //     builder: (context) => BottomSheet(
+          //         onClosing: () {},
+          //         builder: (context) => Container(
+          //               height: 200,
+          //               color: Colors.blue,
+          //             )));
+        },
+        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: CartifyColors.royalBlue.withAlpha(175), width: 2)),
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              width: 2,
+              color: CartifyColors.royalBlue.withAlpha(75),
+            ),
+            borderRadius: BorderRadius.circular(36)),
+      ),
     );
   }
 }

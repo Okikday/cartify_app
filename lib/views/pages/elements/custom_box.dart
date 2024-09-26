@@ -1,0 +1,32 @@
+import 'package:cartify/common/styles/colors.dart';
+import 'package:cartify/utils/device_utils.dart';
+import 'package:flutter/material.dart';
+
+class CustomBox extends StatelessWidget {
+  final Widget child;
+  const CustomBox({
+    super.key,
+    required this.child
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      decoration: BoxDecoration(
+        color: CartifyColors.lightGray.withOpacity(0.1),
+        border: Border.all(width: 2, color: CartifyColors.royalBlue.withAlpha(25)),
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: DeviceUtils.isDarkMode(context) == true ? 
+        [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: Offset(0, 0), blurStyle: BlurStyle.inner, spreadRadius: 2),]
+         : [BoxShadow(color: CartifyColors.royalBlue.withOpacity(0.1), blurRadius: 8, offset: Offset(0, 0), blurStyle: BlurStyle.inner, spreadRadius: 2),],
+      ),
+      child: InkWell(
+        onTap: (){},
+          overlayColor: WidgetStatePropertyAll(CartifyColors.lightPremiumGold.withAlpha(50)),
+          borderRadius: BorderRadius.circular(8),
+        child: child,
+      ),
+    );
+  }
+}

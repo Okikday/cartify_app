@@ -24,12 +24,9 @@ class Wishlists extends StatelessWidget {
         ),
         const SizedBox(height: 8,),
 
-        Expanded(child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: ListView.builder(itemCount: 10, itemBuilder: (context, index) => Container(
-            margin: const EdgeInsets.only(bottom: 16),
-            child: const WishlistCard())),
-        ))
+        Expanded(child: ListView.builder(itemCount: 10, itemBuilder: (context, index) => Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          child: const WishlistCard())))
       ],
     );
   }

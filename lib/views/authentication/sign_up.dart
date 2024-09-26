@@ -2,6 +2,7 @@ import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
+import 'package:cartify/services/test_api.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/authentication/verify_code.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -85,7 +86,9 @@ class SignUp extends StatelessWidget {
                 SizedBox(height: screenHeight * 0.1,),
 
                  CustomElevatedButton(
-                  onClick: (){},
+                  onClick: (){
+                    TestApi().testConnect();
+                  },
                   screenWidth: 90,
                   backgroundColor: Colors.white,
                   elevation: 2,

@@ -27,15 +27,15 @@ class Categories extends StatelessWidget {
         SizedBox(
         
           height: DeviceUtils.getScreenHeight(context) * 0.8,
-          child: GridScreen(),
+          child: CategoriesGrid(),
         ),
       ],
     );
   }
 }
 
-class GridScreen extends StatelessWidget {
-  GridScreen({super.key});
+class CategoriesGrid extends StatelessWidget {
+  CategoriesGrid({super.key});
   final List<Map<String, String>> categories = [
     {"title": "Trending", "icon": "assets/images/trending.png"},
     {"title": "Vehicles", "icon": "assets/images/car.png"},
@@ -75,8 +75,12 @@ class GridScreen extends StatelessWidget {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: CartifyColors.lightPremiumGold,
+                color: CartifyColors.royalBlue.withAlpha(25),
                 borderRadius: BorderRadius.circular(12),
+                border: Border.all(width: 2, color: CartifyColors.royalBlue.withAlpha(25)),
+                boxShadow: DeviceUtils.isDarkMode(context) == true ? 
+        [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: Offset(0, 0), blurStyle: BlurStyle.inner, spreadRadius: 2),]
+         : [BoxShadow(color: CartifyColors.royalBlue.withOpacity(0.1), blurRadius: 8, offset: Offset(0, 0), blurStyle: BlurStyle.inner, spreadRadius: 2),],
               ),
               child: Image.asset(
                 categories[index]["icon"]!,

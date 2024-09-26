@@ -2,6 +2,7 @@ import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/pages/elements/custom_box.dart';
 import 'package:flutter/material.dart';
 
 class WishlistCard extends StatelessWidget {
@@ -10,17 +11,8 @@ class WishlistCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = DeviceUtils.getScreenWidth(context);
-    return InkWell(
-      onTap: () {},
-      overlayColor: WidgetStatePropertyAll(CartifyColors.lightPremiumGold.withOpacity(0.1)),
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            color: DeviceUtils.isDarkMode(context) == true ? CartifyColors.lightPremiumGold.withOpacity(0.25) : CartifyColors.lightPremiumGold.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: CartifyColors.premiumGold.withOpacity(0.5), width: 2)
-            ),
-        child: ConstrainedBox(
+    return CustomBox(
+      child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: screenWidth * 0.9, maxHeight: 200),
           child: IntrinsicHeight(
             child: Row(
@@ -75,8 +67,6 @@ class WishlistCard extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ),
-    );
+        ),);
   }
 }
