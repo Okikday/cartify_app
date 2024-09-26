@@ -1,6 +1,7 @@
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
+import 'package:cartify/common/widgets/custom_textfield.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/elements/custom_box.dart';
 import 'package:flutter/material.dart';
@@ -11,67 +12,98 @@ class PurchaseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return CustomBox(
       child: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: screenWidth * 0.9, maxHeight: 300),
-            child: IntrinsicHeight(
-              child: Row(
-                children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 300),
-                      child: ClipRRect(borderRadius: BorderRadius.circular(8), child: Image.asset("assets/images/iphone_15_pm.jpg"), )),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ConstantWidgets.text(context, "iPhone 15 pro Max", fontSize: 14),
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.cancel_sharp,
-                                  color: CartifyColors.lightGray,
-                                  size: 28,
-                                ),
-                                padding: const EdgeInsets.all(0),
+          constraints: BoxConstraints(maxWidth: screenWidth * 0.9, maxHeight: 400),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 500),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset("assets/images/iphone_15_pm.jpg"),
+                    )),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ConstantWidgets.text(context, "iPhone 15 pro Max", fontSize: 14, fontWeight: FontWeight.bold),
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.cancel_sharp,
+                                color: CartifyColors.lightGray,
+                                size: 28,
                               ),
+                              padding: const EdgeInsets.all(0),
                             ),
-                          ],
-                        ),
-                        ConstantWidgets.text(context, "Mobile phone", color: CartifyColors.lightGray),
-                        ConstantWidgets.text(context, "#1,700,000", color: CartifyColors.premiumGold),
-        
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        CustomElevatedButton(
-                          label: "Buy",
-                          borderRadius: 8,
-                          textSize: 14,
-                          backgroundColor: CartifyColors.premiumGold,
-                          onClick: () {
-                            DeviceUtils.showFlushBar(context, "Say hi");
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      ConstantWidgets.text(context, "Mobile phone", color: CartifyColors.royalBlue),
+                      ConstantWidgets.text(context, "#1,700,000", color: CartifyColors.premiumGold),
+                      Container(
+                        child: ConstantWidgets.text(context, "Descriptions"),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          IconButton(onPressed: () {}, icon: const Icon(Icons.remove_circle_outline_rounded)),
+                          const CustomTextfield(
+                            backgroundColor: Color.fromARGB(26, 211, 211, 211),
+                            contentPadding: EdgeInsets.all(2),
+                            textAlign: TextAlign.center,
+                            pixelWidth: 64,
+                            pixelHeight: 32,
+                            defaultText: "100",
+                            inputTextStyle: TextStyle(
+                              color: CartifyColors.premiumGold,
+                              fontSize: 10,
+                            ),
+                          ),
+                          IconButton(onPressed: () {}, icon: const Icon(Icons.add_circle_outline_rounded))
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      CustomElevatedButton(
+                        label: "Add to Cart",
+                        borderRadius: 8,
+                        textSize: 14,
+                        side: BorderSide(width: 2, color: CartifyColors.aliceBlue.withAlpha(50)),
+                        backgroundColor: CartifyColors.royalBlue,
+                        onClick: () {
+                          DeviceUtils.showFlushBar(context, "Say hi");
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
-      ),);
+        ),
+      ),
+    );
   }
 }

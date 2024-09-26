@@ -16,6 +16,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin{
   late TabController tabController;
   late int currentIndex;
+  late bool isKeyboardVisible;
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   }
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       bottomNavigationBar: BottomNavBar(currentIndex: currentIndex, onTap: (index){setState(() => tabController.index = currentIndex = index);},),
       body: TabBarView(
@@ -43,7 +45,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         children: [
         const Tab(child: Home(),),
         const Tab(child: Categories(),),
-        const Tab(child: Orders(),),
+        Tab(child: Orders(mainScreenContext: context,),),
         const Tab(child: Wishlists(),),
         Tab(child: Account(),),
       ]),

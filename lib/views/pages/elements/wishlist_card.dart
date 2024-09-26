@@ -12,14 +12,20 @@ class WishlistCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = DeviceUtils.getScreenWidth(context);
     return CustomBox(
-      child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: screenWidth * 0.9, maxHeight: 200),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: screenWidth * 0.9, maxHeight: 400),
           child: IntrinsicHeight(
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 200),
-                    child: ClipRRect(borderRadius: BorderRadius.circular(8), child: Image.asset("assets/images/iphone_15_pm.jpg"))),
+                    constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 500),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset("assets/images/iphone_15_pm.jpg"),
+                    )),
                 const SizedBox(
                   width: 8,
                 ),
@@ -31,42 +37,55 @@ class WishlistCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ConstantWidgets.text(context, "iPhone 15 pro max", fontSize: 14),
+                          ConstantWidgets.text(context, "iPhone 15 Pro Max", fontSize: 14, fontWeight: FontWeight.bold),
                           SizedBox(
                             width: 30,
                             height: 30,
                             child: IconButton(
                               onPressed: () {},
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.cancel_sharp,
                                 color: CartifyColors.lightGray,
                                 size: 28,
                               ),
-                              padding: EdgeInsets.all(0),
+                              padding: const EdgeInsets.all(0),
                             ),
                           ),
                         ],
                       ),
-                      ConstantWidgets.text(context, "Mobile phone", color: CartifyColors.lightGray),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      ConstantWidgets.text(context, "Mobile phone", color: CartifyColors.royalBlue),
                       ConstantWidgets.text(context, "#1,700,000", color: CartifyColors.premiumGold),
+                      Container(
+                        child: ConstantWidgets.text(context, "Descriptions"),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                     
                       const SizedBox(
                         height: 8,
                       ),
                       CustomElevatedButton(
-                        label: "Add to Cart",
+                        label: "Add to Bag",
                         borderRadius: 8,
                         textSize: 14,
-                        backgroundColor: CartifyColors.premiumGold,
+                        side: BorderSide(width: 2, color: CartifyColors.aliceBlue.withAlpha(50)),
+                        backgroundColor: CartifyColors.royalBlue,
                         onClick: () {
                           DeviceUtils.showFlushBar(context, "Say hi");
                         },
-                      )
+                      ),
                     ],
                   ),
                 )
               ],
             ),
           ),
-        ),);
+        ),
+      ),
+      );
   }
 }

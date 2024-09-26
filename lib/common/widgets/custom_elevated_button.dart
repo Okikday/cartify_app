@@ -49,7 +49,7 @@ class CustomElevatedButton extends StatelessWidget {
             overlayColor: WidgetStatePropertyAll(CartifyColors.gold.withOpacity(0.25)),
             elevation: WidgetStatePropertyAll(elevation),
             shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? 24) )),
-            side: WidgetStatePropertyAll(side)
+            side: WidgetStatePropertyAll(side),
           ),
           child: child ?? Center(
             child: ConstantWidgets.text(context, label, fontSize: textSize ?? 8, color: textColor ?? Colors.white)

@@ -1,31 +1,30 @@
-import 'package:cartify/models/products_models.dart';
+import 'package:cartify/services/services.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/foundation.dart';
 
 class TestApi {
 
-  final Dio dio = Dio();
-  static const String apiURL = "https://cartify-api.onrender.com/api/v1/products";
+  
+  //Test connection
+  void testConnect() async {
+    final String productsApiURL = "$apiURL/api/v1";
 
-  void testConnect() async{
-    final dynamic response = await dio.get(apiURL,
-    options: Options(
+    try {
+      final dynamic response = await dio.get(productsApiURL, options: Options());
 
-    ));
+      if (response.statusCode == 200) {
+        final content = response.data;
+        debugPrint("Success ${content['status']}");
+      } else if (response.statusCode == 404) {
+        debugPrint('Failed to fetch data: ${response.statusCode}');
+      }
 
-    try{
-    if (response.statusCode == 200) {
-      final List<dynamic> productsList = response.data['payload']['product'];
-      
-      final dynamic data = ProductsModels.fromMap(productsList[0]);
-      print("Data fetched: ${data.userName}");
-    } else {
-      print('Failed to fetch data: ${response.statusCode}');
+    } 
+    catch (e) {
+      debugPrint('Error: $e');
     }
-  } catch (e) {
-    print('Error: $e');
+
   }
 
-    
-  }
+
 }

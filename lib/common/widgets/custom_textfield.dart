@@ -26,6 +26,8 @@ class CustomTextfield extends StatefulWidget {
   final InputBorder? enabledBorder;
   final InputBorder? focusedBorder;
   final TextEditingController? controller;
+  final TextAlign textAlign;
+  final EdgeInsets? contentPadding;
 
   const CustomTextfield({
     super.key,
@@ -53,6 +55,8 @@ class CustomTextfield extends StatefulWidget {
     this.enabledBorder,
     this.focusedBorder,
     this.controller,
+    this.textAlign = TextAlign.start,
+    this.contentPadding,
   });
 
   @override
@@ -112,6 +116,7 @@ class _TextFieldState extends State<CustomTextfield> {
       width: widget.screenWidth != null ? DeviceUtils.getScreenWidth(context) * (widget.screenWidth! / 100) : widget.pixelWidth,
       height: widget.screenHeight != null ? DeviceUtils.getScreenHeight(context) * (widget.screenHeight! / 100) : widget.pixelHeight,
       child: TextField(
+        textAlign: widget.textAlign,
         obscureText: widget.obscureText,
         keyboardType: widget.keyboardType,
         controller: widget.controller ?? textController,
@@ -137,14 +142,14 @@ class _TextFieldState extends State<CustomTextfield> {
         cursorRadius: const Radius.circular(12),
         decoration: InputDecoration(
           prefixIcon: widget.prefixIcon,
-          suffixIcon: showSuffixIcon == true ? widget.suffixIcon : const SizedBox(),
+          suffixIcon: showSuffixIcon == true ? widget.suffixIcon : null,
           hintText: widget.hint,
           labelText: widget.label,
           labelStyle: widget.labelStyle ?? TextStyle(color: DeviceUtils.isDarkMode(context) == true ? Colors.white : Colors.black),
           hintStyle: widget.hintStyle ?? TextStyle(color: DeviceUtils.isDarkMode(context) == true ? Colors.white : Colors.black),
           filled: true,
           fillColor: widget.backgroundColor ?? Colors.transparent,
-          contentPadding: const EdgeInsets.all(16),
+          contentPadding: widget.contentPadding ?? const EdgeInsets.all(16),
           enabledBorder: widget.enabledBorder ?? defaultBorder(widget.borderRadius),
           border: widget.border ?? defaultBorder(widget.borderRadius),
           focusedBorder: widget.focusedBorder ?? defaultBorder(widget.borderRadius),

@@ -1,8 +1,8 @@
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
-import 'package:cartify/common/widgets/custom_textfield.dart';
 import 'package:cartify/data/test_data.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/pages/elements/home_search_bar.dart';
 import 'package:cartify/views/pages/elements/home_space_bar_bg.dart';
 import 'package:cartify/views/pages/elements/product_card.dart';
 import 'package:cartify/views/pages/elements/product_for_you.dart';
@@ -10,7 +10,7 @@ import 'package:cartify/views/pages/elements/top_bar.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  const Home({super.key,});
 
   @override
   State<Home> createState() => _HomeState();
@@ -19,7 +19,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   late TabController tabController;
   late AnimationController opacAnimController;
-  late Animation<double> opacAnim;
+  //late Animation<double> opacAnim;
   final List<Map<String, String>> slidableMap = TestData.slidableMap;
   final List<Map<String, String>> productCategoriesList = TestData.productCategoriesList;
 
@@ -27,8 +27,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(length: slidableMap.length, vsync: this);
-    opacAnimController = AnimationController(vsync: this, duration: Duration(milliseconds: 150));
-    opacAnim = Tween<double>(begin: 0.2, end: 1).animate(opacAnimController);
+    opacAnimController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
+    // opacAnim = Tween<double>(begin: 0.2, end: 1).animate(opacAnimController);
   }
 
   @override
@@ -94,7 +94,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       body: HomeBody(
         productCategoriesList: productCategoriesList,
         opacAnimController: opacAnimController,
-        opacAnim: opacAnim,
       ),
     );
   }
@@ -102,12 +101,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
 class HomeBody extends StatelessWidget {
   final AnimationController opacAnimController;
-  final Animation<double> opacAnim;
+  final BuildContext? mainScreenContext;
   const HomeBody({
     super.key,
     required this.productCategoriesList,
     required this.opacAnimController,
-    required this.opacAnim,
+    this.mainScreenContext
   });
 
   final List<Map<String, String>> productCategoriesList;
@@ -129,7 +128,7 @@ class HomeBody extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: Row(
                 children: [
-                  homeSearchBar(context),
+                  HomeSearchBar(scrollContext: context, bottomSheetAnimController: opacAnimController,),
                   const SizedBox(
                     width: 8,
                   ),
@@ -151,8 +150,8 @@ class HomeBody extends StatelessWidget {
               topic: "Recommended for you",
               list: productCategoriesList,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
+            const Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
               child: Divider(
                 color: CartifyColors.lightGray,
               ),
@@ -177,44 +176,6 @@ class HomeBody extends StatelessWidget {
             for (int i = 0; i < 9; i++) ProductCard()
           ],
         ),
-      ),
-    );
-  }
-
-  Expanded homeSearchBar(BuildContext context) {
-    return Expanded(
-      child: CustomTextfield(
-        backgroundColor: CartifyColors.lightGray,
-        borderRadius: 24,
-        prefixIcon: Icon(
-          Icons.search,
-          color: Colors.black,
-        ),
-        hint: "Search a product",
-        hintStyle: TextStyle(color: Colors.black),
-        pixelHeight: 52,
-        ontap: () {
-          PrimaryScrollController.of(context).jumpTo(240);
-          print("Overlay");
-          // SearchOverlay().showOverlay(context, opacAnim, opacAnimController);
-          // opacAnimController.forward();
-
-          // showBottomSheet(
-          //     context: context,
-          //     builder: (context) => BottomSheet(
-          //         onClosing: () {},
-          //         builder: (context) => Container(
-          //               height: 200,
-          //               color: Colors.blue,
-          //             )));
-        },
-        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: CartifyColors.royalBlue.withAlpha(175), width: 2)),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              width: 2,
-              color: CartifyColors.royalBlue.withAlpha(75),
-            ),
-            borderRadius: BorderRadius.circular(36)),
       ),
     );
   }

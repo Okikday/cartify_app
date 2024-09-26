@@ -7,7 +7,8 @@ class ProductsModels {
     required this.name,
   });
 
-  String get userName => name;
+  String get productId => id;
+  String get productName => name;
 
   factory ProductsModels.fromMap(Map<String, dynamic> json){
 
