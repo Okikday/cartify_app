@@ -2,27 +2,61 @@ import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
+import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/elements/custom_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PurchaseCard extends StatelessWidget {
+class PurchaseCard extends ConsumerStatefulWidget {
   final double screenWidth;
   const PurchaseCard({super.key, required this.screenWidth});
 
   @override
+  ConsumerState<PurchaseCard> createState() => _PurchaseCardState();
+}
+
+class _PurchaseCardState extends ConsumerState<PurchaseCard> {
+  final FocusNode focusNode = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+    focusNode.addListener(listener);
+  }
+
+  void listener(){
+    print("focusnode listener run");
+    if(focusNode.hasFocus == true){
+      print("focusnode has focus");
+      ref.read(simpleWidgetProvider).isOrdersBottomBarBuyNowVisible = false;
+      
+    }else{
+      print("focusnode does not have focus");
+      ref.read(simpleWidgetProvider).isOrdersBottomBarBuyNowVisible = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    focusNode.removeListener(listener);
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+    
     return CustomBox(
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: screenWidth * 0.9, maxHeight: 400),
+          constraints: BoxConstraints(maxWidth: widget.screenWidth * 0.9, maxHeight: 400),
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 500),
+                    constraints: BoxConstraints(maxWidth: widget.screenWidth * 0.35, maxHeight: 500),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.asset("assets/images/iphone_15_pm.jpg"),
@@ -68,14 +102,15 @@ class PurchaseCard extends StatelessWidget {
                       Row(
                         children: [
                           IconButton(onPressed: () {}, icon: const Icon(Icons.remove_circle_outline_rounded)),
-                          const CustomTextfield(
-                            backgroundColor: Color.fromARGB(26, 211, 211, 211),
+                          CustomTextfield(
+                            focusNode: focusNode,
+                            backgroundColor: const Color.fromARGB(26, 211, 211, 211),
                             contentPadding: EdgeInsets.all(2),
                             textAlign: TextAlign.center,
                             pixelWidth: 64,
                             pixelHeight: 32,
                             defaultText: "100",
-                            inputTextStyle: TextStyle(
+                            inputTextStyle: const TextStyle(
                               color: CartifyColors.premiumGold,
                               fontSize: 10,
                             ),

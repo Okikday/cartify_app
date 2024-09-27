@@ -1,6 +1,7 @@
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/data/test_data.dart';
+import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/elements/home_search_bar.dart';
 import 'package:cartify/views/pages/elements/home_space_bar_bg.dart';
@@ -8,17 +9,19 @@ import 'package:cartify/views/pages/elements/product_card.dart';
 import 'package:cartify/views/pages/elements/product_for_you.dart';
 import 'package:cartify/views/pages/elements/top_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Home extends StatefulWidget {
+
+class Home extends ConsumerStatefulWidget {
   const Home({super.key,});
 
   @override
-  State<Home> createState() => _HomeState();
+  ConsumerState<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with TickerProviderStateMixin {
+class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
   late TabController tabController;
-  late AnimationController opacAnimController;
+  late AnimationController searchBodyAnimController;
   //late Animation<double> opacAnim;
   final List<Map<String, String>> slidableMap = TestData.slidableMap;
   final List<Map<String, String>> productCategoriesList = TestData.productCategoriesList;
@@ -27,13 +30,21 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(length: slidableMap.length, vsync: this);
-    opacAnimController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
-    // opacAnim = Tween<double>(begin: 0.2, end: 1).animate(opacAnimController);
+    searchBodyAnimController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
+    // opacAnim = Tween<double>(begin: 0.2, end: 1).animate(searchBodyAnimController);
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    ref.watch(simpleWidgetProvider).searchBodyAnimController = searchBodyAnimController;
+  }
+
+  @override
+  Widget build(BuildContext context,) {
+    
     DeviceUtils.setStatusBarColor(Theme.of(context).scaffoldBackgroundColor, DeviceUtils.isDarkMode(context) == true ? Brightness.light : Brightness.dark);
+
     return NestedScrollView(
       headerSliverBuilder: (context, isScrolled) => [
         SliverAppBar(
@@ -93,26 +104,27 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       ],
       body: HomeBody(
         productCategoriesList: productCategoriesList,
-        opacAnimController: opacAnimController,
+        
       ),
     );
   }
 }
 
-class HomeBody extends StatelessWidget {
-  final AnimationController opacAnimController;
+class HomeBody extends ConsumerWidget {
   final BuildContext? mainScreenContext;
   const HomeBody({
     super.key,
     required this.productCategoriesList,
-    required this.opacAnimController,
     this.mainScreenContext
   });
 
   final List<Map<String, String>> productCategoriesList;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    
+    ref.read(simpleWidgetProvider).homeBodyScrollContext = context;
+    
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Container(
@@ -128,7 +140,7 @@ class HomeBody extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: Row(
                 children: [
-                  HomeSearchBar(scrollContext: context, bottomSheetAnimController: opacAnimController,),
+                  HomeSearchBar(),
                   const SizedBox(
                     width: 8,
                   ),

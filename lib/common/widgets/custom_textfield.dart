@@ -1,22 +1,25 @@
 import 'package:cartify/utils/device_utils.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cartify/utils/device_utils.dart';
+import 'package:flutter/material.dart';
+
 class CustomTextfield extends StatefulWidget {
-  final String? hint;   //Shows hint
-  final String? label;   //Shows Label
-  final double pixelHeight;   //Use pixel height for the normal height, declare for pixel if you want more customization over size
-  final double pixelWidth;   //.... width for the normal width
-  final double? screenHeight;   //Use this for height with respect to the screen size
-  final double? screenWidth; 
-  final bool alwaysShowSuffixIcon;   //If you always want to show the password icon, if false, it only shows when Textfield has focus and has suffixIcon
-  final String defaultText;    //Default text on the Textfield 
-  final void Function()? ontap;   //Action when you tap the Textfield
+  final String? hint; // Shows hint
+  final String? label; // Shows Label
+  final double pixelHeight; // Use pixel height for the normal height
+  final double pixelWidth; // Use pixel width for the normal width
+  final double? screenHeight; // Height based on screen size
+  final double? screenWidth; // Width based on screen size
+  final bool alwaysShowSuffixIcon; // Always show suffix icon if true
+  final String defaultText; // Default text for the TextField
+  final void Function()? ontap; // Tap action
   final void Function()? onTapOutside;
-  final Function(String text)? onchanged;   //Action if there's any change to Textfield content, also returns the text
+  final Function(String text)? onchanged; // Change listener for text
   final TextInputType? keyboardType;
   final Widget? suffixIcon;
   final Icon? prefixIcon;
-  final bool obscureText;   //Whether to hide text
+  final bool obscureText; // Toggle for password field
   final TextStyle? labelStyle;
   final TextStyle? hintStyle;
   final TextStyle? inputTextStyle;
@@ -28,6 +31,7 @@ class CustomTextfield extends StatefulWidget {
   final TextEditingController? controller;
   final TextAlign textAlign;
   final EdgeInsets? contentPadding;
+  final FocusNode? focusNode;
 
   const CustomTextfield({
     super.key,
@@ -45,7 +49,7 @@ class CustomTextfield extends StatefulWidget {
     this.prefixIcon,
     this.pixelHeight = 48,
     this.pixelWidth = 200,
-    this.obscureText= false,
+    this.obscureText = false,
     this.hintStyle,
     this.labelStyle,
     this.inputTextStyle,
@@ -57,115 +61,127 @@ class CustomTextfield extends StatefulWidget {
     this.controller,
     this.textAlign = TextAlign.start,
     this.contentPadding,
+    this.focusNode,
   });
 
   @override
-  State<CustomTextfield> createState() => _TextFieldState();
+  State<CustomTextfield> createState() => _CustomTextfieldState();
 }
 
-class _TextFieldState extends State<CustomTextfield> {
-  final TextEditingController textController = TextEditingController();
-  FocusNode focusNode = FocusNode();
-  String? text;
+class _CustomTextfieldState extends State<CustomTextfield> {
+  late TextEditingController controller;
+  late FocusNode focusNode;
   bool showSuffixIcon = false;
 
   @override
   void initState() {
     super.initState();
+    
+    // Use widget's controller or create a new one
+    controller = widget.controller ?? TextEditingController(text: widget.defaultText);
+    
+    // Use widget's focusNode or create a new one
+    focusNode = widget.focusNode ?? FocusNode();
+
+    // Add listeners
+    controller.addListener(refreshSuffixIconState);
     focusNode.addListener(refreshSuffixIconState);
-     if(widget.alwaysShowSuffixIcon == true){
-      
-     }else{
-      widget.controller == null ? textController.addListener(refreshSuffixIconState) : widget.controller!.addListener(refreshSuffixIconState);
-     }
-    widget.controller == null ? textController.text = widget.defaultText : widget.controller!.text = widget.defaultText;
+
+    // Update the suffix icon state initially
     refreshSuffixIconState();
   }
 
   @override
   void dispose() {
+    // Remove listeners
+    controller.removeListener(refreshSuffixIconState);
     focusNode.removeListener(refreshSuffixIconState);
-    widget.controller == null ? textController.removeListener(refreshSuffixIconState) : widget.controller!.removeListener(refreshSuffixIconState);
+
+    controller.dispose();
     focusNode.dispose();
-    widget.controller == null ? textController.dispose() : widget.controller!.dispose();
     super.dispose();
   }
-  
 
   void refreshSuffixIconState() {
-    if(widget.alwaysShowSuffixIcon == true){
+    if (widget.alwaysShowSuffixIcon) {
       showSuffixIcon = true;
-    }else{
-      if(widget.suffixIcon != null && focusNode.hasFocus){
-        if(widget.controller == null ? textController.text.isNotEmpty : widget.controller!.text.isNotEmpty){
-          setState(() => showSuffixIcon = true);
-          
-        }else{
-          setState(() => showSuffixIcon = false);
-        }
-      }else{
-        setState(() => showSuffixIcon = false);
+    } else {
+      if (widget.suffixIcon != null && focusNode.hasFocus) {
+        showSuffixIcon = controller.text.isNotEmpty;
+      } else {
+        showSuffixIcon = false;
       }
     }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-
     return SizedBox(
-      width: widget.screenWidth != null ? DeviceUtils.getScreenWidth(context) * (widget.screenWidth! / 100) : widget.pixelWidth,
-      height: widget.screenHeight != null ? DeviceUtils.getScreenHeight(context) * (widget.screenHeight! / 100) : widget.pixelHeight,
+      width: widget.screenWidth != null
+          ? DeviceUtils.getScreenWidth(context) * (widget.screenWidth! / 100)
+          : widget.pixelWidth,
+      height: widget.screenHeight != null
+          ? DeviceUtils.getScreenHeight(context) * (widget.screenHeight! / 100)
+          : widget.pixelHeight,
       child: TextField(
         textAlign: widget.textAlign,
         obscureText: widget.obscureText,
         keyboardType: widget.keyboardType,
-        controller: widget.controller ?? textController,
+        controller: controller,
         focusNode: focusNode,
         onChanged: (text) {
           setState(() {
-            widget.controller == null ? textController.text = text : widget.controller!.text = text;
-            if(text.isNotEmpty){
+            if (text.isNotEmpty) {
               refreshSuffixIconState();
             }
           });
-         if(widget.onchanged != null){
-          widget.onchanged!(text);
-         }
+          if (widget.onchanged != null) {
+            widget.onchanged!(text);
+          }
         },
-        onTap: (){
+        onTap: () {
           refreshSuffixIconState();
-          if(widget.ontap != null) widget.ontap!();
+          if (widget.ontap != null) widget.ontap!();
         },
-        onTapOutside: (e){focusNode.unfocus(); widget.alwaysShowSuffixIcon != true ? refreshSuffixIconState() : (){}; if(widget.onTapOutside != null) widget.onTapOutside!();},
+        onTapOutside: (e) {
+          focusNode.unfocus();
+          if (widget.onTapOutside != null) widget.onTapOutside!();
+        },
         style: widget.inputTextStyle ?? const TextStyle(color: Colors.black),
         cursorColor: Colors.black,
         cursorRadius: const Radius.circular(12),
         decoration: InputDecoration(
           prefixIcon: widget.prefixIcon,
-          suffixIcon: showSuffixIcon == true ? widget.suffixIcon : null,
+          suffixIcon: showSuffixIcon ? widget.suffixIcon : null,
           hintText: widget.hint,
           labelText: widget.label,
-          labelStyle: widget.labelStyle ?? TextStyle(color: DeviceUtils.isDarkMode(context) == true ? Colors.white : Colors.black),
-          hintStyle: widget.hintStyle ?? TextStyle(color: DeviceUtils.isDarkMode(context) == true ? Colors.white : Colors.black),
+          labelStyle: widget.labelStyle ??
+              TextStyle(
+                color: DeviceUtils.isDarkMode(context) ? Colors.white : Colors.black,
+              ),
+          hintStyle: widget.hintStyle ??
+              TextStyle(
+                color: DeviceUtils.isDarkMode(context) ? Colors.white : Colors.black,
+              ),
           filled: true,
           fillColor: widget.backgroundColor ?? Colors.transparent,
           contentPadding: widget.contentPadding ?? const EdgeInsets.all(16),
           enabledBorder: widget.enabledBorder ?? defaultBorder(widget.borderRadius),
           border: widget.border ?? defaultBorder(widget.borderRadius),
           focusedBorder: widget.focusedBorder ?? defaultBorder(widget.borderRadius),
-          
         ),
       ),
     );
   }
 
-  InputBorder defaultBorder(double borderRadius){
+  InputBorder defaultBorder(double borderRadius) {
     return OutlineInputBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: const BorderSide(
-              color: Colors.grey,
-              width: 1.5,
-            ),
-          );
+      borderRadius: BorderRadius.circular(borderRadius),
+      borderSide: const BorderSide(
+        color: Colors.grey,
+        width: 1.5,
+      ),
+    );
   }
 }

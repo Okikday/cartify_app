@@ -1,16 +1,27 @@
-import 'package:cartify/app.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
+import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/elements/purchase_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Orders extends StatelessWidget {
-  final BuildContext mainScreenContext;
-  const Orders({super.key, required this.mainScreenContext});
+class Orders extends ConsumerStatefulWidget {
+  const Orders({super.key,});
 
   static bool showBottomBuyBanner = false;
+
+  @override
+  ConsumerState<Orders> createState() => _OrdersState();
+}
+
+class _OrdersState extends ConsumerState<Orders> with WidgetsBindingObserver{
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +53,7 @@ class Orders extends StatelessWidget {
                     child: PurchaseCard(
                       screenWidth: screenWidth,
                     ))),
-            BottomBarBuyNow(isDarkMode: isDarkMode, screenWidth: screenWidth, mainScreenContext: mainScreenContext,)
+            BottomBarBuyNow(isDarkMode: isDarkMode, screenWidth: screenWidth,)
           ],
         ))
       ],
@@ -50,25 +61,22 @@ class Orders extends StatelessWidget {
   }
 }
 
-class BottomBarBuyNow extends StatelessWidget {
+class BottomBarBuyNow extends ConsumerWidget {
 
   const BottomBarBuyNow({
     super.key,
     required this.isDarkMode,
     required this.screenWidth,
-    required this.mainScreenContext,
   });
 
   final bool isDarkMode;
   final double screenWidth;
-  final BuildContext mainScreenContext;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     
-
     return Visibility(
-      visible: DeviceUtils.isKeyboardVisible(mainScreenContext) == true ? false : true,
+      visible: ref.watch(simpleWidgetProvider).isOrdersBottomBarBuyNowVisible,
       maintainSize: false,
       child: Positioned(
         bottom: 0,

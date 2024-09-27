@@ -6,22 +6,22 @@ import 'package:cartify/utils/device_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final simpleWidgetProvider = ChangeNotifierProvider<SimpleWidgetStates>((ref) => SimpleWidgetStates());
-
 class HomeSearchBar extends ConsumerWidget {
   const HomeSearchBar({
     super.key,
-    required this.scrollContext,
-    required this.bottomSheetAnimController,
   });
 
-  final BuildContext scrollContext;
-  final AnimationController bottomSheetAnimController;
+  static bool isSearchBarActivated = false;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final FocusNode focusNode = FocusNode();
     final bool isDarkMode = DeviceUtils.isDarkMode(context);
     final Color color = isDarkMode == true ? CartifyColors.lightGray : CartifyColors.onyxBlack;
-    ref.watch(simpleWidgetProvider).homeSearchBarContext = context;
+    final simpleWidgetRef = ref.watch(simpleWidgetProvider);
+    simpleWidgetRef.homeSearchBarContext = context;
+    simpleWidgetRef.homeSearchBarFocusNode = focusNode;
+    debugPrint("Built search bar widget : $context");
 
     return Expanded(
       child: Container(
@@ -35,6 +35,7 @@ class HomeSearchBar extends ConsumerWidget {
           )
         ]),
         child: CustomTextfield(
+          focusNode: focusNode,
           backgroundColor: CartifyColors.lightGray.withAlpha(50),
           prefixIcon: Icon(
             Icons.search,
@@ -45,30 +46,10 @@ class HomeSearchBar extends ConsumerWidget {
           inputTextStyle: TextStyle(color: color),
           pixelHeight: 42,
           ontap: () {
-            PrimaryScrollController.of(scrollContext).jumpTo(0);
 
-            showBottomSheet(
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (context) => BottomSheet(
-                    animationController: bottomSheetAnimController,
-                    onClosing: () {},
-                    builder: (context) {
-                      final double screenHeight = DeviceUtils.getScreenHeight(context);
-                      final double screenWidth = DeviceUtils.getScreenWidth(context);
-                      return Container(
-                          height:  screenHeight - screenHeight * 0.53,
-                          width: screenWidth,
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.search, color: CartifyColors.lightGray,),
-                            ConstantWidgets.text(context, "Input a text to search", color: CartifyColors.lightGray),
-                          ],
-                           ),
-                        );
-                    }));
+            activateHomeSearchBar(context, simpleWidgetRef.homeBodyScrollContext, simpleWidgetRef.searchBodyAnimController, todo: (){
+              
+            });
           },
           focusedBorder:
               OutlineInputBorder(borderSide: BorderSide(color: CartifyColors.antiFlashWhite.withAlpha(175), width: 2), borderRadius: BorderRadius.circular(36)),
@@ -82,4 +63,34 @@ class HomeSearchBar extends ConsumerWidget {
       ),
     );
   }
+
+  
 }
+
+
+void activateHomeSearchBar(BuildContext context, BuildContext scrollContext, AnimationController searchBodyAnimController, {void Function()? todo}) {
+    PrimaryScrollController.of(scrollContext).jumpTo(0);
+    todo == null ? (){} : todo();
+    showBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) => BottomSheet(
+            animationController: searchBodyAnimController,
+            onClosing: () {},
+            builder: (context) {
+              final double screenHeight = DeviceUtils.getScreenHeight(scrollContext);
+              final double screenWidth = DeviceUtils.getScreenWidth(scrollContext);
+              return Container(
+                  height:  screenHeight - screenHeight * 0.53,
+                  width: screenWidth,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.search, color: CartifyColors.lightGray,),
+                    ConstantWidgets.text(context, "Input a text to search", color: CartifyColors.lightGray),
+                  ],
+                   ),
+                );
+            }));
+  }

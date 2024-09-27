@@ -7,5 +7,5 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
   
-  runApp(ProviderScope(child: const App()));
+  runApp(const ProviderScope(child: App()));
 }

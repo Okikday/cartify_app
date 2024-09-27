@@ -2,10 +2,11 @@ import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/pages/elements/home_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final simpleWidgetProvider = ChangeNotifierProvider<SimpleWidgetStates>((ref) => SimpleWidgetStates());
+
 
 class TopBar extends ConsumerWidget {
   final BuildContext? mainScreenContext;
@@ -36,7 +37,12 @@ class TopBar extends ConsumerWidget {
                   color: Colors.white,
                   icon: const Icon(Icons.search),
                   onPressed: () {
-                    ref.watch(simpleWidgetProvider);
+                    setSearchBarFocus(
+                      context,
+                      ref.watch(simpleWidgetProvider).homeSearchBarFocusNode, 
+                      ref.watch(simpleWidgetProvider).homeBodyScrollContext,
+                      ref.watch(simpleWidgetProvider).searchBodyAnimController
+                      );
                     print("Search button clicked!");
 
                   
@@ -71,5 +77,13 @@ class TopBar extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void setSearchBarFocus(BuildContext homeSearchBarContext, FocusNode homeSearchBarFocusNode, BuildContext homeBodyScrollContext, AnimationController searchBodyAnimController){
+    debugPrint("Setting textfield focus");
+    if(homeSearchBarContext.mounted){
+      FocusScope.of(homeSearchBarContext).requestFocus(homeSearchBarFocusNode);
+      activateHomeSearchBar(homeSearchBarContext, homeBodyScrollContext, searchBodyAnimController);
+    }
   }
 }

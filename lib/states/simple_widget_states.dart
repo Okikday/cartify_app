@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final simpleWidgetProvider = ChangeNotifierProvider<SimpleWidgetStates>((ref) => SimpleWidgetStates());
 
 class SimpleWidgetStates extends ChangeNotifier{
 
-  late BuildContext homeSearchBarContext;
+  //main Screen
+  late BuildContext mainScreenContext;
 
-  void setSearchBarFocus(){
-    debugPrint("Setting textfield focus");
-    if(homeSearchBarContext.mounted){
-      FocusScope.of(homeSearchBarContext).setFirstFocus;
-    }
-  }
+  //home page
+  late BuildContext homeSearchBarContext;
+  late BuildContext homeBodyScrollContext;
+  late FocusNode homeSearchBarFocusNode;
+  late AnimationController searchBodyAnimController;
+
+  //Orders page
+  bool isOrdersBottomBarBuyNowVisible = true;
+  
+  
+  
+
+  
 
 
 
