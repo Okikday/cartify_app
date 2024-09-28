@@ -3,10 +3,9 @@ import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/elements/home_search_bar.dart';
+import 'package:cartify/views/pages/pages/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-
 
 class TopBar extends ConsumerWidget {
   final BuildContext? mainScreenContext;
@@ -26,51 +25,48 @@ class TopBar extends ConsumerWidget {
         child: Row(
           children: [
             Expanded(
-              child: Align(alignment: Alignment.centerLeft,
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: Container(
+                  decoration: BoxDecoration(
+                    color: frostyBackground,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: IconButton(
+                    color: Colors.white,
+                    icon: const Icon(Icons.search),
+                    onPressed: () => setSearchBarFocus(
+                      context,
+                      ref.watch(simpleWidgetProvider).homeSearchBarFocusNode,
+                      ref.watch(simpleWidgetProvider).homeBodyScrollContext,
+                      ref.watch(simpleWidgetProvider).searchBodyAnimController,
+                      ref: ref,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: ()=> DeviceUtils.pushMaterialPage(context, const Notifications()),
+              child: Container(
                 decoration: BoxDecoration(
-                  
                   color: frostyBackground,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: IconButton(
-                  color: Colors.white,
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    setSearchBarFocus(
-                      context,
-                      ref.watch(simpleWidgetProvider).homeSearchBarFocusNode, 
-                      ref.watch(simpleWidgetProvider).homeBodyScrollContext,
-                      ref.watch(simpleWidgetProvider).searchBodyAnimController
-                      );
-                    print("Search button clicked!");
-
-                  
-                  },
-                ),
-                            ),
-              ),
-            ),
-            
-            Container(
-              decoration: BoxDecoration(
-                color: frostyBackground,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Stack(
-                clipBehavior: Clip.hardEdge,
-                children: [
-                  const SizedBox(
-                    width: 52,
-                    height: 36,
-                    child: Icon(Icons.notifications, color: CartifyColors.aliceBlue)),
-
-                  
+                child: Stack(
+                  clipBehavior: Clip.hardEdge,
+                  children: [
+                    const SizedBox(width: 52, height: 36, child: Icon(Icons.notifications, color: CartifyColors.aliceBlue)),
                     Positioned(
-                      top: 4,
-                      right: 8,
-                      child: CircleAvatar(child: ConstantWidgets.text(context, "5", fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white), backgroundColor: Colors.red, radius: 8,))
-                ],
+                        top: 4,
+                        right: 8,
+                        child: CircleAvatar(
+                          child: ConstantWidgets.text(context, "5", fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),
+                          backgroundColor: Colors.red,
+                          radius: 8,
+                        ))
+                  ],
+                ),
               ),
             ),
           ],
@@ -79,11 +75,13 @@ class TopBar extends ConsumerWidget {
     );
   }
 
-  void setSearchBarFocus(BuildContext homeSearchBarContext, FocusNode homeSearchBarFocusNode, BuildContext homeBodyScrollContext, AnimationController searchBodyAnimController){
+  void setSearchBarFocus(
+      BuildContext homeSearchBarContext, FocusNode homeSearchBarFocusNode, BuildContext homeBodyScrollContext, AnimationController searchBodyAnimController,
+      {required WidgetRef ref}) {
     debugPrint("Setting textfield focus");
-    if(homeSearchBarContext.mounted){
+    if (homeSearchBarContext.mounted) {
       FocusScope.of(homeSearchBarContext).requestFocus(homeSearchBarFocusNode);
-      activateHomeSearchBar(homeSearchBarContext, homeBodyScrollContext, searchBodyAnimController);
+      activateHomeSearchBar(homeSearchBarContext, homeBodyScrollContext, searchBodyAnimController, ref);
     }
   }
 }

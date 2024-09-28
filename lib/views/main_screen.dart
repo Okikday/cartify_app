@@ -1,5 +1,4 @@
 import 'package:cartify/states/simple_widget_states.dart';
-import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/page_elements/bottom_nav_bar.dart';
 import 'package:cartify/views/pages/tabs/account.dart';
 import 'package:cartify/views/pages/tabs/categories.dart';

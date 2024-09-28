@@ -47,7 +47,7 @@ class _OrdersState extends ConsumerState<Orders> with WidgetsBindingObserver{
             child: Stack(
           children: [
             ListView.builder(
-                itemCount: 10,
+                itemCount: 5,
                 itemBuilder: (context, index) => Container(
                     margin: const EdgeInsets.only(bottom: 2),
                     child: PurchaseCard(
@@ -84,9 +84,9 @@ class BottomBarBuyNow extends ConsumerWidget {
         right: 0,
         child: Container(
           width: 200,
-          height: 64,
+          height: 72,
           padding: const EdgeInsets.fromLTRB(16, 6, 16, 6),
-          margin: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+          margin: const EdgeInsets.only(left: 12, right: 12, bottom: 8),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               color: Theme.of(context).scaffoldBackgroundColor,

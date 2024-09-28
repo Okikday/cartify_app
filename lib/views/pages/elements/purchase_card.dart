@@ -18,6 +18,7 @@ class PurchaseCard extends ConsumerStatefulWidget {
 
 class _PurchaseCardState extends ConsumerState<PurchaseCard> {
   final FocusNode focusNode = FocusNode();
+  
   @override
   void initState() {
     super.initState();
@@ -25,20 +26,17 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
   }
 
   void listener(){
-    print("focusnode listener run");
     if(focusNode.hasFocus == true){
-      print("focusnode has focus");
-      ref.read(simpleWidgetProvider).isOrdersBottomBarBuyNowVisible = false;
-      
+      ref.refresh(simpleWidgetProvider).isOrdersBottomBarBuyNowVisible = false;
     }else{
-      print("focusnode does not have focus");
-      ref.read(simpleWidgetProvider).isOrdersBottomBarBuyNowVisible = true;
+      ref.refresh(simpleWidgetProvider).isOrdersBottomBarBuyNowVisible = true;
     }
   }
 
   @override
   void dispose() {
     focusNode.removeListener(listener);
+    //focusNode is automatically disposed by CustomTextField
     super.dispose();
   }
 
@@ -105,7 +103,7 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
                           CustomTextfield(
                             focusNode: focusNode,
                             backgroundColor: const Color.fromARGB(26, 211, 211, 211),
-                            contentPadding: EdgeInsets.all(2),
+                            contentPadding: const EdgeInsets.all(2),
                             textAlign: TextAlign.center,
                             pixelWidth: 64,
                             pixelHeight: 32,

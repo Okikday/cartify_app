@@ -17,6 +17,8 @@ class ConstantWidgets {
       FontWeight fontWeight = FontWeight.normal,
       FontStyle fonstStyle = FontStyle.normal,
       TextDecoration textDecoration = TextDecoration.none,
+      Color decorationColor = Colors.black,
+      List<Shadow> shadows = const [],
       }) {
         if(darkColor != null && DeviceUtils.isDarkMode(context) == true) color = darkColor;
     return Text(
@@ -31,7 +33,10 @@ class ConstantWidgets {
         fontFamily: fontFamily,
         fontWeight: fontWeight,
         fontStyle: fonstStyle,
-        decoration: textDecoration
+        decoration: textDecoration,
+        decorationColor: decorationColor,
+        shadows: shadows,
+
       ),
       textAlign: align ?? TextAlign.start,
       overflow: overflow,

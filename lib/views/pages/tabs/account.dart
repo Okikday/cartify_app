@@ -1,5 +1,6 @@
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
+import 'package:cartify/services/product_services.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -41,10 +42,14 @@ class Account extends StatelessWidget {
                 Expanded(child: ConstantWidgets.text(context, "Account", fontSize: 18, fontWeight: FontWeight.bold)),
                 Padding(
                   padding: const EdgeInsets.only(right: 16),
-                  child: Icon(
-                    Icons.settings_outlined,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 28,
+                  child: IconButton(
+                    onPressed: (){
+                    },
+                    icon: Icon(
+                      Icons.settings_outlined,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 28,
+                    ),
                   ),
                 ),
               ],
