@@ -4,6 +4,7 @@ import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_Textfield.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
+import 'package:cartify/services/auth/user_auth.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/authentication/sign_up.dart';
 import 'package:cartify/views/main_screen.dart';
@@ -58,7 +59,7 @@ class SignIn extends StatelessWidget {
                   height: screenHeight * 0.025,
                 ),
                 CustomElevatedButton(
-                  onClick: (){DeviceUtils.pushMaterialPage(context, MainScreen());},
+                  onClick: () {},
                   screenWidth: 90,
                   label: "Sign in",
                   textSize: 16,
@@ -99,7 +100,22 @@ class SignIn extends StatelessWidget {
                   height: screenHeight * 0.025,
                 ),
                 CustomElevatedButton(
-                  onClick: (){},
+                  onClick: () async {
+                    if (context.mounted){
+                      showDialog(
+                          context: context,
+                          builder: (context) => PopScope(canPop: false, child: Dialog(child: SizedBox(width: 200, height: 200, child: Center(child: CircularProgressIndicator())))));
+                    }
+                    final String? signInOutcome = await UserAuth().googleSignIn();
+                    if (signInOutcome == null) {
+                      if (context.mounted) Navigator.pop(context);
+
+                      if (context.mounted) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
+                    } else {
+                      if (context.mounted) Navigator.pop(context);
+                      if (context.mounted) DeviceUtils.showFlushBar(context, signInOutcome);
+                    }
+                  },
                   screenWidth: 90,
                   backgroundColor: Colors.white,
                   elevation: 2,
@@ -119,27 +135,7 @@ class SignIn extends StatelessWidget {
                   height: screenHeight * 0.025,
                 ),
                 CustomElevatedButton(
-                  onClick: (){},
-                  screenWidth: 90,
-                  backgroundColor: Colors.white,
-                  elevation: 2,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: SizedBox(width: 20, height: 20, child: Image.asset("assets/icons/microsoft_logo.png")),
-                      ),
-                      ConstantWidgets.text(context, "Continue with Microsoft", fontSize: 16, color: Colors.black),
-                    ],
-                  ),
-                ),
-
-                SizedBox(
-                  height: screenHeight * 0.025,
-                ),
-                CustomElevatedButton(
-                  onClick: (){},
+                  onClick: () {},
                   screenWidth: 90,
                   backgroundColor: Colors.white,
                   elevation: 2,
@@ -148,14 +144,16 @@ class SignIn extends StatelessWidget {
                 ),
 
                 SizedBox(
-                  height: screenHeight * 0.025,
+                  height: screenHeight * 0.1,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ConstantWidgets.text(context, "Don't have an account?", adjustSize: 4),
                     TextButton(
-                        onPressed: () {DeviceUtils.pushMaterialPage(context, SignUp());},
+                        onPressed: () {
+                          DeviceUtils.pushMaterialPage(context, SignUp());
+                        },
                         style: ButtonStyle(padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
                         child: ConstantWidgets.text(context, "Sign up", color: Theme.of(context).primaryColor, adjustSize: 4))
                   ],

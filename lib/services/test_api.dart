@@ -8,13 +8,13 @@ class TestApi {
   //Test connection
   void testConnect() async {
     final String productsApiURL = "$apiURL/api/v1";
-
+    debugPrint("Testing connect at : $productsApiURL");
     try {
       final dynamic response = await dio.get(productsApiURL, options: Options());
 
       if (response.statusCode == 200) {
         final content = response.data;
-        debugPrint("Success ${content['status']}");
+        debugPrint("${content['status']}");
       } else if (response.statusCode == 404) {
         debugPrint('Failed to fetch data: ${response.statusCode}');
       }

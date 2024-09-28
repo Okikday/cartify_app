@@ -1,23 +1,34 @@
+import 'package:cartify/app.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
-import 'package:cartify/services/product_services.dart';
+import 'package:cartify/services/auth/user_auth.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/pages/pages/upload_product.dart';
 import 'package:flutter/material.dart';
 
 class Account extends StatelessWidget {
   Account({super.key});
 
 //Icon, title
-  final List accountOptions = [
-    [Icons.person, "Account details"],
-    [Icons.add, "Buy and sell"],
-    [Icons.payment_rounded, "Payment method"],
-    [Icons.key, "Change Password"],
-    [Icons.help_outline_rounded, "Support"],
-    [Icons.star_border, "Rate the app"],
-    [Icons.map, "Privacy Policy"],
-    [Icons.info_outline_rounded, "About us"],
-    [Icons.logout, "Log out"],
+  final List<Map<String, dynamic>> accountOptions = [
+    {'icon': Icons.person, 'title': "Account details"},
+
+    //Upload Product
+    {'icon': Icons.add, 'title': "Upload Product", 'onTap': (){
+      DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const UploadProduct());
+    }},
+    {'icon': Icons.payment_rounded, 'title': "Payment method"},
+    {'icon': Icons.key, 'title': "Change Password"},
+    {'icon': Icons.help_outline_rounded, 'title': "Support"},
+    {'icon': Icons.star_border, 'title': "Rate the app"},
+    {'icon': Icons.map, 'title': "Privacy Policy"},
+    {'icon': Icons.info_outline_rounded, 'title': "About us"},
+
+    //Log out
+    {'icon': Icons.logout_rounded, 'title': "Log out", 'onTap': ()async{
+      final String? signOut = await UserAuth().googleSignOut();
+      signOut == null ? debugPrint("Successfully signed out") : debugPrint(signOut);
+    }},
   ];
 
   @override
@@ -154,17 +165,17 @@ class Account extends StatelessWidget {
                 itemCount: accountOptions.length,
                 itemBuilder: (context, index) => ListTile(
                   leading: Icon(
-                    accountOptions[index][0],
+                    accountOptions[index]["icon"],
                     color: Theme.of(context).colorScheme.primary,
                     size: 28,
                   ),
-                  title: ConstantWidgets.text(context, accountOptions[index][1]),
+                  title: ConstantWidgets.text(context, accountOptions[index]["title"]),
                   trailing: Icon(
                     Icons.arrow_forward_ios_rounded,
                     color: Theme.of(context).colorScheme.primary,
                     size: 28,
                   ),
-                  onTap: () {},
+                  onTap: accountOptions[index]["onTap"] ?? (){},
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
               ),

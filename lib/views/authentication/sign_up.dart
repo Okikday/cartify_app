@@ -75,7 +75,7 @@ class SignUp extends StatelessWidget {
                 SizedBox(height: screenHeight * 0.05,),
 
                 CustomElevatedButton(
-                  onClick: (){DeviceUtils.pushMaterialPage(context, const VerifyCode());},
+                  onClick: (){},
                   screenWidth: 90,
                   label: "Sign up",
                   textSize: 16,
