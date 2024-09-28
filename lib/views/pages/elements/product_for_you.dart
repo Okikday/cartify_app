@@ -98,7 +98,7 @@ class ProductForYou extends ConsumerWidget {
             return Container(
               width: 150,
               height: 240,
-              margin: const EdgeInsets.symmetric(horizontal: 8),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), color: Colors.white, ),
               
             );
