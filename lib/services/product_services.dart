@@ -24,6 +24,7 @@ class ProductServices {
 
 //Function to Upload product
   Future<String?> uploadProduct({
+    required String apiKey,
     required String productName,
     required File imageFile,
   }) async {
@@ -43,6 +44,7 @@ class ProductServices {
         data: formData,
         options: Options(
           headers: {
+            "accept": '',
             "Content-Type": "multipart/form-data",
           },
         ),

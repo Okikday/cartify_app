@@ -1,6 +1,7 @@
 import 'dart:io';  // Required for handling files
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
+import 'package:cartify/data/private_storage/user_data.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,12 +67,20 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
                 label: "Upload Product",
                 textSize: 14,
                 onClick: () async {
-                  if (imageFile != null && productName.isNotEmpty && productName.length < 2) {
+
+                  if (imageFile != null && productName.isNotEmpty && productName.length > 2) {
+
+                    final String? apiKey = await UserData().getUserApiKey();
+
                     // Call the upload function
-                    String? result = await ProductServices().uploadProduct(
+                    String? result;
+                    if(apiKey != null){
+                      result = await ProductServices().uploadProduct(
+                      apiKey: apiKey,
                       productName: productName,
                       imageFile: imageFile!,
                     );
+                    }
 
                     if (result == null) {
                       debugPrint("Product uploaded successfully");

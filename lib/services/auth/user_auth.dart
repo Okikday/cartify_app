@@ -1,4 +1,5 @@
 import 'package:cartify/data/private_storage/user_data.dart';
+import 'package:cartify/models/user_model.dart';
 import 'package:cartify/services/services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -6,16 +7,23 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class UserAuth {
-  static final GoogleSignIn googleUserAuth = GoogleSignIn(
-    clientId: dotenv.env["CLIENT_ID"], scopes: <String>['email', 'profile',], );
+  static final clientID = dotenv.env["CLIENT_ID"];
+  static final serverClientID = dotenv.env["SERVER_CLIENT_ID"];
 
-  static Future<GoogleSignInAccount?> login() => googleUserAuth.signIn();
-  static Future signOut() => googleUserAuth.signOut();
+
+  static final GoogleSignIn googleUserAuth = GoogleSignIn(
+    forceCodeForRefreshToken: true,
+    clientId: clientID,
+    serverClientId: serverClientID,
+    scopes: [
+      'email',
+      'profile',
+    ],
+  );
 
   Future<String?> googleSignIn() async {
     try{
-      debugPrint("${dotenv.env["CLIENT_ID"]}");
-      //Try signing in
+
       final GoogleSignInAccount? googleUser = await googleUserAuth.signIn();
 
       if (googleUser == null) {
@@ -32,18 +40,15 @@ class UserAuth {
       final String? displayName = googleUser.displayName;
       final String email = googleUser.email;
       final String? photoURL = googleUser.photoUrl;
-      final String privateUserID = googleUser.id;
 
       if(idToken != null){
         await sendGoogleToken(idToken);
-        debugPrint("Id token: $idToken");
       }else{
-        debugPrint("Error: No ID Token");
         return "Error: No ID Token";
       }
 
       UserData().storeGoogleSignInDetails(
-          idToken: idToken, accessToken: accessToken, displayName: displayName, email: email, photoURL: photoURL, privateUserID: privateUserID);
+          idToken: idToken, accessToken: accessToken, displayName: displayName, email: email, photoURL: photoURL,);
 
       
       // If everything is successful, return null (no error)
@@ -62,8 +67,12 @@ class UserAuth {
       );
 
       if(response.statusCode == 200){
-        debugPrint("Successfully added User");
-        debugPrint("${response.data}");
+        final responseUser = response.data['payload']['user'];
+        final userData = UserModel.fromMap(responseUser);
+
+        UserData().storeUserApiKey(userData.apiKey);
+        UserData().storeUserDetails(userID: userData.id, fullName: userData.fullName,);
+        
         return null;
 
       }else if(response.statusCode == 404){

@@ -10,27 +10,27 @@ class UserData {
     required String? displayName,
     required String? email,
     required String? photoURL,
-    String? privateUserID,
     }) async{
+
      // Store tokens in secure storage
-      if (idToken != null) {
-        await secureStorage.write(key: 'idToken', value: idToken);
-      }
-      if (accessToken != null) {
-        await secureStorage.write(key: 'accessToken', value: accessToken);
-      }
-      if (displayName != null) {
-        await secureStorage.write(key: 'displayName', value: displayName);
-      }
-      if (email != null) {
-        await secureStorage.write(key: 'email', value: email);
-      }
-      if (photoURL != null) {
-        await secureStorage.write(key: 'photoURL', value: photoURL);
-      }
-      if (privateUserID != null){
-        await secureStorage.write(key: 'privateUserID', value: privateUserID);
-      }
+      if (idToken != null) await secureStorage.write(key: 'idToken', value: idToken);
+
+      if (accessToken != null) await secureStorage.write(key: 'accessToken', value: accessToken);
+
+      if (displayName != null) await secureStorage.write(key: 'displayName', value: displayName);
+
+      if (email != null) await secureStorage.write(key: 'email', value: email);
+
+      if (photoURL != null) await secureStorage.write(key: 'photoURL', value: photoURL);
+  }
+
+  Future<void> storeUserDetails({
+    required String? userID,
+    required String? fullName,
+  }) async{
+    if(userID != null) await secureStorage.write(key: 'userID', value: userID);
+
+    if(fullName != null) await secureStorage.write(key: 'fullName', value: fullName);
   }
 
   Future<void> clearStoredGoogleSignInDetails() async {
@@ -42,6 +42,12 @@ class UserData {
     await secureStorage.delete(key: 'email');
     await secureStorage.delete(key: 'photoURL');
     await secureStorage.delete(key: 'privateUserID');
+    await secureStorage.delete(key: 'apiKey');
+  }
+
+  Future<void> clearUserDetails() async{
+    await secureStorage.delete(key: 'userID');
+    await secureStorage.delete(key: 'fullName');
   }
 
   Future<bool> isUserSignedIn() async{
@@ -49,9 +55,9 @@ class UserData {
     return idToken != null;
   }
 
-  // Future<void> storeUserAPIKey(Map userData) async{
-  //   secureStorage.write(key: "user", value: userData);
-  // }
+  Future<void> storeUserApiKey(String apiKey) async => secureStorage.write(key: 'apiKey', value: apiKey);
+
+  Future<String?> getUserApiKey() async => secureStorage.read(key: 'apiKey');
 
 
 }

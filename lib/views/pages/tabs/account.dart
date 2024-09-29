@@ -3,6 +3,7 @@ import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/services/auth/user_auth.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/authentication/sign_in.dart';
 import 'package:cartify/views/pages/pages/upload_product.dart';
 import 'package:flutter/material.dart';
 
@@ -26,8 +27,10 @@ class Account extends StatelessWidget {
 
     //Log out
     {'icon': Icons.logout_rounded, 'title': "Log out", 'onTap': ()async{
+      
       final String? signOut = await UserAuth().googleSignOut();
       signOut == null ? debugPrint("Successfully signed out") : debugPrint(signOut);
+      if(signOut == null) Navigator.pushReplacement(globalNavKey.currentContext!, MaterialPageRoute(builder: (context) => const SignIn()));
     }},
   ];
 

@@ -128,7 +128,8 @@ class HomeBody extends ConsumerWidget {
     return RefreshIndicator(
       displacement: 20,
       onRefresh: () async {
-        ref.watch(productsFutureProvider);
+        // ignore: unused_result
+        ref.refresh(productsFutureProvider);
         DeviceUtils.showFlushBar(context, "Products Refreshed!");
       },
       child: SingleChildScrollView(
