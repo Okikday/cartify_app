@@ -102,6 +102,7 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
                           IconButton(onPressed: () {}, icon: const Icon(Icons.remove_circle_outline_rounded)),
                           CustomTextfield(
                             focusNode: focusNode,
+                            keyboardType: const TextInputType.numberWithOptions(),
                             backgroundColor: const Color.fromARGB(26, 211, 211, 211),
                             contentPadding: const EdgeInsets.all(2),
                             textAlign: TextAlign.center,

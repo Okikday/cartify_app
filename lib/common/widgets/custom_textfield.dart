@@ -32,6 +32,7 @@ class CustomTextfield extends StatefulWidget {
   final TextAlign textAlign;
   final EdgeInsets? contentPadding;
   final FocusNode? focusNode;
+  final int maxLines;
 
   const CustomTextfield({
     super.key,
@@ -62,6 +63,7 @@ class CustomTextfield extends StatefulWidget {
     this.textAlign = TextAlign.start,
     this.contentPadding,
     this.focusNode,
+    this.maxLines = 1
   });
 
   @override
@@ -125,6 +127,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
           ? DeviceUtils.getScreenHeight(context) * (widget.screenHeight! / 100)
           : widget.pixelHeight,
       child: TextField(
+        maxLines: widget.maxLines,
         textAlign: widget.textAlign,
         obscureText: widget.obscureText,
         keyboardType: widget.keyboardType,
@@ -148,8 +151,8 @@ class _CustomTextfieldState extends State<CustomTextfield> {
           focusNode.unfocus();
           if (widget.onTapOutside != null) widget.onTapOutside!();
         },
-        style: widget.inputTextStyle ?? const TextStyle(color: Colors.black),
-        cursorColor: Colors.black,
+        style: widget.inputTextStyle ?? TextStyle(color: DeviceUtils.isDarkMode(context) ? Colors.white : Colors.black),
+        cursorColor: DeviceUtils.isDarkMode(context) ? Colors.white : Colors.black,
         cursorRadius: const Radius.circular(12),
         decoration: InputDecoration(
           prefixIcon: widget.prefixIcon,

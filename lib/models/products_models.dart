@@ -11,7 +11,7 @@ class ProductsModels {
   final DateTime createdAt;
   final DateTime updatedAt;
   final Map<String, dynamic> averageRating;
-  final double discountedPrice;
+  final double? discountedPrice;
 
   ProductsModels({
     required this.id,
@@ -21,12 +21,12 @@ class ProductsModels {
     required this.productDetails,
     required this.category,
     required this.price,
-    required this.units,
-    required this.discountPercentage,
     required this.createdAt,
     required this.updatedAt,
-    required this.averageRating,
-    required this.discountedPrice,
+    this.averageRating = const {},
+    this.units = 1,
+    this.discountPercentage = 0,
+    this.discountedPrice,
   });
 
   factory ProductsModels.fromMap(Map<String, dynamic> json) {

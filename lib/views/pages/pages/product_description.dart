@@ -7,7 +7,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductDescription extends ConsumerStatefulWidget {
-  const ProductDescription({super.key});
+  final String id;
+  final String vendor;
+  final String name;
+  final String photo;
+  final String productDetails;
+  final String category;
+  final double price;
+  final int units;
+  final double discountPercentage;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final Map<String, dynamic> averageRating;
+  final double? discountedPrice;
+  const ProductDescription({
+    super.key,
+    required this.id,
+    required this.vendor,
+    required this.name,
+    required this.photo,
+    required this.productDetails,
+    required this.category,
+    required this.price,
+    required this.createdAt,
+    required this.updatedAt,
+    this.averageRating = const {},
+    this.units = 1,
+    this.discountPercentage = 0,
+    this.discountedPrice,
+  });
 
   @override
   ConsumerState<ProductDescription> createState() => _ProductDescriptionState();
@@ -19,7 +47,7 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
   @override
   void initState() {
     super.initState();
-    imageTabController = TabController(length: 2, vsync: this);
+    imageTabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -57,14 +85,15 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
                               TabBarView(
                                 controller: imageTabController,
                                 children: [
-                                  ImageTab(),
-                                  ImageTab(),
+                                  ImageTab(assetName: widget.photo,),
+                                  ImageTab(assetName: widget.photo,),
+                                  ImageTab(assetName: widget.photo,),
                                 ],
                               ),
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
-                                    padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+                                    padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
                                     margin: const EdgeInsets.only(bottom: 8),
                                     decoration:
                                         BoxDecoration(borderRadius: BorderRadius.circular(24), color: CartifyColors.royalBlue.withAlpha(75), boxShadow: [
@@ -82,7 +111,8 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
                     ),
                   ),
                 ],
-            body: ProductDescBody()));
+            body: ProductDescBody(productName: widget.name, price: widget.price.toString(), description: widget.productDetails),
+            ));
   }
 }
 
@@ -141,8 +171,14 @@ class DescriptionTitle extends StatelessWidget {
 }
 
 class ProductDescBody extends StatelessWidget {
+  final String productName;
+  final String price;
+  final String description;
   const ProductDescBody({
     super.key,
+    required this.productName,
+    required this.price,
+    required this.description
   });
 
   @override
@@ -159,7 +195,7 @@ class ProductDescBody extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ConstantWidgets.text(context, "iPhone 15 Pro Max", fontSize: 16, fontWeight: FontWeight.bold),
+                ConstantWidgets.text(context, productName, fontSize: 16, fontWeight: FontWeight.bold),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.bookmark_add_outlined),
@@ -176,7 +212,7 @@ class ProductDescBody extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ConstantWidgets.text(context, "#1,700,000", color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+                ConstantWidgets.text(context, price, color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
                 ConstantWidgets.text(context, "Rate Product",
                     textDecoration: TextDecoration.underline, color: CartifyColors.premiumGold, decorationColor: CartifyColors.premiumGold)
               ],
@@ -201,9 +237,7 @@ class ProductDescBody extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: ConstantWidgets.text(
                     context,
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing eli, "
-                    "sed do elusmod tempor inciditut ut labore et dolore magna aliqua. Ut"
-                    "enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"),
+                    description),
               ),
               const SizedBox(
                 height: 16,
@@ -321,8 +355,10 @@ class ReviewBox extends StatelessWidget {
 }
 
 class ImageTab extends StatelessWidget {
+  final String assetName;
   const ImageTab({
     super.key,
+    required this.assetName
   });
 
   @override
@@ -334,10 +370,7 @@ class ImageTab extends StatelessWidget {
       ),
       child: ColorFiltered(
         colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.1), BlendMode.colorBurn),
-        child: Image.asset(
-          "assets/images/iphone_15_pm.jpg",
-          fit: BoxFit.cover,
-        ),
+        child: Image.network( assetName, fit: BoxFit.cover,),
       ),
     );
   }

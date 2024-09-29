@@ -40,12 +40,15 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
   void didChangeDependencies() {
     super.didChangeDependencies();
     ref.watch(simpleWidgetProvider).searchBodyAnimController = searchBodyAnimController;
+    // ignore: unused_result
   }
 
   @override
   Widget build(
     BuildContext context,
   ) {
+    // ignore: unused_result
+    ref.refresh(productsFutureProvider);
     DeviceUtils.setStatusBarColor(Theme.of(context).scaffoldBackgroundColor, DeviceUtils.isDarkMode(context) == true ? Brightness.light : Brightness.dark);
 
     return NestedScrollView(

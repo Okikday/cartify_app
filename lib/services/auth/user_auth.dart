@@ -6,9 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+ const String googleAuthSignInUrl = "/api/v1/auth/google";
+ const String googleAuthSignOutUrl = "/api/v1/auth/sign-out";
+ 
+
 class UserAuth {
   static final clientID = dotenv.env["CLIENT_ID"];
   static final serverClientID = dotenv.env["SERVER_CLIENT_ID"];
+  final UserData userData = UserData();
 
 
   static final GoogleSignIn googleUserAuth = GoogleSignIn(
@@ -42,16 +47,17 @@ class UserAuth {
       final String? photoURL = googleUser.photoUrl;
 
       if(idToken != null){
-        await sendGoogleToken(idToken);
+        final result = await sendGoogleTokenToBackend(idToken);
+        if(result != null) return result;
       }else{
         return "Error: No ID Token";
       }
 
       UserData().storeGoogleSignInDetails(
-          idToken: idToken, accessToken: accessToken, displayName: displayName, email: email, photoURL: photoURL,);
+          googleIdToken: idToken, googleAccessToken: accessToken, displayName: displayName, email: email, photoURL: photoURL,);
 
       
-      // If everything is successful, return null (no error)
+      // If everything is successful, return null
       return null;
     } catch (e) {
       debugPrint("$e");
@@ -59,19 +65,23 @@ class UserAuth {
     }
   }
 
-  Future<String?> sendGoogleToken(String idToken) async{
+  Future<String?> sendGoogleTokenToBackend(String googleIdToken) async{
     try{
       final Response response = await dio.post(
-        "$apiURL/api/v1/auth/google",
-        data: {"token": idToken,},
+        "$apiURL$googleAuthSignInUrl",
+        data: {"token": googleIdToken,},
       );
 
       if(response.statusCode == 200){
         final responseUser = response.data['payload']['user'];
-        final userData = UserModel.fromMap(responseUser);
+        final userDetails = UserModel.fromMap(responseUser);
+        
+        debugPrint(responseUser.toString());
 
-        UserData().storeUserApiKey(userData.apiKey);
-        UserData().storeUserDetails(userID: userData.id, fullName: userData.fullName,);
+        userData.storeUserApiKey(userDetails.apiKey);
+        userData.storeUserDetails(userID: userDetails.id, fullName: userDetails.fullName, role: userDetails.role, 
+        phoneNumber: int.tryParse(userDetails.phoneNumber) != null || int.tryParse(userDetails.phoneNumber) != 0 ? userDetails.phoneNumber : null,
+        );
         
         return null;
 
@@ -90,17 +100,10 @@ class UserAuth {
   }
 
   Future<String?> googleSignOut() async {
-    try {
-      // Sign out the currently signed-in user
-      await googleUserAuth.signOut();
-
-      //clear details from secure storage
-      await UserData().clearStoredGoogleSignInDetails();
-
-      return null;
-    } catch (e) {
-      return e.toString();
-    }
+    await googleUserAuth.signOut();
+    await userData.clearUserDetails();
+    return null;
+      
   }
   
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/models/products_models.dart';
@@ -9,10 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 
 final productsFutureProvider = FutureProvider<List<ProductsModels>>((ref) async {
-  final productService = ProductServices();
-  return await productService.getProducts(); // Fetch products using the function
+  return await productServices.getProducts(); // Fetch products using the function
 });
-
 
 class ProductForYou extends ConsumerWidget {
   final String topic;
@@ -65,6 +64,20 @@ class ProductForYou extends ConsumerWidget {
                       rating: "4.8",
                       first: index == 0,
                       last: index == list.length - 1,
+                      onClick: () {
+                        DeviceUtils.pushMaterialPage(
+                            context,
+                            ProductDescription(
+                                id: product.id,
+                                vendor: product.vendor,
+                                name: product.name,
+                                photo: product.photo,
+                                productDetails: product.productDetails,
+                                category: product.category,
+                                price: product.price,
+                                createdAt: product.createdAt,
+                                updatedAt: product.updatedAt));
+                      },
                     );
                   },
                 ),
@@ -84,31 +97,26 @@ class ProductForYou extends ConsumerWidget {
     );
   }
 
-  // Function to create a shimmer loading effect
   Widget _buildShimmerLoading(double screenWidth) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: SizedBox(
-        width: screenWidth,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 5, // Show 5 shimmer placeholders
-          itemBuilder: (context, index) {
-            return Container(
-              width: 150,
-              height: 240,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), color: Colors.white, ),
-              
-            );
-          },
+      baseColor: CartifyColors.royalBlue.withAlpha(50),
+      highlightColor: CartifyColors.royalBlue.withAlpha(100),
+      period: const Duration(milliseconds: 1500), // Control shimmer speed
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          width: screenWidth,
+          height: 225,
+          margin: const EdgeInsets.symmetric(horizontal: 24),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            color: Colors.white,
+          ),
         ),
       ),
     );
   }
 }
-
 
 class ProductForYouCard extends StatelessWidget {
   final String productName;
@@ -118,16 +126,17 @@ class ProductForYouCard extends StatelessWidget {
   final String rating;
   final bool? first;
   final bool? last;
-  const ProductForYouCard({
-    super.key,
-    required this.productName,
-    required this.description,
-    required this.assetName,
-    required this.price,
-    required this.rating,
-    this.first = false,
-    this.last = false,
-  });
+  final void Function()? onClick;
+  const ProductForYouCard(
+      {super.key,
+      required this.productName,
+      required this.description,
+      required this.assetName,
+      required this.price,
+      required this.rating,
+      this.first = false,
+      this.last = false,
+      this.onClick});
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +146,7 @@ class ProductForYouCard extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(first == true ? 16 : 8, 8, last == true ? 16 : 8, 8),
       child: InkWell(
         onTap: () {
-          DeviceUtils.pushMaterialPage(context, const ProductDescription());
+          onClick == null ? () {} : onClick!();
         },
         overlayColor: WidgetStatePropertyAll(CartifyColors.lightPremiumGold.withAlpha(50)),
         borderRadius: BorderRadius.circular(12),
@@ -171,11 +180,8 @@ class ProductForYouCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: CartifyColors.royalBlue.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(assetName),
-                  ),
                 ),
+                child: CachedNetworkImage(imageUrl: assetName, fit: BoxFit.cover, placeholder: (context, url) => CircleAvatar(child: const CircularProgressIndicator()), errorWidget: (context, url, error) => Icon(Icons.error),),
               ),
               const SizedBox(
                 height: 8,
@@ -195,15 +201,21 @@ class ProductForYouCard extends StatelessWidget {
                 height: 8,
               ),
               ConstantWidgets.text(context, price, color: Colors.green, fontWeight: FontWeight.bold),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                Icon(Icons.star_rounded, color: CartifyColors.premiumGold, size: 18,),
-                const SizedBox(width: 4,),
-                ConstantWidgets.text(context, rating, fontWeight: FontWeight.bold),
-              ],)
+                  Icon(
+                    Icons.star_rounded,
+                    color: CartifyColors.premiumGold,
+                    size: 18,
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  ConstantWidgets.text(context, rating, fontWeight: FontWeight.bold),
+                ],
+              )
             ],
           ),
         ),
@@ -211,6 +223,3 @@ class ProductForYouCard extends StatelessWidget {
     );
   }
 }
-
-
-

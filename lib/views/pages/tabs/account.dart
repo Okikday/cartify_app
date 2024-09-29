@@ -4,6 +4,7 @@ import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/services/auth/user_auth.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/authentication/sign_in.dart';
+import 'package:cartify/views/page_elements/loading_dialog.dart';
 import 'package:cartify/views/pages/pages/upload_product.dart';
 import 'package:flutter/material.dart';
 
@@ -27,9 +28,10 @@ class Account extends StatelessWidget {
 
     //Log out
     {'icon': Icons.logout_rounded, 'title': "Log out", 'onTap': ()async{
-      
-      final String? signOut = await UserAuth().googleSignOut();
-      signOut == null ? debugPrint("Successfully signed out") : debugPrint(signOut);
+      if(globalNavKey.currentContext!.mounted) showDialog(context: globalNavKey.currentContext!, builder: (context) => const LoadingDialog());
+      final UserAuth userAuth = UserAuth();
+      final String? signOut = await userAuth.googleSignOut();
+      if(globalNavKey.currentContext!.mounted) signOut != null ? DeviceUtils.showFlushBar(globalNavKey.currentContext!, signOut) : (){};
       if(signOut == null) Navigator.pushReplacement(globalNavKey.currentContext!, MaterialPageRoute(builder: (context) => const SignIn()));
     }},
   ];
@@ -45,7 +47,7 @@ class Account extends StatelessWidget {
           Container(
             height: screenHeight * 0.1,
             width: screenWidth,
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               left: 16,
               right: 16,
               top: 16,
