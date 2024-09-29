@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/data/test_data.dart';
@@ -370,7 +371,7 @@ class ImageTab extends StatelessWidget {
       ),
       child: ColorFiltered(
         colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.1), BlendMode.colorBurn),
-        child: Image.network( assetName, fit: BoxFit.cover,),
+        child: CachedNetworkImage(imageUrl: assetName, fit: BoxFit.cover, placeholder: (context, url) => const CircleAvatar(backgroundColor: Colors.transparent, child: CircularProgressIndicator()), errorWidget: (context, url, error) => const Icon(Icons.error),),
       ),
     );
   }

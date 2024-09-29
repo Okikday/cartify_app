@@ -181,7 +181,7 @@ class ProductForYouCard extends StatelessWidget {
                   color: CartifyColors.royalBlue.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: CachedNetworkImage(imageUrl: assetName, fit: BoxFit.cover, placeholder: (context, url) => CircleAvatar(child: const CircularProgressIndicator()), errorWidget: (context, url, error) => Icon(Icons.error),),
+                child: CachedNetworkImage(imageUrl: assetName, fit: BoxFit.cover, placeholder: (context, url) => const CircleAvatar(backgroundColor: Colors.transparent, child: CircularProgressIndicator()), errorWidget: (context, url, error) => const Icon(Icons.error),),
               ),
               const SizedBox(
                 height: 8,

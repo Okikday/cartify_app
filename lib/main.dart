@@ -13,6 +13,5 @@ void main() async{
   final hiveData = HiveData();
   await hiveData.initSecureHiveData();
   
-  
   runApp(const ProviderScope(child: App()));
 }

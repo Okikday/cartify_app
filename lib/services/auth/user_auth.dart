@@ -75,8 +75,6 @@ class UserAuth {
       if(response.statusCode == 200){
         final responseUser = response.data['payload']['user'];
         final userDetails = UserModel.fromMap(responseUser);
-        
-        debugPrint(responseUser.toString());
 
         userData.storeUserApiKey(userDetails.apiKey);
         userData.storeUserDetails(userID: userDetails.id, fullName: userDetails.fullName, role: userDetails.role, 

@@ -23,7 +23,6 @@ class UserServices {
       
       if(apiKey == null) return "account-error";
       try{
-        print("$apiURL$updateRoleUrl");
         final Response response = await dio.put(
         "$apiURL$updateRoleUrl",
         data: {

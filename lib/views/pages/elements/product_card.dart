@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/utils/device_utils.dart';
@@ -5,7 +6,10 @@ import 'package:cartify/views/pages/elements/custom_box.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+  final String assetName;
+  final String price;
+
+  const ProductCard({super.key, required this.assetName, required this.price});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,8 @@ class ProductCard extends StatelessWidget {
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 200),
-                  child: Image.asset("assets/images/iphone_15_pm.jpg")),
+                  child: CachedNetworkImage(imageUrl: assetName, fit: BoxFit.cover, placeholder: (context, url) => const CircleAvatar(backgroundColor: Colors.transparent, child: CircularProgressIndicator()), errorWidget: (context, url, error) => const Icon(Icons.error),),
+                  ),
               ),
               Expanded(
                 child: Padding(

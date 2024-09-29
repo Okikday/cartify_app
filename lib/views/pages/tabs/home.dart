@@ -127,7 +127,7 @@ class HomeBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(simpleWidgetProvider).homeBodyScrollContext = context;
-
+    final productsAsyncValue = ref.watch(productsFutureProvider);
     return RefreshIndicator(
       displacement: 20,
       onRefresh: () async {
@@ -192,7 +192,19 @@ class HomeBody extends ConsumerWidget {
                   ],
                 ),
               ),
-              for (int i = 0; i < 9; i++) ProductCard()
+              productsAsyncValue.when(
+                data: (products) => Column(children: [
+                  for(int i = 0; i < products.length; i++)
+                  ProductCard(assetName: products[i].photo, price: products[i].price.toString())
+                ],), 
+                error: (error, stackTrace) => Center(
+                child: SizedBox(
+                  height: 200,
+                  child: ConstantWidgets.text(context, "Unable to load products"),
+                ),
+              ),
+                loading: () => CircleAvatar(backgroundColor: Colors.transparent,child: CircularProgressIndicator(),),
+                )
             ],
           ),
         ),
