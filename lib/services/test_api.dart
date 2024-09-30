@@ -6,22 +6,34 @@ class TestApi {
 
   
   //Test connection
-  void testConnect() async {
+  static Future<String?> testConnect() async {
     final String productsApiURL = "$apiURL/api/v1";
     debugPrint("Testing connect at : $productsApiURL");
     try {
       final dynamic response = await dio.get(productsApiURL, options: Options());
 
       if (response.statusCode == 200) {
-        final content = response.data;
-        debugPrint("${content['status']}");
+        debugPrint(response.data.toString());
+        // ignore: avoid_print
+        print("Connected");
+        return null;
       } else if (response.statusCode == 404) {
         debugPrint('Failed to fetch data: ${response.statusCode}');
+        // ignore: avoid_print
+        print("Failed to connect: ERROR 404");
+        return "Unable to connect to server";
+      } else{
+        // ignore: avoid_print
+        print("Unknown error occured!");
+        return "An unknown error occured!";
       }
 
     } 
     catch (e) {
       debugPrint('Error: $e');
+      // ignore: avoid_print
+      print("Unknown error while connecting");
+      return "Unable to connect to server";
     }
 
   }

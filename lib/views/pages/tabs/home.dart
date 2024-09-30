@@ -5,11 +5,9 @@ import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/elements/home_search_bar.dart';
 import 'package:cartify/views/pages/elements/home_space_bar_bg.dart';
-import 'package:cartify/views/pages/elements/product_card.dart';
 import 'package:cartify/views/pages/elements/product_for_you.dart';
 import 'package:cartify/views/pages/elements/top_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Home extends ConsumerStatefulWidget {
@@ -33,14 +31,12 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
     super.initState();
     tabController = TabController(length: slidableMap.length, vsync: this);
     searchBodyAnimController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
-    // opacAnim = Tween<double>(begin: 0.2, end: 1).animate(searchBodyAnimController);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     ref.watch(simpleWidgetProvider).searchBodyAnimController = searchBodyAnimController;
-    // ignore: unused_result
   }
 
   @override
@@ -91,9 +87,12 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
                       left: 16,
                       child: Container(
                           padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), color: const Color.fromARGB(255, 162, 174, 211).withAlpha(100), boxShadow: [
-                            BoxShadow(color: Colors.black.withOpacity(0.5), blurStyle: BlurStyle.outer),
-                          ]),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(24),
+                              color: const Color.fromARGB(255, 162, 174, 211).withAlpha(100),
+                              boxShadow: [
+                                BoxShadow(color: Colors.black.withOpacity(0.5), blurStyle: BlurStyle.outer),
+                              ]),
                           child: TabPageSelector(
                             selectedColor: Colors.white,
                             controller: tabController,
@@ -127,7 +126,7 @@ class HomeBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(simpleWidgetProvider).homeBodyScrollContext = context;
-    final productsAsyncValue = ref.watch(productsFutureProvider);
+    
     return RefreshIndicator(
       displacement: 20,
       onRefresh: () async {
@@ -170,7 +169,7 @@ class HomeBody extends ConsumerWidget {
                 list: productCategoriesList,
               ),
               const Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
+                padding: EdgeInsets.only(left: 8, right: 8),
                 child: Divider(
                   color: CartifyColors.lightGray,
                 ),
@@ -192,19 +191,7 @@ class HomeBody extends ConsumerWidget {
                   ],
                 ),
               ),
-              productsAsyncValue.when(
-                data: (products) => Column(children: [
-                  for(int i = 0; i < products.length; i++)
-                  ProductCard(assetName: products[i].photo, price: products[i].price.toString())
-                ],), 
-                error: (error, stackTrace) => Center(
-                child: SizedBox(
-                  height: 200,
-                  child: ConstantWidgets.text(context, "Unable to load products"),
-                ),
-              ),
-                loading: () => CircleAvatar(backgroundColor: Colors.transparent,child: CircularProgressIndicator(),),
-                )
+              
             ],
           ),
         ),

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async{
+  
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
   await Hive.initFlutter();
@@ -14,4 +15,5 @@ void main() async{
   await hiveData.initSecureHiveData();
   
   runApp(const ProviderScope(child: App()));
+
 }

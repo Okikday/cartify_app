@@ -105,6 +105,7 @@ void activateHomeSearchBar(
   void Function()? todo,
 }) {
   PrimaryScrollController.of(scrollContext).jumpTo(0);
+  ref.read(simpleWidgetProvider).isSearchBodyVisible = true;
   todo == null ? () {} : todo();
   showBottomSheet(
       context: context,

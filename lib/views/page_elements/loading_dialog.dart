@@ -24,7 +24,7 @@ class LoadingDialog extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const CircleAvatar(backgroundColor: Colors.transparent, child: const CircularProgressIndicator()),
+                      const CircleAvatar(backgroundColor: Colors.transparent, child: CircularProgressIndicator(strokeCap: StrokeCap.round,)),
                       const SizedBox(height: 16,),
                       ConstantWidgets.text(context, "Just a moment..."),
                     ],

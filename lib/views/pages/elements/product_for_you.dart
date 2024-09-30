@@ -4,10 +4,10 @@ import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/models/products_models.dart';
 import 'package:cartify/services/product_services.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/page_elements/loading_shimmer.dart';
 import 'package:cartify/views/pages/pages/product_description.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shimmer/shimmer.dart';
 
 final productsFutureProvider = FutureProvider<List<ProductsModels>>((ref) async {
   return await productServices.getProducts(); // Fetch products using the function
@@ -84,35 +84,18 @@ class ProductForYou extends ConsumerWidget {
               ),
               error: (error, stackTrace) => Center(
                 child: SizedBox(
-                  height: 200,
-                  child: ConstantWidgets.text(context, "Unable to load products"),
+                  width: screenWidth * 0.9,
+                  child: ConstantWidgets.text(context, "Unable to load products. Try connecting to a WiFi or Network.", align: TextAlign.center),
                 ),
               ),
-              loading: () => _buildShimmerLoading(screenWidth),
+              loading: () => LoadingShimmer(
+                width: screenWidth * 0.9,
+                height: 240,
+              ),
             ),
           ),
           const SizedBox(height: 12),
         ],
-      ),
-    );
-  }
-
-  Widget _buildShimmerLoading(double screenWidth) {
-    return Shimmer.fromColors(
-      baseColor: CartifyColors.royalBlue.withAlpha(50),
-      highlightColor: CartifyColors.royalBlue.withAlpha(100),
-      period: const Duration(milliseconds: 1500), // Control shimmer speed
-      child: Align(
-        alignment: Alignment.center,
-        child: Container(
-          width: screenWidth,
-          height: 225,
-          margin: const EdgeInsets.symmetric(horizontal: 24),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            color: Colors.white,
-          ),
-        ),
       ),
     );
   }
@@ -160,7 +143,7 @@ class ProductForYouCard extends StatelessWidget {
             color: isDarkMode == true ? CartifyColors.lightPremiumGold.withAlpha(10) : CartifyColors.royalBlue.withOpacity(0.1),
             boxShadow: isDarkMode == true
                 ? [
-                    BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: Offset(2, 2), blurStyle: BlurStyle.inner),
+                    BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: const Offset(2, 2), blurStyle: BlurStyle.inner),
                   ]
                 : [
                     BoxShadow(
@@ -181,7 +164,12 @@ class ProductForYouCard extends StatelessWidget {
                   color: CartifyColors.royalBlue.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: CachedNetworkImage(imageUrl: assetName, fit: BoxFit.cover, placeholder: (context, url) => const CircleAvatar(backgroundColor: Colors.transparent, child: CircularProgressIndicator()), errorWidget: (context, url, error) => const Icon(Icons.error),),
+                child: CachedNetworkImage(
+                  imageUrl: assetName,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const LoadingShimmer(width: 140, height: 140,),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
               ),
               const SizedBox(
                 height: 8,

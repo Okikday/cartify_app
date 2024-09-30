@@ -202,6 +202,7 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
               // Button to "Upload Product"
               CustomElevatedButton(
                   label: "Add Product",
+                  screenWidth: 90,
                   textSize: 14,
                   onClick: () {
                     uploadAction(productName: productName, imageFile: imageFile, productDetails: productDetails, productPrice: productPrice, category: category, units: units, discountPercentage: discountPercentage);

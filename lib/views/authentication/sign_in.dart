@@ -8,6 +8,7 @@ import 'package:cartify/services/auth/user_auth.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/authentication/sign_up.dart';
 import 'package:cartify/views/main_screen.dart';
+import 'package:cartify/views/page_elements/loading_dialog.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,11 +41,11 @@ class SignIn extends StatelessWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(left: 24, right: 24, top: 48),
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 80),
               child: Column(
                 children: [
                   //Top Text
-                  ConstantWidgets.text(context, "Login to your account", fontSize: 36, fontWeight: FontWeight.bold, color: CartifyColors.premiumGold),
+                  ConstantWidgets.text(context, "Login to your account", fontSize: 20, fontWeight: FontWeight.bold,),
       
                   SizedBox(
                     height: screenHeight * 0.05,
@@ -121,7 +122,7 @@ class SignIn extends StatelessWidget {
                       if (context.mounted){
                         showDialog(
                             context: context,
-                            builder: (context) => PopScope(canPop: false, child: Dialog(child: SizedBox(width: 200, height: 200, child: Center(child: CircularProgressIndicator())))));
+                            builder: (context) => const LoadingDialog());
                       }
                       final String? signInOutcome = await UserAuth().googleSignIn();
                       if (signInOutcome == null) {

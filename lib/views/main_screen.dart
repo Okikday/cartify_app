@@ -1,4 +1,7 @@
+import 'package:cartify/app.dart';
+import 'package:cartify/services/test_api.dart';
 import 'package:cartify/states/simple_widget_states.dart';
+import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/page_elements/bottom_nav_bar.dart';
 import 'package:cartify/views/pages/tabs/account.dart';
 import 'package:cartify/views/pages/tabs/categories.dart';
@@ -6,6 +9,7 @@ import 'package:cartify/views/pages/tabs/home.dart';
 import 'package:cartify/views/pages/tabs/orders.dart';
 import 'package:cartify/views/pages/tabs/wishlists.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -18,6 +22,7 @@ class MainScreen extends ConsumerStatefulWidget {
 class _MainScreenState extends ConsumerState<MainScreen> with SingleTickerProviderStateMixin, WidgetsBindingObserver{
   late TabController tabController;
   late int currentIndex;
+  static DateTime? lastBackPressTime;
 
   @override
   void initState() {
@@ -27,6 +32,10 @@ class _MainScreenState extends ConsumerState<MainScreen> with SingleTickerProvid
     tabController.addListener(() => setState(() {
       currentIndex = tabController.index;
     }));
+    WidgetsBinding.instance.addPostFrameCallback((callback) async{
+      final connectOutcome = await TestApi.testConnect();
+     if(globalNavKey.currentContext!.mounted && connectOutcome != null) DeviceUtils.showFlushBar(globalNavKey.currentContext!, connectOutcome);
+    });
   }
 
 
@@ -39,18 +48,42 @@ class _MainScreenState extends ConsumerState<MainScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
      ref.read(simpleWidgetProvider).mainScreenContext = context;
-    return Scaffold(
-      bottomNavigationBar: BottomNavBar(currentIndex: currentIndex, onTap: (index){setState(() => tabController.index = currentIndex = index);},),
-      body: TabBarView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: tabController,
-        children: [
-        const Tab(child: Home(),),
-        const Tab(child: Categories(),),
-        const Tab(child: Orders(),),
-        const Tab(child: Wishlists(),),
-        Tab(child: Account(),),
-      ]),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult:(didPop, result) async{
+        if(currentIndex == 0){
+          if(ref.watch(simpleWidgetProvider).isSearchBodyVisible == true){
+           
+          Navigator.pop(context);
+          ref.read(simpleWidgetProvider).isSearchBodyVisible = false;
+        }
+        else{
+          DateTime now = DateTime.now();
+
+        if (lastBackPressTime == null || now.difference(lastBackPressTime!) > const Duration(milliseconds: 2500)) {
+          lastBackPressTime = now;
+          DeviceUtils.showFlushBar(context, "Repeat action to exit!");
+        }else{
+          SystemNavigator.pop();
+        }}
+        }else{
+          setState(() => tabController.index = currentIndex = 0);
+        }
+        
+      },
+      child: Scaffold(
+        bottomNavigationBar: BottomNavBar(currentIndex: currentIndex, onTap: (index){setState(() => tabController.index = currentIndex = index);},),
+        body: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: tabController,
+          children: [
+          const Tab(child: Home(),),
+          const Tab(child: Categories(),),
+          const Tab(child: Orders(),),
+          const Tab(child: Wishlists(),),
+          Tab(child: Account(),),
+        ]),
+      ),
     );
   }
 }

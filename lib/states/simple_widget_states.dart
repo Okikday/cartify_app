@@ -13,6 +13,7 @@ class SimpleWidgetStates extends ChangeNotifier{
   late BuildContext homeBodyScrollContext;
   late FocusNode homeSearchBarFocusNode;
   late AnimationController searchBodyAnimController;
+  late bool isSearchBodyVisible = false;
 
   //Orders page
   bool isOrdersBottomBarBuyNowVisible = true;

@@ -2,9 +2,7 @@ import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
-import 'package:cartify/services/test_api.dart';
 import 'package:cartify/utils/device_utils.dart';
-import 'package:cartify/views/authentication/verify_code.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +21,7 @@ class SignUp extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: 12, right: 24, ),
+                  padding: const EdgeInsets.only(left: 12, right: 24, ),
                   child: Row(
                     children: [
                       const Align(alignment: Alignment.topLeft, child: BackButton()),
@@ -87,7 +85,7 @@ class SignUp extends StatelessWidget {
 
                  CustomElevatedButton(
                   onClick: (){
-                    TestApi().testConnect();
+                    // TestApi.testConnect();
                   },
                   screenWidth: 90,
                   backgroundColor: Colors.white,
