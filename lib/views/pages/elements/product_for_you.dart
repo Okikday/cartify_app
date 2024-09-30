@@ -15,12 +15,10 @@ final productsFutureProvider = FutureProvider<List<ProductsModels>>((ref) async 
 
 class ProductForYou extends ConsumerWidget {
   final String topic;
-  final List list;
 
   const ProductForYou({
     super.key,
     required this.topic,
-    required this.list,
   });
 
   @override
@@ -63,7 +61,7 @@ class ProductForYou extends ConsumerWidget {
                       price: "\$${product.price}",
                       rating: "4.8",
                       first: index == 0,
-                      last: index == list.length - 1,
+                      last: index == products.length - 1,
                       onClick: () {
                         DeviceUtils.pushMaterialPage(
                             context,

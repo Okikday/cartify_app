@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/utils/formatter.dart';
 import 'package:cartify/views/pages/elements/custom_box.dart';
 import 'package:flutter/material.dart';
 
@@ -9,19 +11,15 @@ class ProductCard1 extends StatelessWidget {
   final String assetName;
   final String price;
   final String category;
+  final void Function() onTap;
 
-  const ProductCard1({
-    super.key,
-    required this.assetName,
-    required this.price,
-    required this.category,
-    required this.productID
-  });
+  const ProductCard1({super.key, required this.assetName, required this.price, required this.category, required this.productID, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = DeviceUtils.getScreenWidth(context);
     return CustomBox(
+      onTap: onTap,
       child: SizedBox(
         height: 180,
         child: Row(
@@ -34,11 +32,13 @@ class ProductCard1 extends StatelessWidget {
               height: 180,
               width: screenWidth * 0.37,
               //constraints: BoxConstraints(maxWidth: screenWidth * 0.37, maxHeight: 180),
-              child: Image.asset(
-                "assets/images/iphone_15_pm_nobg.png",
+
+              child: CachedNetworkImage(
+                imageUrl: assetName,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => const CircleAvatar(backgroundColor: Colors.transparent, child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
-              //child: CachedNetworkImage(imageUrl: assetName, fit: BoxFit.cover, placeholder: (context, url) => const CircleAvatar(backgroundColor: Colors.transparent, child: CircularProgressIndicator()), errorWidget: (context, url, error) => const Icon(Icons.error),),
             ),
             Expanded(
               child: Padding(
@@ -47,7 +47,7 @@ class ProductCard1 extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ConstantWidgets.text(context, "#1,700,000", fontSize: 16, color: Colors.green),
+                    ConstantWidgets.text(context, Formatter.parsePrice(double.parse(price)), fontSize: 16, color: Colors.green),
                     const SizedBox(
                       height: 8,
                     ),
@@ -55,7 +55,13 @@ class ProductCard1 extends StatelessWidget {
                     const SizedBox(
                       height: 8,
                     ),
-                    ConstantWidgets.text(context, "tags tags sold out available 5 hours ago", color: CartifyColors.battleshipGrey),
+                    Container(
+                        decoration: BoxDecoration(
+                          color: CartifyColors.aliceBlue,
+                          borderRadius: BorderRadius.circular(12)
+                        ),
+                        child: ConstantWidgets.text(context, "sold out", color: CartifyColors.battleshipGrey)),
+                    ConstantWidgets.text(context, "5 hours ago", color: CartifyColors.battleshipGrey),
                   ],
                 ),
               ),
@@ -68,7 +74,7 @@ class ProductCard1 extends StatelessWidget {
                   Icons.bookmark_add_outlined,
                   color: Colors.black,
                 ),
-                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.lightGray)),
+                style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.lightGray)),
               ),
             )
           ],

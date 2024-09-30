@@ -3,6 +3,7 @@ import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/data/test_data.dart';
 import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/page_elements/trending_section.dart';
 import 'package:cartify/views/pages/elements/home_search_bar.dart';
 import 'package:cartify/views/pages/elements/home_space_bar_bg.dart';
 import 'package:cartify/views/pages/elements/product_for_you.dart';
@@ -164,9 +165,8 @@ class HomeBody extends ConsumerWidget {
               const SizedBox(
                 height: 24,
               ),
-              ProductForYou(
+              const ProductForYou(
                 topic: "Recommended for you",
-                list: productCategoriesList,
               ),
               const Padding(
                 padding: EdgeInsets.only(left: 8, right: 8),
@@ -174,23 +174,7 @@ class HomeBody extends ConsumerWidget {
                   color: CartifyColors.lightGray,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ConstantWidgets.text(context, "Trending", fontSize: 20),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.grid_view_rounded,
-                        color: Colors.black,
-                      ),
-                      style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.lightPremiumGold)),
-                    ),
-                  ],
-                ),
-              ),
+              const TrendingSection()
               
             ],
           ),

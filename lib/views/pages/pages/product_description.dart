@@ -264,7 +264,7 @@ class ProductDescBody extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              ProductForYou(topic: "Similar items", list: TestData.productCategoriesList)
+              ProductForYou(topic: "Similar items",)
             ],
           ),
         ],

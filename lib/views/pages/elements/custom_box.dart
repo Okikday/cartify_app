@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 class CustomBox extends StatelessWidget {
   final Widget child;
+  final void Function()? onTap;
   const CustomBox({
     super.key,
-    required this.child
+    required this.child,
+    this.onTap,
   });
 
   @override
@@ -22,7 +24,7 @@ class CustomBox extends StatelessWidget {
          : [BoxShadow(color: CartifyColors.royalBlue.withOpacity(0.1), blurRadius: 8, offset: Offset(0, 0), blurStyle: BlurStyle.inner, spreadRadius: 2),],
       ),
       child: InkWell(
-        onTap: (){},
+        onTap: (){onTap == null ? (){} : onTap!();},
           overlayColor: WidgetStatePropertyAll(CartifyColors.lightPremiumGold.withAlpha(50)),
           borderRadius: BorderRadius.circular(8),
         child: child,
