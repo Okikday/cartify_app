@@ -8,12 +8,13 @@ import 'package:flutter/material.dart';
 
 class ProductCard1 extends StatelessWidget {
   final String productID;
+  final String productName;
   final String assetName;
   final String price;
   final String category;
   final void Function() onTap;
 
-  const ProductCard1({super.key, required this.assetName, required this.price, required this.category, required this.productID, required this.onTap});
+  const ProductCard1({super.key, required this.productName, required this.assetName, required this.price, required this.category, required this.productID, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +48,21 @@ class ProductCard1 extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ConstantWidgets.text(context, Formatter.parsePrice(double.parse(price)), fontSize: 16, color: Colors.green),
+                    ConstantWidgets.text(context, "#${Formatter.parsePrice(double.parse(price))}", fontSize: 16, color: Colors.green),
                     const SizedBox(
                       height: 8,
                     ),
-                    ConstantWidgets.text(context, "iPhone 15 Pro max", fontSize: 12, fontWeight: FontWeight.bold),
+                    ConstantWidgets.text(context, productName, fontSize: 12, fontWeight: FontWeight.bold),
                     const SizedBox(
                       height: 8,
                     ),
                     Container(
+                      padding: EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           color: CartifyColors.aliceBlue,
                           borderRadius: BorderRadius.circular(12)
                         ),
-                        child: ConstantWidgets.text(context, "sold out", color: CartifyColors.battleshipGrey)),
+                        child: ConstantWidgets.text(context, "sold out", color: Colors.black)),
                     ConstantWidgets.text(context, "5 hours ago", color: CartifyColors.battleshipGrey),
                   ],
                 ),

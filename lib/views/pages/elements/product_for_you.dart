@@ -53,6 +53,7 @@ class ProductForYou extends ConsumerWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: products.length,
                   itemBuilder: (context, index) {
+                    products.shuffle();
                     final product = products[index];
                     return ProductForYouCard(
                       productName: product.name,
@@ -172,13 +173,7 @@ class ProductForYouCard extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ConstantWidgets.text(context, productName)
-                  //Text(rating.toString()),
-                ],
-              ),
+              ConstantWidgets.text(context, productName, overflow: TextOverflow.ellipsis),
               const SizedBox(
                 height: 4,
               ),

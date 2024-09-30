@@ -15,7 +15,6 @@ class TrendingSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final gridType = LayoutSettings().getTrendingGridType();
     final productsAsyncValue = ref.watch(productsFutureProvider);
     final double screenWidth = DeviceUtils.getScreenWidth(context);
     return Column(
@@ -32,57 +31,85 @@ class TrendingSection extends ConsumerWidget {
                   Icons.grid_view_rounded,
                   color: Colors.black,
                 ),
-                style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.lightPremiumGold)),
+                style: const ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(
+                        CartifyColors.lightPremiumGold)),
               ),
             ],
           ),
         ),
+
         productsAsyncValue.when(
-            data: (products) => ListView.builder(
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return ProductCard1(
-                      assetName: product.photo,
-                      price: product.price.toString(),
+          data: (products) {
+            List<Widget> productWidgets = [];
+
+            for (int i = 0; i < products.length; i++) {
+              final product = products[i];
+              productWidgets.add(ProductCard1(
+                productName: product.name,
+                assetName: product.photo,
+                price: product.price.toString(),
+                category: product.category,
+                productID: product.id,
+                onTap: () {
+                  DeviceUtils.pushMaterialPage(
+                    context,
+                    ProductDescription(
+                      id: product.id,
+                      vendor: product.vendor,
+                      name: product.name,
+                      photo: product.photo,
+                      productDetails: product.productDetails,
                       category: product.category,
-                      productID: product.id,
-                      onTap: () {
-                        DeviceUtils.pushMaterialPage(
-                            context,
-                            ProductDescription(
-                                id: product.id,
-                                vendor: product.vendor,
-                                name: product.name,
-                                photo: product.photo,
-                                productDetails: product.productDetails,
-                                category: product.category,
-                                price: product.price,
-                                createdAt: product.createdAt,
-                                updatedAt: product.updatedAt,
-                                ));
-                      },
-                    );
-                  },
+                      price: product.price,
+                      createdAt: product.createdAt,
+                      updatedAt: product.updatedAt,
+                    ),
+                  );
+                },
+              ));
+            }
+
+            return Column(children: productWidgets);
+          },
+          error: (error, stackTrace) {
+            List<Widget> errorWidgets = [];
+
+            for (int i = 0; i < 3; i++) {
+              errorWidgets.add(
+                LoadingShimmer(
+                  width: screenWidth,
+                  height: 180,
+                  child: ConstantWidgets.text(
+                    context,
+                    "Unable to connect!",
+                    fontSize: 16,
+                  ),
                 ),
-            error: (error, stackTrace) => ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      child: LoadingShimmer(
-                        width: screenWidth,
-                        height: 180,
-                        child: ConstantWidgets.text(context, "Unable to conect!", fontSize: 16),
-                      ),
-                    )),
-            loading: () => ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      child: LoadingShimmer(
-                        width: screenWidth,
-                        height: 180,
-                      ),
-                    ))),
+              );
+            }
+
+            return Column(children: errorWidgets);
+          },
+          loading: () {
+            List<Widget> loadingWidgets = [];
+
+            for (int i = 0; i < 3; i++) {
+              loadingWidgets.add(
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: LoadingShimmer(
+                    width: screenWidth,
+                    height: 180,
+                  ),
+                ),
+              );
+            }
+            loadingWidgets.shuffle();
+            return Column(children: loadingWidgets);
+          },
+        ),
       ],
     );
   }

@@ -1,5 +1,5 @@
 import 'package:cartify/common/constants/themes.dart';
-import 'package:cartify/views/page_elements/trending_section.dart';
+import 'package:cartify/views/authentication/check_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,12 +22,8 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: CartifyThemes.lightTheme,
       darkTheme: CartifyThemes.darkTheme,
-      home: Scaffold(
-        body: Center(
-          child: TrendingSection(),
-        ),
-      ),
-      //home: const CheckUser(),
+        
+      home: const CheckUser(),
     );
   }
 }

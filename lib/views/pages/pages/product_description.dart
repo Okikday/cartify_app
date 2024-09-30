@@ -213,7 +213,7 @@ class ProductDescBody extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ConstantWidgets.text(context, price, color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+                ConstantWidgets.text(context, "#$price", color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
                 ConstantWidgets.text(context, "Rate Product",
                     textDecoration: TextDecoration.underline, color: CartifyColors.premiumGold, decorationColor: CartifyColors.premiumGold)
               ],
