@@ -4,13 +4,16 @@ import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/models/products_models.dart';
 import 'package:cartify/services/product_services.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/utils/formatter.dart';
 import 'package:cartify/views/page_elements/loading_shimmer.dart';
 import 'package:cartify/views/pages/pages/product_description.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final productsFutureProvider = FutureProvider<List<ProductsModels>>((ref) async {
-  return await productServices.getProducts(); // Fetch products using the function
+  final products = await productServices.getProducts();
+  products.shuffle();
+  return products;
 });
 
 class ProductForYou extends ConsumerWidget {
@@ -23,7 +26,7 @@ class ProductForYou extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double screenWidth = DeviceUtils.getScreenWidth(context);
+    double screenWidth = MediaQuery.of(context).size.width;
     final productsAsyncValue = ref.watch(productsFutureProvider);
 
     return SizedBox(
@@ -45,7 +48,7 @@ class ProductForYou extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           SizedBox(
-            height: 270,
+            height: 275,
             child: productsAsyncValue.when(
               data: (products) => SizedBox(
                 width: screenWidth,
@@ -53,13 +56,12 @@ class ProductForYou extends ConsumerWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: products.length,
                   itemBuilder: (context, index) {
-                    products.shuffle();
                     final product = products[index];
                     return ProductForYouCard(
                       productName: product.name,
-                      description: product.category,
-                      assetName: product.photo,
-                      price: "\$${product.price}",
+                      category: product.category,
+                      assetName: product.photo.first,
+                      price: "N${Formatter.parsePrice(product.price, asInt: true)}",
                       rating: "4.8",
                       first: index == 0,
                       last: index == products.length - 1,
@@ -73,7 +75,7 @@ class ProductForYou extends ConsumerWidget {
                                 photo: product.photo,
                                 productDetails: product.productDetails,
                                 category: product.category,
-                                price: product.price,
+                                price: "N${Formatter.parsePrice(product.price)}",
                                 createdAt: product.createdAt,
                                 updatedAt: product.updatedAt));
                       },
@@ -81,11 +83,20 @@ class ProductForYou extends ConsumerWidget {
                   },
                 ),
               ),
-              error: (error, stackTrace) => Center(
-                child: SizedBox(
-                  width: screenWidth * 0.9,
-                  child: ConstantWidgets.text(context, "Unable to load products. Try connecting to a WiFi or Network.", align: TextAlign.center),
-                ),
+              error: (error, stackTrace) => Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: ConstantWidgets.text(context, "Unable to connect!. Try connecting to a network", color: Colors.red)),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Center(
+                    child: LoadingShimmer(
+                      width: screenWidth * 0.9,
+                      height: 180,
+                    ),
+                  ),
+                ],
               ),
               loading: () => LoadingShimmer(
                 width: screenWidth * 0.9,
@@ -102,7 +113,7 @@ class ProductForYou extends ConsumerWidget {
 
 class ProductForYouCard extends StatelessWidget {
   final String productName;
-  final String description;
+  final String category;
   final String assetName;
   final String price;
   final String rating;
@@ -112,7 +123,7 @@ class ProductForYouCard extends StatelessWidget {
   const ProductForYouCard(
       {super.key,
       required this.productName,
-      required this.description,
+      required this.category,
       required this.assetName,
       required this.price,
       required this.rating,
@@ -134,10 +145,10 @@ class ProductForYouCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Container(
           height: 270,
-          width: 156,
-          padding: const EdgeInsets.fromLTRB(8, 8, 8, 12),
+          width: 164,
+          padding: const EdgeInsets.fromLTRB(8, 6, 8, 8),
           decoration: BoxDecoration(
-            border: Border.all(width: 2, color: CartifyColors.royalBlue.withAlpha(25)),
+            border: Border.all(width: 2, color: CartifyColors.royalBlue.withAlpha(75)),
             borderRadius: BorderRadius.circular(12),
             color: isDarkMode == true ? CartifyColors.lightPremiumGold.withAlpha(10) : CartifyColors.royalBlue.withOpacity(0.1),
             boxShadow: isDarkMode == true
@@ -157,46 +168,55 @@ class ProductForYouCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 140,
-                height: 140,
+                width: 146,
+                height: 146,
+                clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                   color: CartifyColors.royalBlue.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(4),
                 ),
                 child: CachedNetworkImage(
                   imageUrl: assetName,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => const LoadingShimmer(width: 140, height: 140,),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  placeholder: (context, url) => const LoadingShimmer(
+                    width: 140,
+                    height: 140,
+                  ),
+                  errorWidget: (context, url, error) => const SizedBox(width: 140, height: 140, child: Center(child: Icon(Icons.error))),
                 ),
               ),
               const SizedBox(
                 height: 8,
               ),
-              ConstantWidgets.text(context, productName, overflow: TextOverflow.ellipsis),
+              ConstantWidgets.text(context, productName, overflow: TextOverflow.clip, fontWeight: FontWeight.bold, fontSize: 11),
               const SizedBox(
-                height: 4,
+                height: 2,
               ),
-              ConstantWidgets.text(context, description, color: CartifyColors.battleshipGrey, overflow: TextOverflow.ellipsis),
+              ConstantWidgets.text(context, category, color: CartifyColors.battleshipGrey, overflow: TextOverflow.ellipsis, fonstStyle: FontStyle.italic, fontSize: 11),
               const SizedBox(
-                height: 8,
+                height: 2,
               ),
               ConstantWidgets.text(context, price, color: Colors.green, fontWeight: FontWeight.bold),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Icon(
-                    Icons.star_rounded,
-                    color: CartifyColors.premiumGold,
-                    size: 18,
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Icon(
+                        Icons.star_rounded,
+                        color: CartifyColors.premiumGold,
+                        size: 14,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      ConstantWidgets.text(context, rating, fontWeight: FontWeight.bold, fontSize: 10),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  ConstantWidgets.text(context, rating, fontWeight: FontWeight.bold),
-                ],
-              )
+                ),
+              ),
             ],
           ),
         ),

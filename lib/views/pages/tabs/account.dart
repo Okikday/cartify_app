@@ -5,6 +5,7 @@ import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/elements/logout_dialog.dart';
 import 'package:cartify/views/pages/pages/account_details.dart';
 import 'package:cartify/views/pages/pages/upload_product.dart';
+import 'package:cartify/views/pages/pages/vendor_mode.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,8 +46,8 @@ class _AccountState extends ConsumerState<Account> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = DeviceUtils.getScreenWidth(context);
-    final double screenHeight = DeviceUtils.getScreenHeight(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     final bool isDarkMode = DeviceUtils.isDarkMode(context);
     return SizedBox(
       child: Column(
@@ -148,7 +149,8 @@ class _AccountState extends ConsumerState<Account> {
                 ),
                 InkWell(
                   onTap: (){
-                    if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const UploadProduct());
+                    DeviceUtils.pushMaterialPage(context, const UploadProduct());
+                    DeviceUtils.showFlushBar(context, "Vendor Mode 🙋");
                   },
                   borderRadius: BorderRadius.circular(16),
                   child: Padding(
@@ -175,7 +177,13 @@ class _AccountState extends ConsumerState<Account> {
                   ),
                 ),
                 InkWell(
-                  onTap: (){},
+                  onTap: (){
+                    // final String role = await HiveData().getData(key: 'role');
+                    // if(role != 'vendor'){}
+                    // if(context.mounted) DeviceUtils.pushMaterialPage(context, const VendorMode());
+                    // if(context.mounted) DeviceUtils.showFlushBar(context, "Vendor Mode 🙋");
+                    DeviceUtils.pushMaterialPage(context, const VendorMode());
+                  },
                   borderRadius: BorderRadius.circular(16),
                   child: Padding(
                     padding: const EdgeInsets.all(4),
@@ -185,9 +193,7 @@ class _AccountState extends ConsumerState<Account> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CircleAvatar(
-                            
                             backgroundColor: isDarkMode ? CartifyColors.premiumGold.withAlpha(50) : CartifyColors.royalBlue.withAlpha(100),
-                            
                             child:  const Icon(
                               FluentIcons.person_28_filled,
                               color: Colors.white,

@@ -8,16 +8,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class DeviceUtils {
 
-  //1. Get Device height
-  static double getScreenHeight(BuildContext context){
-    return MediaQuery.of(context).size.height;
-  }
-
-  //2. Get Device Width
-  static double getScreenWidth(BuildContext context){
-    return MediaQuery.of(context).size.width;
-  }
-
   //3. Check if device is tilted
   static bool isLandscapeOrientation(BuildContext context){
     var orientation = MediaQuery.of(context).orientation;
@@ -109,7 +99,7 @@ class DeviceUtils {
   }
 
     static bool isDeviceBig(BuildContext context) {
-    if (getScreenWidth(context) > 500) {
+    if (MediaQuery.of(context).size.width > 500) {
       debugPrint("Device is big");
       return true;
     }

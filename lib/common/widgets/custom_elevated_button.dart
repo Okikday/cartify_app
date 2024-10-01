@@ -1,7 +1,6 @@
 //Custom Elevated Button
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
-import 'package:cartify/utils/device_utils.dart';
 import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends StatelessWidget {
@@ -38,8 +37,8 @@ class CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: screenWidth != null ? DeviceUtils.getScreenWidth(context) * (screenWidth! / 100) : pixelWidth,
-      height: screenHeight != null ? DeviceUtils.getScreenHeight(context) * (screenHeight! / 100) : pixelHeight,
+      width: screenWidth != null ? MediaQuery.of(context).size.width * (screenWidth! / 100) : pixelWidth,
+      height: screenHeight != null ? MediaQuery.of(context).size.height * (screenHeight! / 100) : pixelHeight,
       child: ElevatedButton(
           onPressed: onClick,
           

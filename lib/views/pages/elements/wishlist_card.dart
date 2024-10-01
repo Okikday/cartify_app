@@ -10,7 +10,7 @@ class WishlistCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = DeviceUtils.getScreenWidth(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
     return CustomBox(
       child: Padding(
         padding: const EdgeInsets.all(8),

@@ -19,7 +19,7 @@ class SignIn extends StatelessWidget {
   static DateTime? lastBackPressTime;
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = DeviceUtils.getScreenHeight(context);
+    final double screenHeight = MediaQuery.of(context).size.height;
     DeviceUtils.setStatusBarColor(Theme.of(context).scaffoldBackgroundColor, DeviceUtils.isDarkMode(context) == true ? Brightness.light : Brightness.dark);
 
     return PopScope(
@@ -153,7 +153,7 @@ class SignIn extends StatelessWidget {
                     height: screenHeight * 0.025,
                   ),
                   CustomElevatedButton(
-                    onClick: () {},
+                    onClick: () {DeviceUtils.showFlushBar(context, "Feature coming soon!");},
                     screenWidth: 90,
                     backgroundColor: Colors.white,
                     elevation: 2,

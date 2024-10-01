@@ -25,7 +25,7 @@ class _OrdersState extends ConsumerState<Orders> with WidgetsBindingObserver{
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = DeviceUtils.getScreenWidth(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
     final bool isDarkMode = DeviceUtils.isDarkMode(context);
     
     return Column(

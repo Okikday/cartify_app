@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
-import 'package:cartify/data/test_data.dart';
+import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/pages/elements/custom_overlay.dart';
+import 'package:cartify/views/pages/elements/image_interactive_view.dart';
 import 'package:cartify/views/pages/elements/product_for_you.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,10 +13,10 @@ class ProductDescription extends ConsumerStatefulWidget {
   final String id;
   final String vendor;
   final String name;
-  final String photo;
+  final List<dynamic> photo;
   final String productDetails;
   final String category;
-  final double price;
+  final String price;
   final int units;
   final double discountPercentage;
   final DateTime createdAt;
@@ -48,7 +50,7 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
   @override
   void initState() {
     super.initState();
-    imageTabController = TabController(length: 3, vsync: this);
+    imageTabController = TabController(length: widget.photo.length, vsync: this);
   }
 
   @override
@@ -59,61 +61,64 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = DeviceUtils.getScreenHeight(context);
+    final double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-        body: NestedScrollView(
-            headerSliverBuilder: (context, isScrolled) => [
-                  SliverAppBar(
-                    backgroundColor: Colors.white.withOpacity(0.01),
-                    collapsedHeight: 96,
-                    expandedHeight: screenHeight * 0.5,
-                    floating: false,
-                    pinned: true,
-                    automaticallyImplyLeading: false,
-                    surfaceTintColor: Colors.transparent,
-                    flexibleSpace: LayoutBuilder(
-                      builder: (BuildContext context, BoxConstraints constraints) {
-                      
-
-                        return FlexibleSpaceBar(
-                          expandedTitleScale: 1.005,
-                          collapseMode: CollapseMode.parallax,
-                          title: const DescriptionTitle(),
-                          background: Stack(
-                            clipBehavior: Clip.hardEdge,
-                            children: [
-                              TabBarView(
-                                controller: imageTabController,
-                                children: [
-                                  ImageTab(assetName: widget.photo,),
-                                  ImageTab(assetName: widget.photo,),
-                                  ImageTab(assetName: widget.photo,),
-                                ],
-                              ),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                    padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
-                                    margin: const EdgeInsets.only(bottom: 8),
-                                    decoration:
-                                        BoxDecoration(borderRadius: BorderRadius.circular(24), color: CartifyColors.royalBlue.withAlpha(75), boxShadow: [
-                                      BoxShadow(color: Colors.black.withOpacity(0.5), blurStyle: BlurStyle.outer),
-                                    ]),
-                                    child: TabPageSelector(
-                                      selectedColor: Colors.white,
-                                      controller: imageTabController,
-                                    )),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+    return PopScope(
+      canPop: ref.watch(simpleWidgetProvider).isProductInfoImageTabVisible == false,
+      onPopInvokedWithResult: (didPop, result) {
+        ref.watch(simpleWidgetProvider).imageInteractiveViewAnimController.reverse();
+        Future.delayed(const Duration(milliseconds: 410), () {
+          if (context.mounted) CustomOverlay(context).removeOverlay();
+          Future.delayed(const Duration(milliseconds: 410), () => ref.refresh(simpleWidgetProvider).isProductInfoImageTabVisible = false);
+        });
+      },
+      child: Scaffold(
+          body: NestedScrollView(
+        headerSliverBuilder: (context, isScrolled) => [
+          SliverAppBar(
+            backgroundColor: Colors.white.withOpacity(0.01),
+            collapsedHeight: 96,
+            expandedHeight: screenHeight * 0.5,
+            floating: false,
+            pinned: true,
+            automaticallyImplyLeading: false,
+            surfaceTintColor: Colors.transparent,
+            flexibleSpace: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return FlexibleSpaceBar(
+                  expandedTitleScale: 1.005,
+                  collapseMode: CollapseMode.parallax,
+                  title: const DescriptionTitle(),
+                  background: Stack(
+                    clipBehavior: Clip.hardEdge,
+                    children: [
+                      TabBarView(
+                        controller: imageTabController,
+                        children: [for (int i = 0; i < widget.photo.length; i++) ImageTab(assetName: widget.photo[i])],
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                            padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+                            margin: const EdgeInsets.only(bottom: 8),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), color: CartifyColors.royalBlue.withAlpha(75), boxShadow: [
+                              BoxShadow(color: Colors.black.withOpacity(0.5), blurStyle: BlurStyle.outer),
+                            ]),
+                            child: TabPageSelector(
+                              selectedColor: Colors.white,
+                              controller: imageTabController,
+                            )),
+                      )
+                    ],
                   ),
-                ],
-            body: ProductDescBody(productName: widget.name, price: widget.price.toString(), description: widget.productDetails),
-            ));
+                );
+              },
+            ),
+          ),
+        ],
+        body: ProductDescBody(productName: widget.name, price: widget.price, description: widget.productDetails),
+      )),
+    );
   }
 }
 
@@ -128,7 +133,7 @@ class DescriptionTitle extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: Container(
         height: 96,
-        padding: EdgeInsets.only(left: 16, right: 16, top: kToolbarHeight-28),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: kToolbarHeight - 28),
         color: Theme.of(context).scaffoldBackgroundColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,12 +180,7 @@ class ProductDescBody extends StatelessWidget {
   final String productName;
   final String price;
   final String description;
-  const ProductDescBody({
-    super.key,
-    required this.productName,
-    required this.price,
-    required this.description
-  });
+  const ProductDescBody({super.key, required this.productName, required this.price, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +213,7 @@ class ProductDescBody extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ConstantWidgets.text(context, "#$price", color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+                ConstantWidgets.text(context, price, color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
                 ConstantWidgets.text(context, "Rate Product",
                     textDecoration: TextDecoration.underline, color: CartifyColors.premiumGold, decorationColor: CartifyColors.premiumGold)
               ],
@@ -222,7 +222,10 @@ class ProductDescBody extends StatelessWidget {
           const SizedBox(
             height: 24,
           ),
-          Divider(color: CartifyColors.premiumGold.withAlpha(50), thickness: 4,),
+          Divider(
+            color: CartifyColors.premiumGold.withAlpha(50),
+            thickness: 4,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -233,12 +236,9 @@ class ProductDescBody extends StatelessWidget {
               const SizedBox(
                 height: 12,
               ),
-              
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
-                child: ConstantWidgets.text(
-                    context,
-                    description),
+                child: ConstantWidgets.text(context, description),
               ),
               const SizedBox(
                 height: 16,
@@ -264,7 +264,9 @@ class ProductDescBody extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              ProductForYou(topic: "Similar items",)
+              ProductForYou(
+                topic: "Similar items",
+              )
             ],
           ),
         ],
@@ -280,7 +282,7 @@ class ReviewBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = DeviceUtils.getScreenWidth(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
     return Container(
       color: CartifyColors.royalBlue.withAlpha(50),
       padding: const EdgeInsets.all(16),
@@ -314,10 +316,16 @@ class ReviewBox extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ConstantWidgets.text(context, "Excellent",),
+                        ConstantWidgets.text(
+                          context,
+                          "Excellent",
+                        ),
                         SizedBox(
                             width: screenWidth * 0.4,
-                            child: LinearProgressIndicator(color: CartifyColors.royalBlue,backgroundColor: CartifyColors.premiumGold.withAlpha(100),borderRadius: BorderRadius.circular(12),
+                            child: LinearProgressIndicator(
+                              color: CartifyColors.royalBlue,
+                              backgroundColor: CartifyColors.premiumGold.withAlpha(100),
+                              borderRadius: BorderRadius.circular(12),
                               value: 0.9,
                             ))
                       ],
@@ -326,22 +334,52 @@ class ReviewBox extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ConstantWidgets.text(context, "Very Good"),
-                        SizedBox(width: screenWidth * 0.4, child: LinearProgressIndicator(color: CartifyColors.royalBlue,backgroundColor: CartifyColors.premiumGold.withAlpha(100),borderRadius: BorderRadius.circular(12), value: 0.8))
+                        SizedBox(
+                            width: screenWidth * 0.4,
+                            child: LinearProgressIndicator(
+                                color: CartifyColors.royalBlue,
+                                backgroundColor: CartifyColors.premiumGold.withAlpha(100),
+                                borderRadius: BorderRadius.circular(12),
+                                value: 0.8))
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [ConstantWidgets.text(context, "Average"), SizedBox(width: screenWidth * 0.4, child: LinearProgressIndicator(color: CartifyColors.royalBlue,backgroundColor: CartifyColors.premiumGold.withAlpha(100),borderRadius: BorderRadius.circular(12), value: 0.7))],
+                      children: [
+                        ConstantWidgets.text(context, "Average"),
+                        SizedBox(
+                            width: screenWidth * 0.4,
+                            child: LinearProgressIndicator(
+                                color: CartifyColors.royalBlue,
+                                backgroundColor: CartifyColors.premiumGold.withAlpha(100),
+                                borderRadius: BorderRadius.circular(12),
+                                value: 0.7))
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [ConstantWidgets.text(context, "Poor"), SizedBox(width: screenWidth * 0.4, child: LinearProgressIndicator(color: CartifyColors.royalBlue,backgroundColor: CartifyColors.premiumGold.withAlpha(100),borderRadius: BorderRadius.circular(12), value: 0.6))],
+                      children: [
+                        ConstantWidgets.text(context, "Poor"),
+                        SizedBox(
+                            width: screenWidth * 0.4,
+                            child: LinearProgressIndicator(
+                                color: CartifyColors.royalBlue,
+                                backgroundColor: CartifyColors.premiumGold.withAlpha(100),
+                                borderRadius: BorderRadius.circular(12),
+                                value: 0.6))
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ConstantWidgets.text(context, "Very Poor"),
-                        SizedBox(width: screenWidth * 0.4, child: LinearProgressIndicator(color: CartifyColors.royalBlue,backgroundColor: CartifyColors.premiumGold.withAlpha(100),borderRadius: BorderRadius.circular(12), value: 0.5))
+                        SizedBox(
+                            width: screenWidth * 0.4,
+                            child: LinearProgressIndicator(
+                                color: CartifyColors.royalBlue,
+                                backgroundColor: CartifyColors.premiumGold.withAlpha(100),
+                                borderRadius: BorderRadius.circular(12),
+                                value: 0.5))
                       ],
                     )
                   ],
@@ -355,23 +393,37 @@ class ReviewBox extends StatelessWidget {
   }
 }
 
-class ImageTab extends StatelessWidget {
+class ImageTab extends ConsumerWidget {
   final String assetName;
   const ImageTab({
     super.key,
-    required this.assetName
+    required this.assetName,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 92, right: 1),
-      decoration: BoxDecoration(
-        color: CartifyColors.royalBlue.withAlpha(25),
-      ),
-      child: ColorFiltered(
-        colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.1), BlendMode.colorBurn),
-        child: CachedNetworkImage(imageUrl: assetName, fit: BoxFit.cover, placeholder: (context, url) => const CircleAvatar(backgroundColor: Colors.transparent, child: CircularProgressIndicator()), errorWidget: (context, url, error) => const Icon(Icons.error),),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      onTap: () {
+        ref.refresh(simpleWidgetProvider).isProductInfoImageTabVisible = true;
+        CustomOverlay(context).showOverlay(
+            child: ImageInteractiveView(
+          assetName: assetName,
+        ));
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 92, right: 1),
+        decoration: BoxDecoration(
+          color: CartifyColors.royalBlue.withAlpha(25),
+        ),
+        child: ColorFiltered(
+          colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.1), BlendMode.colorBurn),
+          child: CachedNetworkImage(
+            imageUrl: assetName,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => const CircleAvatar(backgroundColor: Colors.transparent, child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+          ),
+        ),
       ),
     );
   }

@@ -11,7 +11,7 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final double screenHeight = DeviceUtils.getScreenHeight(context);
+     final double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: SafeArea(

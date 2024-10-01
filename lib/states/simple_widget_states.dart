@@ -18,6 +18,11 @@ class SimpleWidgetStates extends ChangeNotifier{
   //Orders page
   bool isOrdersBottomBarBuyNowVisible = true;
   
+
+
+  bool isProductInfoImageTabVisible = false;
+  late AnimationController imageInteractiveViewAnimController;
+  
   
   
   

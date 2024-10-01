@@ -2,7 +2,7 @@ class ProductsModels {
   final String id;
   final String vendor;
   final String name;
-  final String photo;
+  final List<dynamic> photo;
   final String productDetails;
   final String category;
   final double price;

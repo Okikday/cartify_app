@@ -114,8 +114,8 @@ void activateHomeSearchBar(
           animationController: searchBodyAnimController,
           onClosing: () {},
           builder: (context) {
-            final double screenHeight = DeviceUtils.getScreenHeight(scrollContext);
-            final double screenWidth = DeviceUtils.getScreenWidth(scrollContext);
+            final double screenHeight = MediaQuery.of(scrollContext).size.height;
+            final double screenWidth = MediaQuery.of(scrollContext).size.width;
             return AnimatedContainer(
               duration: const Duration(milliseconds: 350),
               curve: Curves.decelerate,

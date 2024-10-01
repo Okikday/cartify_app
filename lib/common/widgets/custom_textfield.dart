@@ -1,9 +1,6 @@
 import 'package:cartify/utils/device_utils.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cartify/utils/device_utils.dart';
-import 'package:flutter/material.dart';
-
 class CustomTextfield extends StatefulWidget {
   final String? hint; // Shows hint
   final String? label; // Shows Label
@@ -121,10 +118,10 @@ class _CustomTextfieldState extends State<CustomTextfield> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.screenWidth != null
-          ? DeviceUtils.getScreenWidth(context) * (widget.screenWidth! / 100)
+          ? MediaQuery.of(context).size.width * (widget.screenWidth! / 100)
           : widget.pixelWidth,
       height: widget.screenHeight != null
-          ? DeviceUtils.getScreenHeight(context) * (widget.screenHeight! / 100)
+          ? MediaQuery.of(context).size.height * (widget.screenHeight! / 100)
           : widget.pixelHeight,
       child: TextField(
         maxLines: widget.maxLines,

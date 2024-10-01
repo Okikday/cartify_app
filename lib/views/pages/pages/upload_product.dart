@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:cartify/app.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
+import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/data/storage/product_data.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/page_elements/loading_dialog.dart';
@@ -31,8 +33,23 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
   final ImagePicker _picker = ImagePicker();
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final String result = await HiveData().getData(key: 'role');
+      if (result != 'vendor') {
+        if (globalNavKey.currentContext!.mounted) {
+          Navigator.pushReplacement(globalNavKey.currentContext!, MaterialPageRoute(builder: (context) => const UpdateRole()));
+          DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Make yourself a vendor to upload a product");
+        }
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final double screenWidth = DeviceUtils.getScreenWidth(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
@@ -82,15 +99,18 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
 
               CustomDropdownMenu(
                 hintText: "Select a Product category",
-                width: screenWidth * 0.8, 
+                width: screenWidth * 0.8,
                 dropdownEntryItems: ProductData.categories,
-                menuLabel: ConstantWidgets.text(context, "Select a product category", fontWeight: FontWeight.bold,),
+                menuLabel: ConstantWidgets.text(
+                  context,
+                  "Select a product category",
+                  fontWeight: FontWeight.bold,
+                ),
                 trailingIcon: const Icon(Icons.arrow_drop_down_circle_outlined),
                 textStyle: TextStyle(color: DeviceUtils.isDarkMode(context) ? Colors.white : Colors.black),
                 leadingIcon: const Icon(Icons.merge_type_outlined),
-                onselected: (selected)=> setState(() => category = selected),
-                
-                ),
+                onselected: (selected) => setState(() => category = selected),
+              ),
 
               const SizedBox(
                 height: 36,
@@ -140,7 +160,9 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
                 },
               ),
 
-              const SizedBox(height: 24,),
+              const SizedBox(
+                height: 24,
+              ),
 
               CustomTextfield(
                 screenWidth: 80,
@@ -205,10 +227,17 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
                   screenWidth: 90,
                   textSize: 14,
                   onClick: () {
-                    uploadAction(productName: productName, imageFile: imageFile, productDetails: productDetails, productPrice: productPrice, category: category, units: units, discountPercentage: discountPercentage);
+                    uploadAction(
+                        productName: productName,
+                        imageFile: imageFile,
+                        productDetails: productDetails,
+                        productPrice: productPrice,
+                        category: category,
+                        units: units,
+                        discountPercentage: discountPercentage);
                   }),
 
-                  const SizedBox(
+              const SizedBox(
                 height: 36,
               ),
             ],

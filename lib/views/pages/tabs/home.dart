@@ -1,9 +1,10 @@
-import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/data/test_data.dart';
+import 'package:cartify/services/test_api.dart';
 import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/page_elements/trending_section.dart';
+import 'package:cartify/views/pages/elements/custom_overlay.dart';
 import 'package:cartify/views/pages/elements/home_search_bar.dart';
 import 'package:cartify/views/pages/elements/home_space_bar_bg.dart';
 import 'package:cartify/views/pages/elements/product_for_you.dart';
@@ -44,8 +45,6 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
   Widget build(
     BuildContext context,
   ) {
-    // ignore: unused_result
-    ref.refresh(productsFutureProvider);
     DeviceUtils.setStatusBarColor(Theme.of(context).scaffoldBackgroundColor, DeviceUtils.isDarkMode(context) == true ? Brightness.light : Brightness.dark);
 
     return NestedScrollView(
@@ -127,58 +126,50 @@ class HomeBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(simpleWidgetProvider).homeBodyScrollContext = context;
-    
+
     return RefreshIndicator(
       displacement: 20,
       onRefresh: () async {
         // ignore: unused_result
         ref.refresh(productsFutureProvider);
-        DeviceUtils.showFlushBar(context, "Products Refreshed!");
+        
+        final String? canConnect = await TestApi.testConnect();
+        if(context.mounted){
+            if(canConnect == null){
+              DeviceUtils.showFlushBar(context, "Products Refreshed!");
+            }else{
+              DeviceUtils.showFlushBar(context, canConnect);
+            }
+          }
+        
+        
       },
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: SizedBox(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 24,
+      child: CustomScrollView(
+        slivers: [
+          // A widget above the SliverList
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              child: Row(
+                children: [
+                  const HomeSearchBar(),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.filter_list_rounded),
+                    style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.premiumGold.withAlpha(50))),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Row(
-                  children: [
-                    const HomeSearchBar(),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.filter_list_rounded,
-                        color: Colors.black,
-                      ),
-                      style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.lightPremiumGold)),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              const ProductForYou(
-                topic: "Recommended for you",
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 8, right: 8),
-                child: Divider(
-                  color: CartifyColors.lightGray,
-                ),
-              ),
-              const TrendingSection()
-              
-            ],
+            ),
           ),
-        ),
+          const SliverToBoxAdapter(
+            child: ProductForYou(topic: "Recommended for you"),
+          ),
+          const SliverToBoxAdapter(child: TrendingSectionHeader()),
+          
+          const TrendingSection(),
+        ],
       ),
     );
   }

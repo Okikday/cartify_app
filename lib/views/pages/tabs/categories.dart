@@ -26,7 +26,7 @@ class Categories extends StatelessWidget {
         const SizedBox(height: 24),
         SizedBox(
         
-          height: DeviceUtils.getScreenHeight(context) * 0.8,
+          height: MediaQuery.of(context).size.height * 0.8,
           child: CategoriesGrid(),
         ),
       ],

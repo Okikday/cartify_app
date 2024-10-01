@@ -17,7 +17,7 @@ class CustomBox extends StatelessWidget {
       margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       decoration: BoxDecoration(
         color: CartifyColors.lightGray.withOpacity(0.1),
-        border: Border.all(width: 2, color: CartifyColors.royalBlue.withAlpha(25)),
+        border: Border.all(width: 2, color: CartifyColors.royalBlue.withAlpha(75)),
         borderRadius: BorderRadius.circular(8),
         boxShadow: DeviceUtils.isDarkMode(context) == true ? 
         [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: Offset(0, 0), blurStyle: BlurStyle.inner, spreadRadius: 2),]
