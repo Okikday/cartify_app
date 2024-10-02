@@ -23,6 +23,7 @@ class CustomTextfield extends StatefulWidget {
   final double borderRadius;
   final Color? backgroundColor;
   final InputBorder? border;
+  final InputBorder? disabledBorder;
   final InputBorder? enabledBorder;
   final InputBorder? focusedBorder;
   final TextEditingController? controller;
@@ -55,6 +56,7 @@ class CustomTextfield extends StatefulWidget {
     this.borderRadius = 8,
     this.backgroundColor,
     this.border,
+    this.disabledBorder,
     this.enabledBorder,
     this.focusedBorder,
     this.controller,
@@ -171,6 +173,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
           fillColor: widget.backgroundColor ?? Colors.transparent,
           contentPadding: widget.contentPadding ?? const EdgeInsets.all(16),
           enabledBorder: widget.enabledBorder ?? defaultBorder(widget.borderRadius),
+          disabledBorder: widget.disabledBorder ?? defaultBorder(widget.borderRadius),
           border: widget.border ?? defaultBorder(widget.borderRadius),
           focusedBorder: widget.focusedBorder ?? defaultBorder(widget.borderRadius),
         ),

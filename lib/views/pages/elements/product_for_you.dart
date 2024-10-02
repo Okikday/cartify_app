@@ -77,7 +77,7 @@ class ProductForYou extends ConsumerWidget {
                                 category: product.category,
                                 price: "N${Formatter.parsePrice(product.price)}",
                                 createdAt: product.createdAt,
-                                updatedAt: product.updatedAt));
+                                updatedAt: product.updatedAt,));
                       },
                     );
                   },

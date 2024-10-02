@@ -18,7 +18,6 @@ class HomeSearchBar extends ConsumerStatefulWidget {
 }
 
 class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
-  final FocusNode focusNode = FocusNode();
   late bool isDarkMode;
   late Color color;
   late SimpleWidgetStates simpleWidgetRef;
@@ -29,7 +28,6 @@ class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
     isDarkMode = DeviceUtils.isDarkMode(context);
     color = isDarkMode == true ? CartifyColors.lightGray : CartifyColors.onyxBlack;
     simpleWidgetRef.homeSearchBarContext = context;
-    simpleWidgetRef.homeSearchBarFocusNode = focusNode;
   }
 
   // void focusNodeListener(){
@@ -62,7 +60,6 @@ class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
         ]),
         child: CustomTextfield(
           isEnabled: false,
-          focusNode: focusNode,
           backgroundColor: CartifyColors.lightGray.withAlpha(25),
           prefixIcon: Icon(
             Icons.search,
@@ -72,12 +69,7 @@ class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
           hintStyle: TextStyle(color: color, fontSize: 14),
           inputTextStyle: TextStyle(color: color),
           pixelHeight: 42,
-          ontap: () {
-            activateHomeSearchBar(context, ref);
-          },
-          focusedBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: CartifyColors.antiFlashWhite.withAlpha(175), width: 2), borderRadius: BorderRadius.circular(36)),
-          enabledBorder: OutlineInputBorder(
+          disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 width: 2,
                 color: isDarkMode == true ? CartifyColors.lightPremiumGold.withAlpha(100) : CartifyColors.premiumGold.withAlpha(25),

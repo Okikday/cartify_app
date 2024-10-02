@@ -27,7 +27,6 @@ class _AccountState extends ConsumerState<Account> {
         if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const AccountDetails());
       }
     },
-    {'icon': FluentIcons.person_24_regular, 'title': "Vendor Mode"},
     {'icon': Icons.key, 'title': "Change Password"},
     {'icon': Icons.help_outline_rounded, 'title': "Support"},
     {'icon': Icons.star_border, 'title': "Rate the app"},
@@ -80,7 +79,7 @@ class _AccountState extends ConsumerState<Account> {
             height: 96,
             width: screenWidth,
             padding: const EdgeInsets.only(left: 12, right: 12),
-            margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24, top: 16),
             decoration: BoxDecoration(
               color: isDarkMode ? CartifyColors.royalBlue.withAlpha(100) : CartifyColors.royalBlue.withAlpha(100),
               borderRadius: BorderRadius.circular(16),
@@ -99,7 +98,7 @@ class _AccountState extends ConsumerState<Account> {
                   onTap: (){},
                   borderRadius: BorderRadius.circular(16),
                   child: Padding(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.only(left: 16, right: 16),
                     child: SizedBox(
                       height: 80,
                       child: Column(
@@ -125,7 +124,7 @@ class _AccountState extends ConsumerState<Account> {
                   onTap: (){ },
                   borderRadius: BorderRadius.circular(16),
                   child: Padding(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.only(left: 16, right: 16),
                     child: SizedBox(
                       height: 80,
                       child: Column(
@@ -147,35 +146,7 @@ class _AccountState extends ConsumerState<Account> {
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: (){
-                    DeviceUtils.pushMaterialPage(context, const UploadProduct());
-                    DeviceUtils.showFlushBar(context, "Vendor Mode 🙋");
-                  },
-                  borderRadius: BorderRadius.circular(16),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: SizedBox(
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            
-                            backgroundColor: isDarkMode ? CartifyColors.premiumGold.withAlpha(50) : CartifyColors.royalBlue.withAlpha(100),
-                            
-                            child:  const Icon(
-                              Icons.upgrade_outlined,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 4,),
-                          ConstantWidgets.text(context, "Sell Product", color: Colors.white),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+               
                 InkWell(
                   onTap: (){
                     // final String role = await HiveData().getData(key: 'role');
@@ -186,7 +157,7 @@ class _AccountState extends ConsumerState<Account> {
                   },
                   borderRadius: BorderRadius.circular(16),
                   child: Padding(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.only(left: 8, right: 8),
                     child: SizedBox(
                       height: 80,
                       child: Column(
@@ -265,6 +236,7 @@ class _AccountState extends ConsumerState<Account> {
               child: ListView.builder(
                 itemCount: accountOptions.length,
                 itemBuilder: (context, index) => ListTile(
+                  contentPadding: const EdgeInsets.only(left: 12, right: 12),
                   leading: Icon(
                     accountOptions[index]["icon"],
                     color: CartifyColors.royalBlue,

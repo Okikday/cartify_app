@@ -11,7 +11,7 @@ class SimpleWidgetStates extends ChangeNotifier{
 
   //home page
   late BuildContext homeSearchBarContext;
-  late FocusNode homeSearchBarFocusNode;
+  //late FocusNode homeSearchBarFocusNode;
   late AnimationController searchBodyAnimController;
   late bool isSearchBodyVisible = false;
 

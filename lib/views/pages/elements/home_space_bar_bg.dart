@@ -31,11 +31,11 @@ class HomeSpaceBarBg extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ConstantWidgets.text(context, topic, fontSize: 28, fontWeight: FontWeight.bold, color: CartifyColors.antiFlashWhite),
+              ConstantWidgets.text(context, topic, fontSize: 24, fontWeight: FontWeight.bold, color: CartifyColors.antiFlashWhite),
               const SizedBox(
-                height: 16,
+                height: 12,
               ),
-              ConstantWidgets.text(context, description, color: Colors.white),
+              ConstantWidgets.text(context, description, color: CartifyColors.lightPremiumGold, fontSize: 13, shadows: [const Shadow(color: CartifyColors.premiumGold, blurRadius: 4)]),
             ],
           ),
         )

@@ -70,7 +70,7 @@ class ProductCard1 extends StatelessWidget {
                           children: [
                             ConstantWidgets.text(context, "Vendor",),
                             const SizedBox(width: 2.5,),
-                            Icon(Icons.stars, size: 14, color: isDarkMode ? CartifyColors.premiumGold : CartifyColors.gold,)
+                            Icon(Icons.stars, size: 14, color: isDarkMode ? CartifyColors.premiumGold : CartifyColors.royalBlue,)
                           ],
                         ),
                         ),

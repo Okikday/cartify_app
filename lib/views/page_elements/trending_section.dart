@@ -29,7 +29,7 @@ class TrendingSection extends ConsumerWidget {
               productName: product.name,
               assetName: product.photo.first,
               discountPercentage: product.discountPercentage,
-              price: "N${Formatter.parsePrice(product.price, asInt: true)}",
+              price: "N ${Formatter.parsePrice(product.price, asInt: true)}",
               category: product.category,
               productID: product.id,
               onTap: () {
@@ -42,7 +42,7 @@ class TrendingSection extends ConsumerWidget {
                     photo: product.photo,
                     productDetails: product.productDetails,
                     category: product.category,
-                    price: "N${Formatter.parsePrice(product.price)}",
+                    price: "N ${Formatter.parsePrice(product.price)}",
                     createdAt: product.createdAt,
                     updatedAt: product.updatedAt,
                   ),

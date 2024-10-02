@@ -28,6 +28,8 @@ class TopBar extends ConsumerWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
+                  width: 52,
+                  height: 48,
                   decoration: BoxDecoration(
                     color: frostyBackground,
                     borderRadius: BorderRadius.circular(10),
@@ -35,18 +37,16 @@ class TopBar extends ConsumerWidget {
                   child: IconButton(
                     color: Colors.white,
                     icon: const Icon(Icons.search),
-                    onPressed: () => setSearchBarFocus(
-                      context,
-                      ref.watch(simpleWidgetProvider).homeSearchBarFocusNode,
-                      ref: ref,
-                    ),
+                    onPressed: () {},
                   ),
                 ),
               ),
             ),
             InkWell(
-              onTap: ()=> DeviceUtils.pushMaterialPage(context, const Notifications()),
+              onTap: () => DeviceUtils.pushMaterialPage(context, const Notifications()),
               child: Container(
+                width: 52,
+                height: 48,
                 decoration: BoxDecoration(
                   color: frostyBackground,
                   borderRadius: BorderRadius.circular(10),
@@ -73,13 +73,13 @@ class TopBar extends ConsumerWidget {
     );
   }
 
-  void setSearchBarFocus(
-      BuildContext homeSearchBarContext, FocusNode homeSearchBarFocusNode,
-      {required WidgetRef ref}) {
-    debugPrint("Setting textfield focus");
-    if (homeSearchBarContext.mounted) {
-      FocusScope.of(homeSearchBarContext).requestFocus(homeSearchBarFocusNode);
-      activateHomeSearchBar(homeSearchBarContext, ref);
-    }
-  }
+  // void setSearchBarFocus(
+  //     BuildContext homeSearchBarContext,
+  //     {required WidgetRef ref}) {
+  //   debugPrint("Setting textfield focus");
+  //   if (homeSearchBarContext.mounted) {
+  //     //FocusScope.of(homeSearchBarContext).requestFocus(homeSearchBarFocusNode);
+  //     activateHomeSearchBar(homeSearchBarContext, ref);
+  //   }
+  // }
 }

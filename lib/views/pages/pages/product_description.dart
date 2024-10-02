@@ -258,11 +258,11 @@ class ProductDescBody extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              ReviewBox(),
+              const ReviewBox(),
               const SizedBox(
                 height: 24,
               ),
-              ProductForYou(
+              const ProductForYou(
                 topic: "Similar items",
               )
             ],

@@ -22,13 +22,17 @@ class ImageInteractiveView extends ConsumerStatefulWidget {
 
 class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> with SingleTickerProviderStateMixin {
   late Animation<double> scaleAnim;
+  late Animation<double> opacAnim;
 
   @override
   void initState() {
     super.initState();
     ref.read(simpleWidgetProvider).imageInteractiveViewAnimController = AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
-    scaleAnim = Tween<double>(begin: 0, end: 1).animate(
+    scaleAnim = Tween<double>(begin: 0.25, end: 1).animate(
       CurvedAnimation(parent: ref.read(simpleWidgetProvider).imageInteractiveViewAnimController, curve: Curves.decelerate),
+    );
+    opacAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: ref.read(simpleWidgetProvider).imageInteractiveViewAnimController, curve: Curves.easeIn),
     );
     ref.read(simpleWidgetProvider).imageInteractiveViewAnimController.forward();
   }
@@ -50,39 +54,42 @@ class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> wit
               child: Stack(
                 children: [
                   Center(
-                    child: ScaleTransition(
-                      scale: scaleAnim,
-                      child: InteractiveViewer(
-                        maxScale: 5.0,
-                        minScale: 1.0,
-                        constrained: false,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: CachedNetworkImage(
-                            imageUrl: widget.assetName,
-                            errorWidget: (context, url, error) {
-                              return Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.error, size: 50, color: Colors.red),
-                                    const SizedBox(height: 24),
-                                    ConstantWidgets.text(context, "Unable to load image!", fontSize: 18),
-                                  ],
-                                ),
-                              );
-                            },
-                            placeholder: (context, url) {
-                              return Center(
-                                child: LoadingShimmer(
-                                  width: screenWidth * 0.9,
-                                  height: screenHeight * 0.5,
-                                ),
-                              );
-                            },
-                            fit: BoxFit.contain,
-                            width: screenWidth,
-                            height: screenHeight,
+                    child: FadeTransition(
+                      opacity: opacAnim,
+                      child: ScaleTransition(
+                        scale: scaleAnim,
+                        child: InteractiveViewer(
+                          maxScale: 5.0,
+                          minScale: 1.0,
+                          constrained: false,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: CachedNetworkImage(
+                              imageUrl: widget.assetName,
+                              errorWidget: (context, url, error) {
+                                return Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.error, size: 50, color: Colors.red),
+                                      const SizedBox(height: 24),
+                                      ConstantWidgets.text(context, "Unable to load image!", fontSize: 18),
+                                    ],
+                                  ),
+                                );
+                              },
+                              placeholder: (context, url) {
+                                return Center(
+                                  child: LoadingShimmer(
+                                    width: screenWidth * 0.9,
+                                    height: screenHeight * 0.5,
+                                  ),
+                                );
+                              },
+                              fit: BoxFit.contain,
+                              width: screenWidth,
+                              height: screenHeight,
+                            ),
                           ),
                         ),
                       ),
