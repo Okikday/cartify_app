@@ -1,3 +1,4 @@
+import 'package:cartify/views/pages/elements/custom_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,12 +24,24 @@ class SimpleWidgetStates extends ChangeNotifier{
   bool isProductInfoImageTabVisible = false;
   late AnimationController imageInteractiveViewAnimController;
   
-  
-  
-  
+  void initImageInteractiveAnimController(TickerProvider vsync) {
+    imageInteractiveViewAnimController = AnimationController(duration: const Duration(milliseconds: 400), vsync: vsync);
+  }
 
-  
-
-
-
+  void reverseImageInteractiveAnimController(BuildContext context) {
+    imageInteractiveViewAnimController.reverse();
+    Future.delayed(const Duration(milliseconds: 410), () {
+      if(context.mounted) CustomOverlay(context).removeOverlay();
+      isProductInfoImageTabVisible = false;
+      imageInteractiveViewAnimController.dispose();
+      notifyListeners();
+    });
+  }
 }
+  
+  
+
+  
+
+
+

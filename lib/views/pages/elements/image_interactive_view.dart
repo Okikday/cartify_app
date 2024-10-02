@@ -23,26 +23,23 @@ class ImageInteractiveView extends ConsumerStatefulWidget {
 
 class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> with SingleTickerProviderStateMixin {
   late Animation<double> scaleAnim;
+
   @override
   void initState() {
     super.initState();
-    
+    ref.read(simpleWidgetProvider).initImageInteractiveAnimController(this);
+    scaleAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: ref.read(simpleWidgetProvider).imageInteractiveViewAnimController, curve: Curves.decelerate),
+    );
+    ref.read(simpleWidgetProvider).imageInteractiveViewAnimController.forward();
   }
 
-  @override
-  void dispose() {
-    ref.watch(simpleWidgetProvider).imageInteractiveViewAnimController.dispose();
-    super.dispose();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    ref.read(simpleWidgetProvider).imageInteractiveViewAnimController = AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
-    scaleAnim = Tween<double>(begin: 0, end: 1)
-        .animate(CurvedAnimation(parent: ref.watch(simpleWidgetProvider).imageInteractiveViewAnimController, curve: Curves.decelerate));
-    ref.watch(simpleWidgetProvider).imageInteractiveViewAnimController.forward();
 
     return AnimatedBuilder(
         animation: scaleAnim,
@@ -97,11 +94,8 @@ class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> wit
                     right: 16,
                     child: IconButton(
                       onPressed: () {
-                        ref.watch(simpleWidgetProvider).imageInteractiveViewAnimController.reverse();
-                        Future.delayed(const Duration(milliseconds: 410), () {
-                          if (context.mounted) CustomOverlay(context).removeOverlay();
-                          Future.delayed(const Duration(milliseconds: 410), () => ref.refresh(simpleWidgetProvider).isProductInfoImageTabVisible = false);
-                        });
+                        ref.watch(simpleWidgetProvider).reverseImageInteractiveAnimController(context);
+                        
                       },
                       icon: const Icon(Icons.close, color: Colors.black),
                       iconSize: 30,

@@ -66,11 +66,9 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
     return PopScope(
       canPop: ref.watch(simpleWidgetProvider).isProductInfoImageTabVisible == false,
       onPopInvokedWithResult: (didPop, result) {
-        ref.watch(simpleWidgetProvider).imageInteractiveViewAnimController.reverse();
-        Future.delayed(const Duration(milliseconds: 410), () {
-          if (context.mounted) CustomOverlay(context).removeOverlay();
-          Future.delayed(const Duration(milliseconds: 410), () => ref.refresh(simpleWidgetProvider).isProductInfoImageTabVisible = false);
-        });
+        if(ref.watch(simpleWidgetProvider).isProductInfoImageTabVisible == true){
+          ref.read(simpleWidgetProvider).reverseImageInteractiveAnimController(context);
+        }
       },
       child: Scaffold(
           body: NestedScrollView(
