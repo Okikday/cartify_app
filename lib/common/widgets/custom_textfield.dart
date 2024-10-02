@@ -30,6 +30,7 @@ class CustomTextfield extends StatefulWidget {
   final EdgeInsets? contentPadding;
   final FocusNode? focusNode;
   final int maxLines;
+  final bool isEnabled;
 
   const CustomTextfield({
     super.key,
@@ -60,7 +61,8 @@ class CustomTextfield extends StatefulWidget {
     this.textAlign = TextAlign.start,
     this.contentPadding,
     this.focusNode,
-    this.maxLines = 1
+    this.maxLines = 1,
+    this.isEnabled = true
   });
 
   @override
@@ -124,6 +126,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
           ? MediaQuery.of(context).size.height * (widget.screenHeight! / 100)
           : widget.pixelHeight,
       child: TextField(
+        enabled: widget.isEnabled,
         maxLines: widget.maxLines,
         textAlign: widget.textAlign,
         obscureText: widget.obscureText,

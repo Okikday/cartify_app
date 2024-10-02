@@ -1,5 +1,6 @@
 import 'package:cartify/common/constants/themes.dart';
 import 'package:cartify/views/authentication/check_user.dart';
+import 'package:cartify/views/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,7 +24,7 @@ class App extends StatelessWidget {
       theme: CartifyThemes.lightTheme,
       darkTheme: CartifyThemes.darkTheme,
         
-      home: const CheckUser(),
+      home: const MainScreen(),
     );
   }
 }

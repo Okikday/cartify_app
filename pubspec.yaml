@@ -9,6 +9,7 @@ environment:
 dependencies:
   another_flushbar: ^1.12.30
   cached_network_image: ^3.4.1
+  connectivity_plus: ^6.0.5
   dio: ^5.7.0
   fluentui_system_icons: ^1.1.257
   flutter:

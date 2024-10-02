@@ -24,13 +24,6 @@ class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
   late SimpleWidgetStates simpleWidgetRef;
   bool isBottomBuyNowVisible = false;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   focusNode.addListener(focusNodeListener);
-  // }
-
   void assignVals() {
     simpleWidgetRef = ref.watch(simpleWidgetProvider);
     isDarkMode = DeviceUtils.isDarkMode(context);
@@ -68,6 +61,7 @@ class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
           )
         ]),
         child: CustomTextfield(
+          isEnabled: false,
           focusNode: focusNode,
           backgroundColor: CartifyColors.lightGray.withAlpha(25),
           prefixIcon: Icon(
@@ -79,9 +73,7 @@ class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
           inputTextStyle: TextStyle(color: color),
           pixelHeight: 42,
           ontap: () {
-            activateHomeSearchBar(context, simpleWidgetRef.homeBodyScrollContext, simpleWidgetRef.searchBodyAnimController, ref, todo: () {
-              isBottomBuyNowVisible = true;
-            });
+            activateHomeSearchBar(context, ref);
           },
           focusedBorder:
               OutlineInputBorder(borderSide: BorderSide(color: CartifyColors.antiFlashWhite.withAlpha(175), width: 2), borderRadius: BorderRadius.circular(36)),
@@ -97,41 +89,54 @@ class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
   }
 }
 
-void activateHomeSearchBar(
-  BuildContext context,
-  BuildContext scrollContext,
-  AnimationController searchBodyAnimController,
-  WidgetRef ref, {
-  void Function()? todo,
-}) {
-  PrimaryScrollController.of(scrollContext).jumpTo(0);
+void activateHomeSearchBar(BuildContext context, WidgetRef ref,) {
+  ref.read(simpleWidgetProvider).homeBodyScrollController.animateTo(270, duration: const Duration(milliseconds: 200), curve: Curves.decelerate );
   ref.read(simpleWidgetProvider).isSearchBodyVisible = true;
-  todo == null ? () {} : todo();
-  showBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => BottomSheet(
-          animationController: searchBodyAnimController,
-          onClosing: () {},
-          builder: (context) {
-            final double screenHeight = MediaQuery.of(scrollContext).size.height;
-            final double screenWidth = MediaQuery.of(scrollContext).size.width;
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 350),
-              curve: Curves.decelerate,
-              height: DeviceUtils.isKeyboardVisible(context) == true ? screenHeight - screenHeight * 0.53 : screenHeight - screenHeight * 0.25,
-              width: screenWidth,
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.search,
-                    color: CartifyColors.lightGray,
-                  ),
-                  ConstantWidgets.text(context, "Input a text to search", color: CartifyColors.lightGray),
-                ],
-              ),
-            );
-          }));
+  showBottomSheet(context: context, backgroundColor: Colors.transparent, builder: (context) => const SearchBarBody());
+}
+
+class SearchBarBody extends ConsumerStatefulWidget {
+  const SearchBarBody({
+    super.key,
+  });
+
+  @override
+  ConsumerState<SearchBarBody> createState() => _SearchBarBodyState();
+}
+
+class _SearchBarBodyState extends ConsumerState<SearchBarBody> with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(simpleWidgetProvider).searchBodyAnimController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomSheet(
+        animationController: ref.read(simpleWidgetProvider).searchBodyAnimController,
+        onClosing: () {
+        },
+        builder: (context) {
+          final double screenHeight = MediaQuery.of(context).size.height;
+          final double screenWidth = MediaQuery.of(context).size.width;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.decelerate,
+            height: DeviceUtils.isKeyboardVisible(context) == true ? screenHeight - screenHeight * 0.53 : screenHeight - screenHeight * 0.25,
+            width: screenWidth,
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.search,
+                  color: CartifyColors.lightGray,
+                ),
+                ConstantWidgets.text(context, "Input a text to search", color: CartifyColors.lightGray),
+              ],
+            ),
+          );
+        });
+  }
 }

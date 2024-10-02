@@ -5,7 +5,6 @@ import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/views/page_elements/loading_shimmer.dart';
-import 'package:cartify/views/pages/elements/custom_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,7 +26,7 @@ class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> wit
   @override
   void initState() {
     super.initState();
-    ref.read(simpleWidgetProvider).initImageInteractiveAnimController(this);
+    ref.read(simpleWidgetProvider).imageInteractiveViewAnimController = AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
     scaleAnim = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: ref.read(simpleWidgetProvider).imageInteractiveViewAnimController, curve: Curves.decelerate),
     );

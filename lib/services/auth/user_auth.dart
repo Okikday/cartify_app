@@ -88,11 +88,11 @@ class UserAuth {
         return "Unable to access link";
 
       }else{
-      debugPrint("Unknown error occurred");
+      debugPrint("${response.statusCode} Unknown error occurred");
       return "Unknown error while adding user";
       }
     }catch(e){
-      debugPrint("Unknown error occurred");
+      debugPrint("${e}: Unknown error occurred");
       return "Unknown error while adding user";
     }
   }

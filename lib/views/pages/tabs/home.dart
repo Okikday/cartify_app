@@ -4,7 +4,6 @@ import 'package:cartify/services/test_api.dart';
 import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/page_elements/trending_section.dart';
-import 'package:cartify/views/pages/elements/custom_overlay.dart';
 import 'package:cartify/views/pages/elements/home_search_bar.dart';
 import 'package:cartify/views/pages/elements/home_space_bar_bg.dart';
 import 'package:cartify/views/pages/elements/product_for_you.dart';
@@ -23,7 +22,6 @@ class Home extends ConsumerStatefulWidget {
 
 class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
   late TabController tabController;
-  late AnimationController searchBodyAnimController;
   //late Animation<double> opacAnim;
   final List<Map<String, String>> slidableMap = TestData.slidableMap;
   final List<Map<String, String>> productCategoriesList = TestData.productCategoriesList;
@@ -32,22 +30,16 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(length: slidableMap.length, vsync: this);
-    searchBodyAnimController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    ref.watch(simpleWidgetProvider).searchBodyAnimController = searchBodyAnimController;
   }
 
   @override
   Widget build(
     BuildContext context,
   ) {
-    DeviceUtils.setStatusBarColor(Theme.of(context).scaffoldBackgroundColor, DeviceUtils.isDarkMode(context) == true ? Brightness.light : Brightness.dark);
 
+    DeviceUtils.setStatusBarColor(Theme.of(context).scaffoldBackgroundColor, DeviceUtils.isDarkMode(context) == true ? Brightness.light : Brightness.dark);
     return NestedScrollView(
+      controller: ref.watch(simpleWidgetProvider).homeBodyScrollController,
       headerSliverBuilder: (context, isScrolled) => [
         SliverAppBar(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -125,8 +117,6 @@ class HomeBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(simpleWidgetProvider).homeBodyScrollContext = context;
-
     return RefreshIndicator(
       displacement: 20,
       onRefresh: () async {
@@ -145,6 +135,7 @@ class HomeBody extends ConsumerWidget {
         
       },
       child: CustomScrollView(
+        
         slivers: [
           // A widget above the SliverList
           SliverToBoxAdapter(

@@ -5,29 +5,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final simpleWidgetProvider = ChangeNotifierProvider<SimpleWidgetStates>((ref) => SimpleWidgetStates());
 
 class SimpleWidgetStates extends ChangeNotifier{
-
   //main Screen
   late BuildContext mainScreenContext;
+  late ScrollController homeBodyScrollController = ScrollController();
 
   //home page
   late BuildContext homeSearchBarContext;
-  late BuildContext homeBodyScrollContext;
   late FocusNode homeSearchBarFocusNode;
   late AnimationController searchBodyAnimController;
   late bool isSearchBodyVisible = false;
 
   //Orders page
   bool isOrdersBottomBarBuyNowVisible = true;
-  
-
 
   bool isProductInfoImageTabVisible = false;
   late AnimationController imageInteractiveViewAnimController;
-  
-  void initImageInteractiveAnimController(TickerProvider vsync) {
-    imageInteractiveViewAnimController = AnimationController(duration: const Duration(milliseconds: 400), vsync: vsync);
-  }
 
+
+  //Functions
+  
   void reverseImageInteractiveAnimController(BuildContext context) {
     imageInteractiveViewAnimController.reverse();
     Future.delayed(const Duration(milliseconds: 410), () {
@@ -37,6 +33,12 @@ class SimpleWidgetStates extends ChangeNotifier{
       notifyListeners();
     });
   }
+
+ 
+
+
+  
+  
 }
   
   

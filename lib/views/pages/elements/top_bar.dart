@@ -38,8 +38,6 @@ class TopBar extends ConsumerWidget {
                     onPressed: () => setSearchBarFocus(
                       context,
                       ref.watch(simpleWidgetProvider).homeSearchBarFocusNode,
-                      ref.watch(simpleWidgetProvider).homeBodyScrollContext,
-                      ref.watch(simpleWidgetProvider).searchBodyAnimController,
                       ref: ref,
                     ),
                   ),
@@ -76,12 +74,12 @@ class TopBar extends ConsumerWidget {
   }
 
   void setSearchBarFocus(
-      BuildContext homeSearchBarContext, FocusNode homeSearchBarFocusNode, BuildContext homeBodyScrollContext, AnimationController searchBodyAnimController,
+      BuildContext homeSearchBarContext, FocusNode homeSearchBarFocusNode,
       {required WidgetRef ref}) {
     debugPrint("Setting textfield focus");
     if (homeSearchBarContext.mounted) {
       FocusScope.of(homeSearchBarContext).requestFocus(homeSearchBarFocusNode);
-      activateHomeSearchBar(homeSearchBarContext, homeBodyScrollContext, searchBodyAnimController, ref);
+      activateHomeSearchBar(homeSearchBarContext, ref);
     }
   }
 }
