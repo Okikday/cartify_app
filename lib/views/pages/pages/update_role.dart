@@ -25,7 +25,9 @@ class _UpdateRoleState extends ConsumerState<UpdateRole> {
       appBar: AppBar(centerTitle: true, title: const Text("Turn a vendor"),),
 
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+
           Center(child: ConstantWidgets.text(context, "Make Yourself a vendor to upload products")),
           const SizedBox(height: 24,),
           Center(

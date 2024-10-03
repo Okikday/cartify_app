@@ -26,7 +26,7 @@ class SimpleWidgetStates extends ChangeNotifier{
   
   void reverseImageInteractiveAnimController(BuildContext context) {
     imageInteractiveViewAnimController.reverse();
-    Future.delayed(const Duration(milliseconds: 410), () {
+    Future.delayed(const Duration(milliseconds: 260), () {
       if(context.mounted) CustomOverlay(context).removeOverlay();
       isProductInfoImageTabVisible = false;
       imageInteractiveViewAnimController.dispose();

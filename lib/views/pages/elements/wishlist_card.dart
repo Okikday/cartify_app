@@ -11,6 +11,7 @@ class WishlistCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    final bool isDarkMode = DeviceUtils.isDarkMode(context);
     return CustomBox(
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -43,9 +44,9 @@ class WishlistCard extends StatelessWidget {
                             height: 30,
                             child: IconButton(
                               onPressed: () {},
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.cancel_sharp,
-                                color: CartifyColors.lightGray,
+                                color: isDarkMode ? CartifyColors.lightGray : Colors.white,
                                 size: 28,
                               ),
                               padding: const EdgeInsets.all(0),

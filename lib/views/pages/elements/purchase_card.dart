@@ -43,7 +43,7 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
 
   @override
   Widget build(BuildContext context) {
-    
+    final bool isDarkMode = DeviceUtils.isDarkMode(context);
     return CustomBox(
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -76,9 +76,9 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
                             height: 30,
                             child: IconButton(
                               onPressed: () {},
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.cancel_sharp,
-                                color: CartifyColors.lightGray,
+                                color: isDarkMode ? CartifyColors.lightGray : Colors.white,
                                 size: 28,
                               ),
                               padding: const EdgeInsets.all(0),

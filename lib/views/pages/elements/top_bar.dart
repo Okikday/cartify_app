@@ -1,8 +1,6 @@
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
-import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
-import 'package:cartify/views/pages/elements/home_search_bar.dart';
 import 'package:cartify/views/pages/pages/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -59,7 +57,7 @@ class TopBar extends ConsumerWidget {
                         top: 4,
                         right: 8,
                         child: CircleAvatar(
-                          child: ConstantWidgets.text(context, "5", fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),
+                          child: ConstantWidgets.text(context, "1", fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),
                           backgroundColor: Colors.red,
                           radius: 8,
                         ))

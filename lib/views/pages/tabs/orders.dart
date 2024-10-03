@@ -49,7 +49,7 @@ class _OrdersState extends ConsumerState<Orders> with WidgetsBindingObserver{
             ListView.builder(
                 itemCount: 5,
                 itemBuilder: (context, index) => Container(
-                    margin: const EdgeInsets.only(bottom: 2),
+                    margin: const EdgeInsets.only(bottom: 0),
                     child: PurchaseCard(
                       screenWidth: screenWidth,
                     ))),
@@ -121,7 +121,7 @@ class BottomBarBuyNow extends ConsumerWidget {
                 elevation: 8,
                 backgroundColor: isDarkMode == true ? CartifyColors.lightGray : CartifyColors.jetBlack,
                 onClick: () {
-                  DeviceUtils.showFlushBar(context, "Say hi");
+                  DeviceUtils.showFlushBar(context, "Processing...");
                 },
                 child: Center(
                   child: ConstantWidgets.text(context, "Buy now", invertColor: true, fontWeight: FontWeight.bold, fontSize: 14),

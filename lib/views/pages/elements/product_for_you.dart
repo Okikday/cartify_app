@@ -42,11 +42,11 @@ class ProductForYou extends ConsumerWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 16),
-                child: ConstantWidgets.text(context, "See all", color: CartifyColors.premiumGold),
+                child: ConstantWidgets.text(context, "See all", color: CartifyColors.premiumGold, textDecoration: TextDecoration.underline, decorationColor: CartifyColors.premiumGold),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 12),
           SizedBox(
             height: 275,
             child: productsAsyncValue.when(
@@ -150,7 +150,7 @@ class ProductForYouCard extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(width: 2, color: CartifyColors.royalBlue.withAlpha(75)),
             borderRadius: BorderRadius.circular(12),
-            color: isDarkMode == true ? CartifyColors.lightPremiumGold.withAlpha(10) : CartifyColors.royalBlue.withOpacity(0.1),
+            color: isDarkMode == true ? Colors.blueGrey.withOpacity(0.15) : CartifyColors.royalBlue.withOpacity(0.1),
             boxShadow: isDarkMode == true
                 ? [
                     BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: const Offset(2, 2), blurStyle: BlurStyle.inner),

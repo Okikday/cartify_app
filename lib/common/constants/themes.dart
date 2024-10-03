@@ -10,7 +10,7 @@ class CartifyThemes{
     useMaterial3: true,
     textTheme: GoogleFonts.notoSansTextTheme(),
     scaffoldBackgroundColor: CartifyColors.antiFlashWhite,
-    colorScheme: ColorScheme.light(primary: CartifyColors.premiumGold)
+    colorScheme: const ColorScheme.light(primary: CartifyColors.premiumGold)
     
   );
 
@@ -21,7 +21,7 @@ class CartifyThemes{
     useMaterial3: true,
     textTheme: GoogleFonts.notoSansTextTheme(),
     scaffoldBackgroundColor: CartifyColors.jetBlack,
-    colorScheme: ColorScheme.dark(primary: CartifyColors.premiumGold)
+    colorScheme: const ColorScheme.dark(primary: CartifyColors.premiumGold)
   );
 
 }

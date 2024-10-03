@@ -64,11 +64,11 @@ class _AccountState extends ConsumerState<Account> {
               children: [
                 Expanded(child: ConstantWidgets.text(context, "Account", fontSize: 20, fontWeight: FontWeight.bold)),
                 IconButton(
-                  style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.premiumGold.withAlpha(50))),
+                  style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(isDarkMode ? const Color(0xFFE0C878).withAlpha(60) : const Color(0xFFC9A641).withAlpha(80),)),
                   onPressed: () {},
-                  icon: const Icon(
+                  icon: Icon(
                     FluentIcons.settings_24_filled,
-                    color: CartifyColors.royalBlue,
+                    color: isDarkMode ? CartifyColors.richBlack : CartifyColors.royalBlue,
                     size: 28,
                   ),
                 ),
@@ -192,7 +192,7 @@ class _AccountState extends ConsumerState<Account> {
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     width: screenWidth * 0.35,
-                    decoration: BoxDecoration(color: CartifyColors.premiumGold.withAlpha(50), borderRadius: BorderRadius.circular(14)),
+                    decoration: BoxDecoration(color: isDarkMode ? const Color(0xFFE0C878).withAlpha(60) : const Color(0xFFC9A641).withAlpha(80), borderRadius: BorderRadius.circular(14)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +213,7 @@ class _AccountState extends ConsumerState<Account> {
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     width: screenWidth * 0.35,
-                    decoration: BoxDecoration(color: CartifyColors.premiumGold.withAlpha(35), borderRadius: BorderRadius.circular(14)),
+                    decoration: BoxDecoration(color: isDarkMode ? const Color(0xFFE0C878).withAlpha(60) : const Color(0xFFC9A641).withAlpha(80), borderRadius: BorderRadius.circular(14)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,7 +242,7 @@ class _AccountState extends ConsumerState<Account> {
                     color: CartifyColors.royalBlue,
                     size: 28,
                   ),
-                  title: ConstantWidgets.text(context, accountOptions[index]["title"]),
+                  title: ConstantWidgets.text(context, accountOptions[index]["title"], fontWeight: FontWeight.bold),
                   trailing: const Icon(
                     Icons.arrow_forward_ios_rounded,
                     color: CartifyColors.royalBlue,

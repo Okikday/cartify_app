@@ -16,12 +16,12 @@ class CustomBox extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       decoration: BoxDecoration(
-        color: CartifyColors.lightGray.withOpacity(0.1),
+        color: Colors.blueGrey.withOpacity(0.2),  // Subtle cool frost
         border: Border.all(width: 2, color: CartifyColors.royalBlue.withAlpha(75)),
         borderRadius: BorderRadius.circular(8),
         boxShadow: DeviceUtils.isDarkMode(context) == true ? 
-        [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: Offset(0, 0), blurStyle: BlurStyle.inner, spreadRadius: 2),]
-         : [BoxShadow(color: CartifyColors.royalBlue.withOpacity(0.1), blurRadius: 8, offset: Offset(0, 0), blurStyle: BlurStyle.inner, spreadRadius: 2),],
+        [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: const Offset(0, 0), blurStyle: BlurStyle.inner, spreadRadius: 2),]
+         : [BoxShadow(color: CartifyColors.royalBlue.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 0), blurStyle: BlurStyle.inner, spreadRadius: 2),],
       ),
       child: InkWell(
         onTap: (){onTap == null ? (){} : onTap!();},

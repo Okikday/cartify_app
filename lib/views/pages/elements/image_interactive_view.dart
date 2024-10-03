@@ -27,7 +27,7 @@ class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> wit
   @override
   void initState() {
     super.initState();
-    ref.read(simpleWidgetProvider).imageInteractiveViewAnimController = AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
+    ref.read(simpleWidgetProvider).imageInteractiveViewAnimController = AnimationController(duration: const Duration(milliseconds: 250), vsync: this);
     scaleAnim = Tween<double>(begin: 0.25, end: 1).animate(
       CurvedAnimation(parent: ref.read(simpleWidgetProvider).imageInteractiveViewAnimController, curve: Curves.decelerate),
     );

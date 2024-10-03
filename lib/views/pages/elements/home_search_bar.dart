@@ -72,7 +72,7 @@ class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
           disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 width: 2,
-                color: isDarkMode == true ? CartifyColors.lightPremiumGold.withAlpha(100) : CartifyColors.premiumGold.withAlpha(25),
+                color: isDarkMode == true ? CartifyColors.lightPremiumGold.withAlpha(75) : CartifyColors.royalBlue.withOpacity(0.1),
               ),
               borderRadius: BorderRadius.circular(36)),
         ),
