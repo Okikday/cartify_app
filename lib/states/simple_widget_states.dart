@@ -7,7 +7,7 @@ final simpleWidgetProvider = ChangeNotifierProvider<SimpleWidgetStates>((ref) =>
 class SimpleWidgetStates extends ChangeNotifier{
   //main Screen
   late BuildContext mainScreenContext;
-  late ScrollController homeBodyScrollController = ScrollController();
+  final ScrollController homeBodyScrollController = ScrollController();
 
   //home page
   late BuildContext homeSearchBarContext;

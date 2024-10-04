@@ -224,6 +224,9 @@ class ProductDescBody extends StatelessWidget {
             color: CartifyColors.premiumGold.withAlpha(50),
             thickness: 4,
           ),
+          const SizedBox(
+            height: 12,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -248,8 +251,8 @@ class ProductDescBody extends StatelessWidget {
                     for (int i = 0; i < 4; i++)
                       Row(
                         children: [
-                          SizedBox(width: 125, child: ConstantWidgets.text(context, "Storage:")),
-                          ConstantWidgets.text(context, "256GB"),
+                          SizedBox(width: 125, child: ConstantWidgets.text(context, "property:", color: CartifyColors.lightGray)),
+                          ConstantWidgets.text(context, "value", color: CartifyColors.lightGray),
                         ],
                       )
                   ],

@@ -85,14 +85,14 @@ class UserAuth {
 
       }else if(response.statusCode == 404){
         debugPrint("Unable to access link");
-        return "Unable to access link";
+        return "Unable to access link : Error 404";
 
       }else{
       debugPrint("${response.statusCode} Unknown error occurred");
-      return "Unknown error while adding user";
+      return "Unknown error while adding user : Error ${response.statusCode}";
       }
     }catch(e){
-      debugPrint("${e}: Unknown error occurred");
+      debugPrint("$e: Unknown error occurred");
       return "Unknown error while adding user";
     }
   }

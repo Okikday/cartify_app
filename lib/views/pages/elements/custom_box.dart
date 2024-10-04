@@ -5,16 +5,21 @@ import 'package:flutter/material.dart';
 class CustomBox extends StatelessWidget {
   final Widget child;
   final void Function()? onTap;
+  final BoxConstraints? constraints;
+  final EdgeInsets? margin;
   const CustomBox({
     super.key,
     required this.child,
+    this.constraints,
+    this.margin,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      constraints: constraints,
+      margin: margin ?? const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       decoration: BoxDecoration(
         color: Colors.blueGrey.withOpacity(0.2),  // Subtle cool frost
         border: Border.all(width: 2, color: CartifyColors.royalBlue.withAlpha(75)),

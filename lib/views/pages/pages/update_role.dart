@@ -24,59 +24,62 @@ class _UpdateRoleState extends ConsumerState<UpdateRole> {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: const Text("Turn a vendor"),),
 
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-
-          Center(child: ConstantWidgets.text(context, "Make Yourself a vendor to upload products")),
-          const SizedBox(height: 24,),
-          Center(
-              child: CustomTextfield(
-                pixelWidth: 300,
-                keyboardType: TextInputType.streetAddress,
-                hint: "Enter your address",
-                onchanged: (text) {
-                  setState(() => addressText = text);
-                },
-              ),
-            ),
-
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
             const SizedBox(height: 24,),
-
+            Center(child: ConstantWidgets.text(context, "Make Yourself a vendor to upload products", fontWeight: FontWeight.bold, fontSize: 16)),
+            const SizedBox(height: 64,),
             Center(
-              child: CustomTextfield(
-                keyboardType: TextInputType.phone,
-                pixelWidth: 300,
-                hint: "Enter your Phone number",
-                onchanged: (text) {
-                  setState(() => phoneNumber = text);
-                },
+                child: CustomTextfield(
+                  maxLines: 3,
+                  screenWidth: 90,
+                  pixelHeight: 120,
+                  keyboardType: TextInputType.streetAddress,
+                  hint: "Enter your address",
+                  onchanged: (text) {
+                    setState(() => addressText = text);
+                  },
+                ),
               ),
-            ),
-
-            const SizedBox(height: 24,),
-
-            Center(child: CustomElevatedButton(label: "Continue", textSize: 14, onClick: () async{
-              if(context.mounted){
-                showDialog(context: context, builder: (context) => const LoadingDialog());
-              }
-              final updateRoleOutcome = await userServices.updateUserRole(enableToVendor: true, phoneNumber: phoneNumber, address: addressText);
-              debugPrint(updateRoleOutcome.toString());
-              if(updateRoleOutcome == null){
+        
+              const SizedBox(height: 24,),
+        
+              Center(
+                child: CustomTextfield(
+                  keyboardType: TextInputType.phone,
+                  screenWidth: 90,
+                  hint: "Enter your Phone number",
+                  onchanged: (text) {
+                    setState(() => phoneNumber = text);
+                  },
+                ),
+              ),
+              
+              const SizedBox(height: 48,),
+        
+              CustomElevatedButton(label: "Continue", textSize: 14, screenWidth: 90, onClick: () async{
                 if(context.mounted){
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  DeviceUtils.showFlushBar(context, "Successfully updated user role");
+                  showDialog(context: context, builder: (context) => const LoadingDialog());
                 }
-              }else{
-                if(context.mounted){
-                  Navigator.pop(context);
-                  DeviceUtils.showFlushBar(context, updateRoleOutcome);
+                final updateRoleOutcome = await userServices.updateUserRole(enableToVendor: true, phoneNumber: phoneNumber, address: addressText);
+                debugPrint(updateRoleOutcome.toString());
+                if(updateRoleOutcome == null){
+                  if(context.mounted){
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    DeviceUtils.showFlushBar(context, "Successfully updated user role");
+                  }
+                }else{
+                  if(context.mounted){
+                    Navigator.pop(context);
+                    DeviceUtils.showFlushBar(context, updateRoleOutcome);
+                  }
                 }
-              }
-            },)),
-
-        ],
+              },),
+          ],
+        ),
       ),
     );
   }

@@ -146,7 +146,7 @@ class ProductForYouCard extends StatelessWidget {
         child: Container(
           height: 270,
           width: 164,
-          padding: const EdgeInsets.fromLTRB(8, 6, 8, 8),
+          padding: const EdgeInsets.fromLTRB(6, 6, 6, 8),
           decoration: BoxDecoration(
             border: Border.all(width: 2, color: CartifyColors.royalBlue.withAlpha(75)),
             borderRadius: BorderRadius.circular(12),

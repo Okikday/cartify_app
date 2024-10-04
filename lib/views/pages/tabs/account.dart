@@ -1,9 +1,12 @@
 import 'package:cartify/app.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
+import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/elements/logout_dialog.dart';
 import 'package:cartify/views/pages/pages/account_details.dart';
+import 'package:cartify/views/pages/pages/settings.dart';
+import 'package:cartify/views/pages/pages/update_role.dart';
 import 'package:cartify/views/pages/pages/upload_product.dart';
 import 'package:cartify/views/pages/pages/vendor_mode.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -18,13 +21,14 @@ class Account extends ConsumerStatefulWidget {
 }
 
 class _AccountState extends ConsumerState<Account> {
+  final HiveData hiveData = HiveData();
 //Icon, title
   final List<Map<String, dynamic>> accountOptions = [
     {
-      'icon': Icons.person,
-      'title': "Account details",
+      'icon': Icons.settings_rounded,
+      'title': "Preferences",
       'onTap': () {
-        if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const AccountDetails());
+        if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const Settings());
       }
     },
     {'icon': Icons.key, 'title': "Change Password"},
@@ -65,9 +69,11 @@ class _AccountState extends ConsumerState<Account> {
                 Expanded(child: ConstantWidgets.text(context, "Account", fontSize: 20, fontWeight: FontWeight.bold)),
                 IconButton(
                   style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(isDarkMode ? const Color(0xFFE0C878).withAlpha(60) : const Color(0xFFC9A641).withAlpha(80),)),
-                  onPressed: () {},
+                  onPressed: () {
+                    DeviceUtils.pushMaterialPage(context, const AccountDetails());
+                  },
                   icon: Icon(
-                    FluentIcons.settings_24_filled,
+                    FluentIcons.person_28_filled,
                     color: isDarkMode ? CartifyColors.richBlack : CartifyColors.royalBlue,
                     size: 28,
                   ),
@@ -148,12 +154,14 @@ class _AccountState extends ConsumerState<Account> {
                 ),
                
                 InkWell(
-                  onTap: (){
-                    // final String role = await HiveData().getData(key: 'role');
-                    // if(role != 'vendor'){}
-                    // if(context.mounted) DeviceUtils.pushMaterialPage(context, const VendorMode());
-                    // if(context.mounted) DeviceUtils.showFlushBar(context, "Vendor Mode 🙋");
-                    DeviceUtils.pushMaterialPage(context, const VendorMode());
+                  onTap: () async{
+                    final String role = await hiveData.getData(key: 'role');
+                    if(role != 'vendor'){
+                      if(context.mounted) DeviceUtils.pushMaterialPage(context, const UpdateRole());
+                    }else{
+                    if(context.mounted) DeviceUtils.pushMaterialPage(context, const VendorMode());
+                    if(context.mounted) DeviceUtils.showFlushBar(context, "Vendor Mode 🙋");
+                    }
                   },
                   borderRadius: BorderRadius.circular(16),
                   child: Padding(
