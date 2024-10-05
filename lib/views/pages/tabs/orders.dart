@@ -37,7 +37,7 @@ class _OrdersState extends ConsumerState<Orders> with WidgetsBindingObserver{
             alignment: Alignment.centerLeft,
             child: ConstantWidgets.text(
               context,
-              "Purchase",
+              "Cart",
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),

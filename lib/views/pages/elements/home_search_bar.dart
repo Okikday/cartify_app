@@ -47,35 +47,33 @@ class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
   Widget build(BuildContext context) {
     assignVals();
 
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), boxShadow: [
-          BoxShadow(color: CartifyColors.royalBlue.withAlpha(75), blurRadius: 4, blurStyle: BlurStyle.inner),
-          const BoxShadow(
-            color: Colors.black54,
-            blurRadius: 2,
-            offset: Offset(1, 1),
-            blurStyle: BlurStyle.outer,
-          )
-        ]),
-        child: CustomTextfield(
-          isEnabled: false,
-          backgroundColor: CartifyColors.lightGray.withAlpha(25),
-          prefixIcon: Icon(
-            Icons.search,
-            color: color,
-          ),
-          hint: "Search a product",
-          hintStyle: TextStyle(color: color, fontSize: 14),
-          inputTextStyle: TextStyle(color: color),
-          pixelHeight: 42,
-          disabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                width: 2,
-                color: isDarkMode == true ? CartifyColors.lightPremiumGold.withAlpha(75) : CartifyColors.royalBlue.withOpacity(0.1),
-              ),
-              borderRadius: BorderRadius.circular(36)),
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), boxShadow: [
+        BoxShadow(color: CartifyColors.royalBlue.withAlpha(75), blurRadius: 4, blurStyle: BlurStyle.inner),
+        const BoxShadow(
+          color: Colors.black54,
+          blurRadius: 2,
+          offset: Offset(1, 1),
+          blurStyle: BlurStyle.outer,
+        )
+      ]),
+      child: CustomTextfield(
+        isEnabled: false,
+        backgroundColor: CartifyColors.lightGray.withAlpha(25),
+        prefixIcon: Icon(
+          Icons.search,
+          color: color,
         ),
+        hint: "Search a product",
+        hintStyle: TextStyle(color: color, fontSize: 14),
+        inputTextStyle: TextStyle(color: color),
+        pixelHeight: 42,
+        disabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              width: 2,
+              color: isDarkMode == true ? CartifyColors.lightPremiumGold.withAlpha(75) : CartifyColors.royalBlue.withOpacity(0.1),
+            ),
+            borderRadius: BorderRadius.circular(36)),
       ),
     );
   }

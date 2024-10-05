@@ -24,8 +24,7 @@ class TrendingSection extends ConsumerStatefulWidget {
 }
 
 class _TrendingSectionState extends ConsumerState<TrendingSection> {
-  final LayoutSettings layoutSettings = LayoutSettings();
-  int gridType = 1;
+  late int gridType;
 
   @override
   void initState() {
@@ -34,11 +33,13 @@ class _TrendingSectionState extends ConsumerState<TrendingSection> {
   }
 
   loadLayoutSettings() async{
-    final int? settingGridType = await layoutSettings.getTrendingGridType();
+    final int? settingGridType = await ref.read(layoutSettingProvider).getTrendingGridType();
+    ref.read(layoutSettingProvider).trendingGridType = settingGridType ?? 1;
     setState(() => gridType = settingGridType ?? 1);
   }
   @override
   Widget build(BuildContext context) {
+    gridType = ref.watch(layoutSettingProvider).trendingGridType;
     final productsAsyncValue = ref.watch(productsFutureProvider);
     final double screenWidth = MediaQuery.of(context).size.width;
 
@@ -97,7 +98,7 @@ class _TrendingSectionState extends ConsumerState<TrendingSection> {
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
           children: [
-            for (int i = 0; i < products.length; i++)
+            for (int i = 0; i < 2; i++)
               ProductCard2(
                productName: products[i].name,
             assetName: products[i].photo.first,
@@ -224,10 +225,20 @@ class TrendingSectionHeader extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ConstantWidgets.text(context, "Trending", fontSize: 20),
+          ConstantWidgets.text(context, "Trending", fontSize: 20, fontWeight: FontWeight.bold),
           IconButton(
             onPressed: () {
-              
+              final int gridType = ref.read(layoutSettingProvider).trendingGridType;
+
+              if(gridType == 1){
+                ref.refresh(layoutSettingProvider).trendingGridType = 2;
+                ref.read(layoutSettingProvider).setTrendingGridType(2);
+              }else{
+                ref.refresh(layoutSettingProvider).trendingGridType = 1;
+                ref.read(layoutSettingProvider).setTrendingGridType(1);
+              }
+
+              DeviceUtils.showFlushBar(context, "Changed Grid type");
             },
             icon: const Icon(
               Icons.grid_view_rounded,

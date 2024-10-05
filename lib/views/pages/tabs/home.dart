@@ -134,32 +134,20 @@ class HomeBody extends ConsumerWidget {
         
         
       },
-      child: CustomScrollView(
+      child: const CustomScrollView(
         
         slivers: [
-          // A widget above the SliverList
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: Row(
-                children: [
-                  const HomeSearchBar(),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.filter_list_rounded),
-                    style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.premiumGold.withAlpha(50))),
-                  ),
-                ],
-              ),
-            ),
+              padding: EdgeInsets.all(16),
+              child: HomeSearchBar()),
           ),
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: ProductForYou(topic: "Recommended for you"),
           ),
-          const SliverToBoxAdapter(child: TrendingSectionHeader()),
+          SliverToBoxAdapter(child: TrendingSectionHeader()),
           
-          const TrendingSection(),
+          TrendingSection(),
         ],
       ),
     );

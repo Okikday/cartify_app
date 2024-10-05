@@ -15,5 +15,5 @@ void main() async{
   await hiveData.initSecureHiveData();
   
   runApp(const ProviderScope(child: App()));
-
+  
 }

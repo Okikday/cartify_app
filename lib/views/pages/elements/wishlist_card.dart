@@ -70,13 +70,13 @@ class WishlistCard extends StatelessWidget {
                         height: 8,
                       ),
                       CustomElevatedButton(
-                        label: "Add to Bag",
+                        label: "Add to Cart",
                         borderRadius: 8,
                         textSize: 14,
                         side: BorderSide(width: 2, color: CartifyColors.aliceBlue.withAlpha(50)),
                         backgroundColor: CartifyColors.royalBlue,
                         onClick: () {
-                          DeviceUtils.showFlushBar(context, "Say hi");
+                          DeviceUtils.showFlushBar(context, "Loading...");
                         },
                       ),
                     ],
