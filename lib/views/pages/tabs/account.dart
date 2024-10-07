@@ -31,7 +31,11 @@ class _AccountState extends ConsumerState<Account> {
         if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const Settings());
       }
     },
+    {'icon' : Icons.upload, 'onTap':(){
+      if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const UploadProduct());
+    }},
     {'icon': Icons.key, 'title': "Change Password"},
+
     {'icon': Icons.help_outline_rounded, 'title': "Support"},
     {'icon': Icons.star_border, 'title': "Rate the app"},
     {'icon': Icons.map, 'title': "Privacy Policy"},
