@@ -75,12 +75,15 @@ class DeviceUtils {
     return MediaQuery.of(context).platformBrightness == Brightness.dark ? true : false;
   }
 
-  static void showFlushBar(BuildContext context, String msg) {
+  static void showFlushBar(BuildContext context, String msg, {
+    int animationDuration = 750,
+    
+  }) {
     if (context.mounted) {
       Flushbar(
         message: msg,
         duration: const Duration(milliseconds: 1500),
-        animationDuration: const Duration(milliseconds: 750),
+        animationDuration: Duration(milliseconds: animationDuration),
         flushbarPosition: FlushbarPosition.BOTTOM,
         margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
         borderRadius: BorderRadius.circular(36),

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
-import 'package:cartify/models/products_models.dart';
 import 'package:cartify/services/product_services.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/utils/formatter.dart';
@@ -10,11 +9,6 @@ import 'package:cartify/views/pages/pages/product_description.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final productsFutureProvider = FutureProvider<List<ProductsModels>>((ref) async {
-  final products = await productServices.getProducts();
-  products.shuffle();
-  return products;
-});
 
 class ProductForYou extends ConsumerWidget {
   final String topic;
@@ -50,7 +44,9 @@ class ProductForYou extends ConsumerWidget {
           SizedBox(
             height: 275,
             child: productsAsyncValue.when(
-              data: (products) => SizedBox(
+              data: (products) {
+                if(products != null){
+                return SizedBox(
                 width: screenWidth,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -68,21 +64,32 @@ class ProductForYou extends ConsumerWidget {
                       onClick: () {
                         DeviceUtils.pushMaterialPage(
                             context,
-                            ProductDescription(
-                                id: product.id,
-                                vendor: product.vendor,
-                                name: product.name,
-                                photo: product.photo,
-                                productDetails: product.productDetails,
-                                category: product.category,
-                                price: "N${Formatter.parsePrice(product.price)}",
-                                createdAt: product.createdAt,
-                                updatedAt: product.updatedAt,));
+                            ProductDescription(product: product,)
+                                );
                       },
                     );
                   },
                 ),
-              ),
+              );
+              } else{
+                return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: ConstantWidgets.text(context, "Unable to connect!. Try connecting to a network", color: Colors.red)),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Center(
+                    child: LoadingShimmer(
+                      width: screenWidth * 0.9,
+                      height: 180,
+                    ),
+                  ),
+                ],
+              );
+              }
+
+              },
               error: (error, stackTrace) => Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -64,6 +64,11 @@ class UserData {
     await secureStorage.delete(key: 'fullName');
     await secureStorage.delete(key: 'apiKey');
     clearStoredGoogleSignInDetails();
+    clearProducts();
+  }
+
+  Future<void> clearProducts() async{
+    await hiveData.deleteData(key: "wishlistsData");
   }
 
   Future<bool> isUserSignedIn() async => await getUserApiKey() != null;

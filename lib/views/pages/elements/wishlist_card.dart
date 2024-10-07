@@ -1,12 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
+import 'package:cartify/models/products_models.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/utils/formatter.dart';
 import 'package:cartify/views/pages/elements/custom_box.dart';
 import 'package:flutter/material.dart';
 
 class WishlistCard extends StatelessWidget {
-  const WishlistCard({super.key});
+  final ProductModel product;
+
+  const WishlistCard({
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +33,7 @@ class WishlistCard extends StatelessWidget {
                     constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 500),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.asset("assets/images/iphone_15_pm.jpg"),
+                      child: CachedNetworkImage(imageUrl: product.photo.first),
                     )),
                 const SizedBox(
                   width: 8,
@@ -38,7 +46,7 @@ class WishlistCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ConstantWidgets.text(context, "iPhone 15 Pro Max", fontSize: 14, fontWeight: FontWeight.bold),
+                          ConstantWidgets.text(context, product.name, fontSize: 14, fontWeight: FontWeight.bold),
                           SizedBox(
                             width: 30,
                             height: 30,
@@ -57,10 +65,10 @@ class WishlistCard extends StatelessWidget {
                       const SizedBox(
                         height: 8,
                       ),
-                      ConstantWidgets.text(context, "Mobile phone", color: CartifyColors.royalBlue),
-                      ConstantWidgets.text(context, "#1,700,000", color: CartifyColors.premiumGold),
+                      ConstantWidgets.text(context, product.category, color: CartifyColors.royalBlue),
+                      ConstantWidgets.text(context, "N${Formatter.parsePrice(product.price, asInt: true)}", color: Colors.green),
                       Container(
-                        child: ConstantWidgets.text(context, "Descriptions"),
+                        child: ConstantWidgets.text(context, "Descriptions", textDecoration: TextDecoration.underline),
                       ),
                       const SizedBox(
                         height: 8,

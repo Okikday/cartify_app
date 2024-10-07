@@ -1,6 +1,7 @@
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/models/products_models.dart';
+import 'package:cartify/services/product_services.dart';
 import 'package:cartify/states/layout_settings.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/utils/formatter.dart';
@@ -45,15 +46,15 @@ class _TrendingSectionState extends ConsumerState<TrendingSection> {
 
     return productsAsyncValue.when(
       data: (products) => gridType == 1
-          ? buildProductSliverList(products)
-          : buildProductStaggeredGrid(context, products),
+          ? (products == null ? buildErrorSliverList(screenWidth) : buildProductSliverList(products))
+          : (products == null ? buildErrorSliverList(screenWidth) : buildProductStaggeredGrid(context, products)),
       error: (error, stackTrace) => buildErrorSliverList(screenWidth),
       loading: () => buildLoadingSliverList(screenWidth),
     );
   }
 
   // Build SliverList for product data
-  Widget buildProductSliverList(List<ProductsModels> products) {
+  Widget buildProductSliverList(List<ProductModel> products) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -68,17 +69,7 @@ class _TrendingSectionState extends ConsumerState<TrendingSection> {
             onTap: () {
               DeviceUtils.pushMaterialPage(
                 context,
-                ProductDescription(
-                  id: product.id,
-                  vendor: product.vendor,
-                  name: product.name,
-                  photo: product.photo,
-                  productDetails: product.productDetails,
-                  category: product.category,
-                  price: "N${Formatter.parsePrice(product.price)}",
-                  createdAt: product.createdAt,
-                  updatedAt: product.updatedAt,
-                ),
+                ProductDescription(product: product,),
               );
             },
           );
@@ -89,7 +80,7 @@ class _TrendingSectionState extends ConsumerState<TrendingSection> {
   }
 
   // Build StaggeredGrid for product data
-  Widget buildProductStaggeredGrid(BuildContext context, List<ProductsModels> products) {
+  Widget buildProductStaggeredGrid(BuildContext context, List<ProductModel> products) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
@@ -109,17 +100,7 @@ class _TrendingSectionState extends ConsumerState<TrendingSection> {
             onTap: (){
               DeviceUtils.pushMaterialPage(
                 context,
-                ProductDescription(
-                  id: products[i].id,
-                  vendor: products[i].vendor,
-                  name: products[i].name,
-                  photo: products[i].photo,
-                  productDetails: products[i].productDetails,
-                  category: products[i].category,
-                  price: "N${Formatter.parsePrice(products[i].price)}",
-                  createdAt: products[i].createdAt,
-                  updatedAt: products[i].updatedAt,
-                ),
+                ProductDescription(product: products[i],),
               );
             },
               ),

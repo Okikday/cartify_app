@@ -1,4 +1,4 @@
-class ProductsModels {
+class ProductModel {
   final String id;
   final String vendor;
   final String name;
@@ -13,7 +13,7 @@ class ProductsModels {
   final Map<String, dynamic> averageRating;
   final double? discountedPrice;
 
-  ProductsModels({
+  ProductModel({
     required this.id,
     required this.vendor,
     required this.name,
@@ -29,8 +29,8 @@ class ProductsModels {
     this.discountedPrice,
   });
 
-  factory ProductsModels.fromMap(Map<String, dynamic> json) {
-    return ProductsModels(
+  factory ProductModel.fromMap(Map<String, dynamic> json) {
+    return ProductModel(
       id: json['id'],
       vendor: json['vendor'],
       name: json['name'],

@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
+import 'package:cartify/data/storage/product_data.dart';
+import 'package:cartify/models/products_models.dart';
 import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/utils/formatter.dart';
 import 'package:cartify/views/pages/elements/custom_overlay.dart';
 import 'package:cartify/views/pages/elements/image_interactive_view.dart';
 import 'package:cartify/views/pages/elements/product_for_you.dart';
@@ -10,34 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductDescription extends ConsumerStatefulWidget {
-  final String id;
-  final String vendor;
-  final String name;
-  final List<dynamic> photo;
-  final String productDetails;
-  final String category;
-  final String price;
-  final int units;
-  final double discountPercentage;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final Map<String, dynamic> averageRating;
-  final double? discountedPrice;
+  final ProductModel product;
   const ProductDescription({
     super.key,
-    required this.id,
-    required this.vendor,
-    required this.name,
-    required this.photo,
-    required this.productDetails,
-    required this.category,
-    required this.price,
-    required this.createdAt,
-    required this.updatedAt,
-    this.averageRating = const {},
-    this.units = 1,
-    this.discountPercentage = 0,
-    this.discountedPrice,
+    required this.product,
   });
 
   @override
@@ -50,7 +29,7 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
   @override
   void initState() {
     super.initState();
-    imageTabController = TabController(length: widget.photo.length, vsync: this);
+    imageTabController = TabController(length: widget.product.photo.length, vsync: this);
   }
 
   @override
@@ -92,7 +71,7 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
                     children: [
                       TabBarView(
                         controller: imageTabController,
-                        children: [for (int i = 0; i < widget.photo.length; i++) ImageTab(assetName: widget.photo[i])],
+                        children: [for (int i = 0; i < widget.product.photo.length; i++) ImageTab(assetName: widget.product.photo[i])],
                       ),
                       Align(
                         alignment: Alignment.bottomCenter,
@@ -114,7 +93,7 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
             ),
           ),
         ],
-        body: ProductDescBody(productName: widget.name, price: widget.price, description: widget.productDetails),
+        body: ProductDescBody(exampleProduct: widget.product, id: widget.product.id, productName: widget.product.name, price: "N${Formatter.parsePrice(widget.product.price,)}", description: widget.product.productDetails),
       )),
     );
   }
@@ -175,10 +154,12 @@ class DescriptionTitle extends StatelessWidget {
 }
 
 class ProductDescBody extends StatelessWidget {
+  final ProductModel exampleProduct;
+  final String id;
   final String productName;
   final String price;
   final String description;
-  const ProductDescBody({super.key, required this.productName, required this.price, required this.description});
+  const ProductDescBody({super.key, required this.exampleProduct, required this.id, required this.productName, required this.price, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +177,10 @@ class ProductDescBody extends StatelessWidget {
               children: [
                 ConstantWidgets.text(context, productName, fontSize: 16, fontWeight: FontWeight.bold),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () async{
+                    final ProductData productData = ProductData();
+                    await productData.addToWishlists(exampleProduct);
+                  },
                   icon: const Icon(Icons.bookmark_add_outlined),
                   style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.royalBlue.withAlpha(50))),
                 )

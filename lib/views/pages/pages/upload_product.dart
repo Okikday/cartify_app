@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:cartify/app.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
@@ -7,6 +8,7 @@ import 'package:cartify/common/widgets/custom_textfield.dart';
 import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/data/storage/product_data.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/utils/utilities_functions.dart';
 import 'package:cartify/views/page_elements/loading_dialog.dart';
 import 'package:cartify/views/pages/elements/custom_dropdown_menu.dart';
 import 'package:cartify/views/pages/pages/update_role.dart';
@@ -29,8 +31,8 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
   String category = ProductData.categories.first;
   double discountPercentage = 0;
   int units = 1;
-  File? imageFile;
-  final ImagePicker _picker = ImagePicker();
+  List<File>? imageFiles;
+  final ImagePicker picker = ImagePicker();
 
   @override
   void initState() {
@@ -184,38 +186,84 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
                 },
               ),
 
-              GestureDetector(
-                onTap: () async {
-                  if (context.mounted) showDialog(context: context, builder: (context) => const LoadingDialog());
-                  XFile? selectedImage = await _picker.pickImage(source: ImageSource.gallery);
-                  if (context.mounted) Navigator.pop(context);
-                  if (selectedImage != null) setState(() => imageFile = File(selectedImage.path));
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(top: 36, bottom: 8),
-                  width: screenWidth * 0.5,
-                  height: screenWidth * 0.5,
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    color: CartifyColors.royalBlue.withAlpha(75),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: imageFile != null
-                      ? Image.file(
-                          imageFile!,
-                          fit: BoxFit.cover,
-                        )
-                      : Center(
-                          child: ConstantWidgets.text(context, "Add an image ", fontSize: 14, fontWeight: FontWeight.bold, color: CartifyColors.royalBlue)),
-                ),
-              ),
+              imageFiles != null && imageFiles!.isNotEmpty
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (int i = 0; i < imageFiles!.length; i++)
+                          Container(
+                            clipBehavior: Clip.hardEdge,
+                            margin: const EdgeInsets.fromLTRB(12, 16, 12, 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            width: screenWidth * 0.25,
+                            height: screenWidth * 0.25,
+                            child: Image.file(
+                              imageFiles![i],
+                              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => const Center(
+                                child: Icon(
+                                  Icons.image,
+                                  size: 64,
+                                ),
+                              ),
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                  child: Icon(
+                                    Icons.error,
+                                    size: 64,
+                                  ),
+                                );
+                              },
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                      ],
+                    )
+                  : GestureDetector(
+                      onTap: () async {
+                        if (context.mounted) showDialog(context: context, builder: (context) => const LoadingDialog());
+
+                        List<XFile>? selectedImages = await picker.pickMultiImage(limit: 3);
+
+                        if (context.mounted) Navigator.pop(context);
+
+                        if (selectedImages.isNotEmpty) {
+                          final processedImages = await Future.wait(selectedImages.map((image) async {
+                            File file = File(image.path);
+                            if (await file.length() <= pow(1024, 2).truncate()) {
+                              return file;
+                            } else {
+                              return await UtilitiesFunctions.compressImageTo1MB(file);
+                            }
+                          }));
+
+                          setState(() {
+                            imageFiles = processedImages.whereType<File>().toList();
+                          });
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 36, bottom: 8),
+                        width: screenWidth * 0.5,
+                        height: screenWidth * 0.5,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          color: CartifyColors.royalBlue.withAlpha(75),
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: Center(
+                            child: ConstantWidgets.text(context, "Add an image ", fontSize: 14, fontWeight: FontWeight.bold, color: CartifyColors.royalBlue)),
+                      ),
+                    ),
 
               Visibility(
-                  visible: imageFile != null,
+                  visible: imageFiles != null && imageFiles!.isNotEmpty,
                   maintainSize: false,
-                  child: TextButton(
-                      onPressed: () => setState(() => imageFile = null),
-                      child: ConstantWidgets.text(context, "Remove image", color: Colors.red, fontWeight: FontWeight.bold))),
+                  child: GestureDetector(
+                      onTap: () => DeviceUtils.showFlushBar(context, "Double tap to remove images", animationDuration: 450),
+                      onDoubleTap: () => setState(() => imageFiles = null),
+                      child: ConstantWidgets.text(context, "Remove images", color: Colors.red, fontWeight: FontWeight.bold))),
 
               const SizedBox(
                 height: 48,
@@ -229,7 +277,7 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
                   onClick: () {
                     uploadAction(
                         productName: productName,
-                        imageFile: imageFile,
+                        imageFiles: imageFiles!,
                         productDetails: productDetails,
                         productPrice: productPrice,
                         category: category,
@@ -247,9 +295,11 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
     );
   }
 
+
+
   Future<bool?> uploadAction({
     required String productName,
-    required File? imageFile,
+    required List<File>? imageFiles,
     required String productDetails,
     required int productPrice,
     required String category,
@@ -261,8 +311,13 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
       return false;
     }
 
-    if (imageFile == null) {
+    if (imageFiles == null || imageFiles.isEmpty ) {
       if (context.mounted) DeviceUtils.showFlushBar(context, "Please select an Image to upload");
+      return false;
+    }
+
+    if(imageFiles.length >= 4){
+      if (context.mounted) DeviceUtils.showFlushBar(context, "Remove images and select only three images");
       return false;
     }
 
@@ -286,7 +341,7 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
     // Call the upload function
     final String? result = await productServices.uploadProduct(
       productName: productName,
-      imageFile: imageFile,
+      imageFiles: imageFiles,
       productDetails: productDetails,
       productPrice: productPrice,
       category: category,
