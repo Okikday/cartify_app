@@ -7,10 +7,13 @@ import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
 import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/data/storage/product_data.dart';
+import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/utils/utilities_functions.dart';
 import 'package:cartify/views/page_elements/loading_dialog.dart';
 import 'package:cartify/views/pages/elements/custom_dropdown_menu.dart';
+import 'package:cartify/views/pages/elements/custom_overlay.dart';
+import 'package:cartify/views/pages/elements/image_interactive_view.dart';
 import 'package:cartify/views/pages/pages/update_role.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,242 +56,256 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: ConstantWidgets.text(context, "Upload your product", fontSize: 14, fontWeight: FontWeight.bold),
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 48,
-              ),
-              CustomTextfield(
-                screenWidth: 80,
-                borderRadius: 14,
-                prefixIcon: Icon(
-                  Icons.abc,
-                  color: CartifyColors.royalBlue.withAlpha(200),
+    return PopScope(
+      canPop: ref.watch(simpleWidgetProvider).isProductInfoImageTabVisible == false,
+      onPopInvokedWithResult: (didPop, result) {
+        if(ref.watch(simpleWidgetProvider).isProductInfoImageTabVisible == true){
+          ref.read(simpleWidgetProvider).reverseImageInteractiveAnimController(context);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: ConstantWidgets.text(context, "Upload your product", fontSize: 14, fontWeight: FontWeight.bold),
+        ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 48,
                 ),
-                hintStyle: const TextStyle(fontSize: 15),
-                hint: "Enter the product name",
-                onchanged: (text) => setState(() => productName = text),
-              ),
-
-              const SizedBox(
-                height: 36,
-              ),
-
-              CustomTextfield(
-                screenWidth: 80,
-                borderRadius: 12,
-                maxLines: 8,
-                pixelHeight: 200,
-                backgroundColor: CartifyColors.royalBlue.withAlpha(25),
-                contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 24),
-                hintStyle: const TextStyle(fontSize: 15),
-                hint: "Enter the product Description",
-                onchanged: (text) => setState(() => productDetails = text),
-              ),
-
-              const SizedBox(
-                height: 36,
-              ),
-
-              CustomDropdownMenu(
-                hintText: "Select a Product category",
-                width: screenWidth * 0.8,
-                dropdownEntryItems: ProductData.categories,
-                menuLabel: ConstantWidgets.text(
-                  context,
-                  "Select a product category",
-                  fontWeight: FontWeight.bold,
+                CustomTextfield(
+                  screenWidth: 80,
+                  borderRadius: 14,
+                  prefixIcon: Icon(
+                    Icons.abc,
+                    color: CartifyColors.royalBlue.withAlpha(200),
+                  ),
+                  hintStyle: const TextStyle(fontSize: 15),
+                  hint: "Enter the product name",
+                  onchanged: (text) => setState(() => productName = text),
                 ),
-                trailingIcon: const Icon(Icons.arrow_drop_down_circle_outlined),
-                textStyle: TextStyle(color: DeviceUtils.isDarkMode(context) ? Colors.white : Colors.black),
-                leadingIcon: const Icon(Icons.merge_type_outlined),
-                onselected: (selected) => setState(() => category = selected),
-              ),
-
-              const SizedBox(
-                height: 36,
-              ),
-
-              CustomTextfield(
-                screenWidth: 80,
-                borderRadius: 36,
-                keyboardType: const TextInputType.numberWithOptions(),
-                prefixIcon: Icon(
-                  Icons.monetization_on_outlined,
-                  color: CartifyColors.royalBlue.withAlpha(200),
+      
+                const SizedBox(
+                  height: 36,
                 ),
-                hintStyle: const TextStyle(fontSize: 14),
-                hint: "Enter the price of the product",
-                onchanged: (text) {
-                  final converted = int.tryParse(text);
-                  if (converted != null) {
-                    setState(() => productPrice = converted);
-                  } else {
-                    setState(() => productPrice = 0);
-                  }
-                },
-              ),
-
-              const SizedBox(
-                height: 36,
-              ),
-
-              CustomTextfield(
-                screenWidth: 80,
-                borderRadius: 36,
-                keyboardType: TextInputType.number,
-                prefixIcon: Icon(
-                  Icons.percent,
-                  color: CartifyColors.royalBlue.withAlpha(200),
+      
+                CustomTextfield(
+                  screenWidth: 80,
+                  borderRadius: 12,
+                  maxLines: 8,
+                  pixelHeight: 200,
+                  backgroundColor: CartifyColors.royalBlue.withAlpha(25),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 24),
+                  hintStyle: const TextStyle(fontSize: 15),
+                  hint: "Enter the product Description",
+                  onchanged: (text) => setState(() => productDetails = text),
                 ),
-                hintStyle: const TextStyle(fontSize: 14),
-                hint: "Enter the Discount in percentage",
-                onchanged: (text) {
-                  final converted = double.tryParse(text);
-                  if (converted != null) {
-                    setState(() => discountPercentage = converted);
-                  } else {
-                    setState(() => discountPercentage = 0);
-                  }
-                },
-              ),
-
-              const SizedBox(
-                height: 24,
-              ),
-
-              CustomTextfield(
-                screenWidth: 80,
-                borderRadius: 36,
-                keyboardType: const TextInputType.numberWithOptions(),
-                prefixIcon: Icon(
-                  Icons.numbers_rounded,
-                  color: CartifyColors.royalBlue.withAlpha(200),
+      
+                const SizedBox(
+                  height: 36,
                 ),
-                hintStyle: const TextStyle(fontSize: 14),
-                hint: "How many units are available?",
-                onchanged: (text) {
-                  final converted = int.tryParse(text);
-                  if (converted != null) {
-                    setState(() => units = converted);
-                  } else {
-                    setState(() => units = 1);
-                  }
-                },
-              ),
-
-              imageFiles != null && imageFiles!.isNotEmpty
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        for (int i = 0; i < imageFiles!.length; i++)
-                          Container(
-                            clipBehavior: Clip.hardEdge,
-                            margin: const EdgeInsets.fromLTRB(12, 16, 12, 16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            width: screenWidth * 0.25,
-                            height: screenWidth * 0.25,
-                            child: Image.file(
-                              imageFiles![i],
-                              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => const Center(
-                                child: Icon(
-                                  Icons.image,
-                                  size: 64,
+      
+                CustomDropdownMenu(
+                  hintText: "Select a Product category",
+                  width: screenWidth * 0.8,
+                  dropdownEntryItems: ProductData.categories,
+                  menuLabel: ConstantWidgets.text(
+                    context,
+                    "Select a product category",
+                    fontWeight: FontWeight.bold,
+                  ),
+                  trailingIcon: const Icon(Icons.arrow_drop_down_circle_outlined),
+                  textStyle: TextStyle(color: DeviceUtils.isDarkMode(context) ? Colors.white : Colors.black),
+                  leadingIcon: const Icon(Icons.merge_type_outlined),
+                  onselected: (selected) => setState(() => category = selected),
+                ),
+      
+                const SizedBox(
+                  height: 36,
+                ),
+      
+                CustomTextfield(
+                  screenWidth: 80,
+                  borderRadius: 36,
+                  keyboardType: const TextInputType.numberWithOptions(),
+                  prefixIcon: Icon(
+                    Icons.monetization_on_outlined,
+                    color: CartifyColors.royalBlue.withAlpha(200),
+                  ),
+                  hintStyle: const TextStyle(fontSize: 14),
+                  hint: "Enter the price of the product",
+                  onchanged: (text) {
+                    final converted = int.tryParse(text);
+                    if (converted != null) {
+                      setState(() => productPrice = converted);
+                    } else {
+                      setState(() => productPrice = 0);
+                    }
+                  },
+                ),
+      
+                const SizedBox(
+                  height: 36,
+                ),
+      
+                CustomTextfield(
+                  screenWidth: 80,
+                  borderRadius: 36,
+                  keyboardType: TextInputType.number,
+                  prefixIcon: Icon(
+                    Icons.percent,
+                    color: CartifyColors.royalBlue.withAlpha(200),
+                  ),
+                  hintStyle: const TextStyle(fontSize: 14),
+                  hint: "Enter the Discount in percentage",
+                  onchanged: (text) {
+                    final converted = double.tryParse(text);
+                    if (converted != null) {
+                      setState(() => discountPercentage = converted);
+                    } else {
+                      setState(() => discountPercentage = 0);
+                    }
+                  },
+                ),
+      
+                const SizedBox(
+                  height: 24,
+                ),
+      
+                CustomTextfield(
+                  screenWidth: 80,
+                  borderRadius: 36,
+                  keyboardType: const TextInputType.numberWithOptions(),
+                  prefixIcon: Icon(
+                    Icons.numbers_rounded,
+                    color: CartifyColors.royalBlue.withAlpha(200),
+                  ),
+                  hintStyle: const TextStyle(fontSize: 14),
+                  hint: "How many units are available?",
+                  onchanged: (text) {
+                    final converted = int.tryParse(text);
+                    if (converted != null) {
+                      setState(() => units = converted);
+                    } else {
+                      setState(() => units = 1);
+                    }
+                  },
+                ),
+      
+                imageFiles != null && imageFiles!.isNotEmpty
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for (int i = 0; i < imageFiles!.length; i++)
+                            GestureDetector(
+                              onTap: (){
+                                ref.refresh(simpleWidgetProvider).isProductInfoImageTabVisible = true;
+                                CustomOverlay(context).showOverlay(child: ImageInteractiveView(assetName: "", assetFile: imageFiles![i],));
+                              },
+                              child: Container(
+                                clipBehavior: Clip.hardEdge,
+                                margin: const EdgeInsets.fromLTRB(12, 16, 12, 16),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                width: screenWidth * 0.25,
+                                height: screenWidth * 0.25,
+                                child: Image.file(
+                                  imageFiles![i],
+                                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => const Center(
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 64,
+                                    ),
+                                  ),
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Center(
+                                      child: Icon(
+                                        Icons.error,
+                                        size: 64,
+                                      ),
+                                    );
+                                  },
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Center(
-                                  child: Icon(
-                                    Icons.error,
-                                    size: 64,
-                                  ),
-                                );
-                              },
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                      ],
-                    )
-                  : GestureDetector(
-                      onTap: () async {
-                        if (context.mounted) showDialog(context: context, builder: (context) => const LoadingDialog());
-
-                        List<XFile>? selectedImages = await picker.pickMultiImage(limit: 3);
-
-                        if (context.mounted) Navigator.pop(context);
-
-                        if (selectedImages.isNotEmpty) {
-                          final processedImages = await Future.wait(selectedImages.map((image) async {
-                            File file = File(image.path);
-                            if (await file.length() <= pow(1024, 2).truncate()) {
-                              return file;
-                            } else {
-                              return await UtilitiesFunctions.compressImageTo1MB(file);
-                            }
-                          }));
-
-                          setState(() {
-                            imageFiles = processedImages.whereType<File>().toList();
-                          });
-                        }
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 36, bottom: 8),
-                        width: screenWidth * 0.5,
-                        height: screenWidth * 0.5,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          color: CartifyColors.royalBlue.withAlpha(75),
-                          borderRadius: BorderRadius.circular(24),
+                            )
+                        ],
+                      )
+                    : GestureDetector(
+                        onTap: () async {
+                          if (context.mounted) showDialog(context: context, builder: (context) => const LoadingDialog());
+      
+                          List<XFile>? selectedImages = await picker.pickMultiImage(limit: 3);
+      
+                          if (context.mounted) Navigator.pop(context);
+      
+                          if (selectedImages.isNotEmpty) {
+                            final processedImages = await Future.wait(selectedImages.map((image) async {
+                              File file = File(image.path);
+                              if (await file.length() <= pow(1024, 2).truncate()) {
+                                return file;
+                              } else {
+                                return await UtilitiesFunctions.compressImageTo1MB(file);
+                              }
+                            }));
+      
+                            setState(() {
+                              imageFiles = processedImages.whereType<File>().toList();
+                            });
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 36, bottom: 8),
+                          width: screenWidth * 0.5,
+                          height: screenWidth * 0.5,
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            color: CartifyColors.royalBlue.withAlpha(75),
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: Center(
+                              child: ConstantWidgets.text(context, "Add an image ", fontSize: 14, fontWeight: FontWeight.bold, color: CartifyColors.royalBlue)),
                         ),
-                        child: Center(
-                            child: ConstantWidgets.text(context, "Add an image ", fontSize: 14, fontWeight: FontWeight.bold, color: CartifyColors.royalBlue)),
                       ),
-                    ),
-
-              Visibility(
-                  visible: imageFiles != null && imageFiles!.isNotEmpty,
-                  maintainSize: false,
-                  child: GestureDetector(
-                      onTap: () => DeviceUtils.showFlushBar(context, "Double tap to remove images", animationDuration: 450),
-                      onDoubleTap: () => setState(() => imageFiles = null),
-                      child: ConstantWidgets.text(context, "Remove images", color: Colors.red, fontWeight: FontWeight.bold))),
-
-              const SizedBox(
-                height: 48,
-              ),
-
-              // Button to "Upload Product"
-              CustomElevatedButton(
-                  label: "Add Product",
-                  screenWidth: 90,
-                  textSize: 14,
-                  onClick: () {
-                    uploadAction(
-                        productName: productName,
-                        imageFiles: imageFiles!,
-                        productDetails: productDetails,
-                        productPrice: productPrice,
-                        category: category,
-                        units: units,
-                        discountPercentage: discountPercentage);
-                  }),
-
-              const SizedBox(
-                height: 36,
-              ),
-            ],
+      
+                Visibility(
+                    visible: imageFiles != null && imageFiles!.isNotEmpty,
+                    maintainSize: false,
+                    child: GestureDetector(
+                        onTap: () => DeviceUtils.showFlushBar(context, "Double tap to remove images", animationDuration: 450),
+                        onDoubleTap: () => setState(() => imageFiles = null),
+                        child: ConstantWidgets.text(context, "Remove images", color: Colors.red, fontWeight: FontWeight.bold))),
+      
+                const SizedBox(
+                  height: 48,
+                ),
+      
+                // Button to "Upload Product"
+                CustomElevatedButton(
+                    label: "Add Product",
+                    screenWidth: 90,
+                    textSize: 14,
+                    onClick: () {
+                      uploadAction(
+                          productName: productName,
+                          imageFiles: imageFiles!,
+                          productDetails: productDetails,
+                          productPrice: productPrice,
+                          category: category,
+                          units: units,
+                          discountPercentage: discountPercentage);
+                    }),
+      
+                const SizedBox(
+                  height: 36,
+                ),
+              ],
+            ),
           ),
         ),
       ),

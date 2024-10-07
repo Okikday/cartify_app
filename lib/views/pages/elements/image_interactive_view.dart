@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,10 +11,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ImageInteractiveView extends ConsumerStatefulWidget {
   final String assetName;
+  final File? assetFile;
 
   const ImageInteractiveView({
     super.key,
     required this.assetName,
+    this.assetFile,
   });
 
   @override
@@ -36,8 +39,6 @@ class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> wit
     );
     ref.read(simpleWidgetProvider).imageInteractiveViewAnimController.forward();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -64,32 +65,55 @@ class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> wit
                           constrained: false,
                           child: Align(
                             alignment: Alignment.center,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.assetName,
-                              errorWidget: (context, url, error) {
-                                return Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(Icons.error, size: 50, color: Colors.red),
-                                      const SizedBox(height: 24),
-                                      ConstantWidgets.text(context, "Unable to load image!", fontSize: 18),
-                                    ],
+                            child: widget.assetFile != null
+                                ? Image.file(
+                                    widget.assetFile!,
+                                    errorBuilder: (context, url, error) => Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(Icons.error, size: 50, color: Colors.red),
+                                          const SizedBox(height: 24),
+                                          ConstantWidgets.text(context, "Unable to load image!", fontSize: 18),
+                                        ],
+                                      ),
+                                    ),
+                                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => Center(
+                                      child: LoadingShimmer(
+                                        width: screenWidth * 0.9,
+                                        height: screenHeight * 0.5,
+                                      ),
+                                    ),
+                                    fit: BoxFit.contain,
+                                    width: screenWidth,
+                                    height: screenHeight,
+                                  )
+                                : CachedNetworkImage(
+                                    imageUrl: widget.assetName,
+                                    errorWidget: (context, url, error) {
+                                      return Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(Icons.error, size: 50, color: Colors.red),
+                                            const SizedBox(height: 24),
+                                            ConstantWidgets.text(context, "Unable to load image!", fontSize: 18),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    placeholder: (context, url) {
+                                      return Center(
+                                        child: LoadingShimmer(
+                                          width: screenWidth * 0.9,
+                                          height: screenHeight * 0.5,
+                                        ),
+                                      );
+                                    },
+                                    fit: BoxFit.contain,
+                                    width: screenWidth,
+                                    height: screenHeight,
                                   ),
-                                );
-                              },
-                              placeholder: (context, url) {
-                                return Center(
-                                  child: LoadingShimmer(
-                                    width: screenWidth * 0.9,
-                                    height: screenHeight * 0.5,
-                                  ),
-                                );
-                              },
-                              fit: BoxFit.contain,
-                              width: screenWidth,
-                              height: screenHeight,
-                            ),
                           ),
                         ),
                       ),
@@ -101,7 +125,6 @@ class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> wit
                     child: IconButton(
                       onPressed: () {
                         ref.watch(simpleWidgetProvider).reverseImageInteractiveAnimController(context);
-                        
                       },
                       icon: const Icon(Icons.close, color: Colors.black),
                       iconSize: 30,
