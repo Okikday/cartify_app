@@ -78,12 +78,6 @@ class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> wit
                                         ],
                                       ),
                                     ),
-                                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => Center(
-                                      child: LoadingShimmer(
-                                        width: screenWidth * 0.9,
-                                        height: screenHeight * 0.5,
-                                      ),
-                                    ),
                                     fit: BoxFit.contain,
                                     width: screenWidth,
                                     height: screenHeight,

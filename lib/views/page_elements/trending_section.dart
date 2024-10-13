@@ -89,7 +89,7 @@ class _TrendingSectionState extends ConsumerState<TrendingSection> {
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
           children: [
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < products.length; i++)
               ProductCard2(
                productName: products[i].name,
             assetName: products[i].photo.first,

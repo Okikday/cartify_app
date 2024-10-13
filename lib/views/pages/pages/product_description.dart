@@ -180,6 +180,7 @@ class ProductDescBody extends StatelessWidget {
                   onPressed: () async{
                     final ProductData productData = ProductData();
                     await productData.addToWishlists(exampleProduct);
+
                   },
                   icon: const Icon(Icons.bookmark_add_outlined),
                   style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.royalBlue.withAlpha(50))),

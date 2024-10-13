@@ -119,7 +119,7 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
                     fontWeight: FontWeight.bold,
                   ),
                   trailingIcon: const Icon(Icons.arrow_drop_down_circle_outlined),
-                  textStyle: TextStyle(color: DeviceUtils.isDarkMode(context) ? Colors.white : Colors.black),
+                  textStyle: TextStyle(color: DeviceUtils.isDarkMode(context) ? Colors.white : Colors.black,),
                   leadingIcon: const Icon(Icons.merge_type_outlined),
                   onselected: (selected) => setState(() => category = selected),
                 ),
@@ -216,12 +216,6 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
                                 height: screenWidth * 0.25,
                                 child: Image.file(
                                   imageFiles![i],
-                                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => const Center(
-                                    child: Icon(
-                                      Icons.image,
-                                      size: 64,
-                                    ),
-                                  ),
                                   errorBuilder: (context, error, stackTrace) {
                                     return const Center(
                                       child: Icon(
@@ -241,8 +235,14 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
                           if (context.mounted) showDialog(context: context, builder: (context) => const LoadingDialog());
       
                           List<XFile>? selectedImages = await picker.pickMultiImage(limit: 3);
+                          
       
                           if (context.mounted) Navigator.pop(context);
+                          if(selectedImages.length > 3 && selectedImages.isNotEmpty){
+                            selectedImages = selectedImages.sublist(0, 3);
+                            if(context.mounted) DeviceUtils.showFlushBar(context, "Reduced images to three due to limit", duration: 750);
+                            setState(() => selectedImages);
+                          }
       
                           if (selectedImages.isNotEmpty) {
                             final processedImages = await Future.wait(selectedImages.map((image) async {
@@ -277,7 +277,7 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
                     visible: imageFiles != null && imageFiles!.isNotEmpty,
                     maintainSize: false,
                     child: GestureDetector(
-                        onTap: () => DeviceUtils.showFlushBar(context, "Double tap to remove images", animationDuration: 450),
+                        onTap: () => DeviceUtils.showFlushBar(context, "Double tap to remove images", duration: 1000),
                         onDoubleTap: () => setState(() => imageFiles = null),
                         child: ConstantWidgets.text(context, "Remove images", color: Colors.red, fontWeight: FontWeight.bold))),
       

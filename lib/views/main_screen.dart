@@ -19,7 +19,7 @@ class MainScreen extends ConsumerStatefulWidget {
   ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends ConsumerState<MainScreen> with SingleTickerProviderStateMixin, WidgetsBindingObserver{
+class _MainScreenState extends ConsumerState<MainScreen> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late TabController tabController;
   late int currentIndex;
   static DateTime? lastBackPressTime;
@@ -30,14 +30,13 @@ class _MainScreenState extends ConsumerState<MainScreen> with SingleTickerProvid
     tabController = TabController(length: 5, vsync: this);
     currentIndex = 0;
     tabController.addListener(() => setState(() {
-      currentIndex = tabController.index;
-    }));
-    WidgetsBinding.instance.addPostFrameCallback((callback) async{
+          currentIndex = tabController.index;
+        }));
+    WidgetsBinding.instance.addPostFrameCallback((callback) async {
       final connectOutcome = await TestApi.testConnect();
-     if(globalNavKey.currentContext!.mounted && connectOutcome != null) DeviceUtils.showFlushBar(globalNavKey.currentContext!, connectOutcome);
+      if (globalNavKey.currentContext!.mounted && connectOutcome != null) DeviceUtils.showFlushBar(globalNavKey.currentContext!, connectOutcome);
     });
   }
-
 
   @override
   void dispose() {
@@ -45,43 +44,49 @@ class _MainScreenState extends ConsumerState<MainScreen> with SingleTickerProvid
 
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-     ref.read(simpleWidgetProvider).mainScreenContext = context;
+    ref.read(simpleWidgetProvider).mainScreenContext = context;
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult:(didPop, result) async{
-        if(currentIndex == 0){
-          if(ref.watch(simpleWidgetProvider).isSearchBodyVisible == true){
-           
-          Navigator.pop(context);
-          ref.read(simpleWidgetProvider).isSearchBodyVisible = false;
-        }
-        else{
+      onPopInvokedWithResult: (didPop, result) async {
+        if (currentIndex == 0) {
           DateTime now = DateTime.now();
 
-        if (lastBackPressTime == null || now.difference(lastBackPressTime!) > const Duration(milliseconds: 2500)) {
-          lastBackPressTime = now;
-          DeviceUtils.showFlushBar(context, "Repeat action to exit!");
-        }else{
-          SystemNavigator.pop();
-        }}
-        }else{
+          if (lastBackPressTime == null || now.difference(lastBackPressTime!) > const Duration(milliseconds: 2500)) {
+            lastBackPressTime = now;
+            DeviceUtils.showFlushBar(context, "Repeat action to exit!");
+          } else {
+            SystemNavigator.pop();
+          }
+        } else {
           setState(() => tabController.index = currentIndex = 0);
         }
-        
       },
       child: Scaffold(
-        bottomNavigationBar: BottomNavBar(currentIndex: currentIndex, onTap: (index){setState(() => tabController.index = currentIndex = index);},),
-        body: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: tabController,
-          children: const [
-          Tab(child: Home(),),
-          Tab(child: Categories(),),
-          Tab(child: Orders(),),
-          Tab(child: Wishlists(),),
-          Tab(child: Account(),),
+        bottomNavigationBar: BottomNavBar(
+          currentIndex: currentIndex,
+          onTap: (index) {
+            setState(() => tabController.index = currentIndex = index);
+          },
+        ),
+        body: TabBarView(physics: const NeverScrollableScrollPhysics(), controller: tabController, children: const [
+          Tab(
+            child: Home(),
+          ),
+          Tab(
+            child: Categories(),
+          ),
+          Tab(
+            child: Orders(),
+          ),
+          Tab(
+            child: Wishlists(),
+          ),
+          Tab(
+            child: Account(),
+          ),
         ]),
       ),
     );

@@ -16,7 +16,7 @@ class ProductData {
   ];
 
   
-  Future<List<ProductModel>> getWishlists() async => await hiveData.getData(key: "wishlistsData");
+  Future<List<ProductModel>> getWishlists() async => await hiveData.getData(key: "wishlistsData") ?? [];
 
   Future<void> addToWishlists(ProductModel wishlist) async {
     final List<ProductModel> wishlists = await getWishlists();

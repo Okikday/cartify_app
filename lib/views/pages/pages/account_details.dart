@@ -96,7 +96,7 @@ class _AccountDetailsState extends ConsumerState<AccountDetails> {
                   child: CircleAvatar(
                     radius: 50,
                     backgroundColor: CartifyColors.lightGray,
-                    backgroundImage: userImage == null ? const AssetImage("assets/images/user.png") : CachedNetworkImageProvider(userImage!),
+                    child: userImage == null ? Image.asset("assets/images/user.png") : CachedNetworkImage(imageUrl: userImage!, ),
                   ),
                 ),
                 const SizedBox(
@@ -117,7 +117,7 @@ class _AccountDetailsState extends ConsumerState<AccountDetails> {
             height: 24,
           ),
           CustomElevatedButton(
-            onClick: ()=> DeviceUtils.showFlushBar(context, "Feature not yet implemented"),
+            onClick: ()=> DeviceUtils.showFlushBar(context, "Incoming!"),
             label: "Edit account",
             textSize: 14,
             backgroundColor: CartifyColors.royalBlue,

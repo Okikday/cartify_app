@@ -31,7 +31,7 @@ class _AccountState extends ConsumerState<Account> {
         if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const Settings());
       }
     },
-    {'icon' : Icons.upload, 'onTap':(){
+    {'icon' : Icons.upload, 'title': "Upload product", 'onTap':(){
       if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const UploadProduct());
     }},
     {'icon': Icons.key, 'title': "Change Password"},

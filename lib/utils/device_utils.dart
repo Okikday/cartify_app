@@ -76,14 +76,14 @@ class DeviceUtils {
   }
 
   static void showFlushBar(BuildContext context, String msg, {
-    int animationDuration = 750,
+    int duration = 1500,
     
   }) {
     if (context.mounted) {
       Flushbar(
         message: msg,
-        duration: const Duration(milliseconds: 1500),
-        animationDuration: Duration(milliseconds: animationDuration),
+        duration: Duration(milliseconds: duration),
+        animationDuration: const Duration(milliseconds: 500),
         flushbarPosition: FlushbarPosition.BOTTOM,
         margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
         borderRadius: BorderRadius.circular(36),

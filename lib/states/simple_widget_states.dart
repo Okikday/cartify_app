@@ -10,10 +10,8 @@ class SimpleWidgetStates extends ChangeNotifier{
   final ScrollController homeBodyScrollController = ScrollController();
 
   //home page
-  late BuildContext homeSearchBarContext;
+
   //late FocusNode homeSearchBarFocusNode;
-  late AnimationController searchBodyAnimController;
-  late bool isSearchBodyVisible = false;
 
   //Orders page
   bool isOrdersBottomBarBuyNowVisible = true;
