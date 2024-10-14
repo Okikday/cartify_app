@@ -4,7 +4,6 @@ import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/utils/device_utils.dart';
-import 'package:cartify/views/page_elements/loading_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -44,6 +43,7 @@ class _AccountDetailsState extends ConsumerState<AccountDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: Column(
         children: [
           const SizedBox(height: kToolbarHeight),
@@ -76,28 +76,18 @@ class _AccountDetailsState extends ConsumerState<AccountDetails> {
             child: Row(
               children: [
                 Container(
+                  clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        offset: Offset(4, 4),
                         color: CartifyColors.premiumGold.withOpacity(0.5),
                         blurRadius: 6,
-                        spreadRadius: 1,
-                      ),
-                      BoxShadow(
-                        offset: Offset(-4, -4),
-                        color: CartifyColors.royalBlue.withOpacity(0.3),
-                        blurRadius: 6,
-                        spreadRadius: 1,
+                        spreadRadius: 4,
                       ),
                     ],
                   ),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: CartifyColors.lightGray,
-                    child: userImage == null ? Image.asset("assets/images/user.png") : CachedNetworkImage(imageUrl: userImage!, ),
-                  ),
+                  child: userImage == null ? Image.asset("assets/images/user.png") : CachedNetworkImage(imageUrl: userImage!, fit: BoxFit.cover, ),
                 ),
                 const SizedBox(
                   width: 24,

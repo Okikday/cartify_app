@@ -12,6 +12,7 @@ class VerifyCode extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      extendBody: true,
       body: SafeArea(
         child: Column(
           children: [

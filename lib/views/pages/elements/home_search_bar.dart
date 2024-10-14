@@ -25,7 +25,6 @@ class _HomeSearchBarState extends ConsumerState<HomeSearchBar> {
   bool isBottomBuyNowVisible = false;
 
   void assignVals() {
-    simpleWidgetRef = ref.watch(simpleWidgetProvider);
     isDarkMode = DeviceUtils.isDarkMode(context);
     color = isDarkMode == true ? CartifyColors.lightGray : CartifyColors.onyxBlack;
   }

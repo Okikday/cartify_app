@@ -77,6 +77,7 @@ class DeviceUtils {
 
   static void showFlushBar(BuildContext context, String msg, {
     int duration = 1500,
+    FlushbarPosition position = FlushbarPosition.BOTTOM,
     
   }) {
     if (context.mounted) {
@@ -84,7 +85,7 @@ class DeviceUtils {
         message: msg,
         duration: Duration(milliseconds: duration),
         animationDuration: const Duration(milliseconds: 500),
-        flushbarPosition: FlushbarPosition.BOTTOM,
+        flushbarPosition: position,
         margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
         borderRadius: BorderRadius.circular(36),
         backgroundColor: Colors.black.withOpacity(0.9),

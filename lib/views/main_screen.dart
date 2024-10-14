@@ -48,46 +48,53 @@ class _MainScreenState extends ConsumerState<MainScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     ref.read(simpleWidgetProvider).mainScreenContext = context;
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (currentIndex == 0) {
-          DateTime now = DateTime.now();
-
-          if (lastBackPressTime == null || now.difference(lastBackPressTime!) > const Duration(milliseconds: 2500)) {
-            lastBackPressTime = now;
-            DeviceUtils.showFlushBar(context, "Repeat action to exit!");
+    DeviceUtils.setFullScreen(false);
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (currentIndex == 0) {
+            DateTime now = DateTime.now();
+      
+            if (lastBackPressTime == null || now.difference(lastBackPressTime!) > const Duration(milliseconds: 2500)) {
+              lastBackPressTime = now;
+              DeviceUtils.showFlushBar(context, "Repeat action to exit!");
+            } else {
+              SystemNavigator.pop();
+            }
           } else {
-            SystemNavigator.pop();
+            setState(() => tabController.index = currentIndex = 0);
           }
-        } else {
-          setState(() => tabController.index = currentIndex = 0);
-        }
-      },
-      child: Scaffold(
-        bottomNavigationBar: BottomNavBar(
-          currentIndex: currentIndex,
-          onTap: (index) {
-            setState(() => tabController.index = currentIndex = index);
-          },
+        },
+        child: Scaffold(
+        extendBody: true,
+          bottomNavigationBar: BottomNavBar(
+            currentIndex: currentIndex,
+            onTap: (index) {
+              setState(() => tabController.index = currentIndex = index);
+            },
+          ),
+          body: TabBarView(physics: const NeverScrollableScrollPhysics(), controller: tabController, children: const [
+            Tab(
+              child: Home(),
+            ),
+            Tab(
+              child: Categories(),
+            ),
+            Tab(
+              child: Orders(),
+            ),
+            Tab(
+              child: Wishlists(),
+            ),
+            Tab(
+              child: Account(),
+            ),
+          ]),
         ),
-        body: TabBarView(physics: const NeverScrollableScrollPhysics(), controller: tabController, children: const [
-          Tab(
-            child: Home(),
-          ),
-          Tab(
-            child: Categories(),
-          ),
-          Tab(
-            child: Orders(),
-          ),
-          Tab(
-            child: Wishlists(),
-          ),
-          Tab(
-            child: Account(),
-          ),
-        ]),
       ),
     );
   }

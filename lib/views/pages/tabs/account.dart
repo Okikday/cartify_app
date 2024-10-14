@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cartify/app.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
@@ -164,7 +165,7 @@ class _AccountState extends ConsumerState<Account> {
                       if(context.mounted) DeviceUtils.pushMaterialPage(context, const UpdateRole());
                     }else{
                     if(context.mounted) DeviceUtils.pushMaterialPage(context, const VendorMode());
-                    if(context.mounted) DeviceUtils.showFlushBar(context, "Vendor Mode 🙋");
+                    if(context.mounted) DeviceUtils.showFlushBar(context, "Vendor Mode 🙋", position: FlushbarPosition.TOP);
                     }
                   },
                   borderRadius: BorderRadius.circular(16),

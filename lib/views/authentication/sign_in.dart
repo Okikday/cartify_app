@@ -38,6 +38,7 @@ class SignIn extends StatelessWidget {
       },
       
       child: Scaffold(
+      extendBody: true,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(

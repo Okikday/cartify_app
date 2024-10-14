@@ -64,6 +64,7 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
         }
       },
       child: Scaffold(
+      extendBody: true,
         appBar: AppBar(
           centerTitle: true,
           title: ConstantWidgets.text(context, "Upload your product", fontSize: 14, fontWeight: FontWeight.bold),
@@ -324,7 +325,7 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
     required double discountPercentage,
   }) async {
     if (productName.length < 2) {
-      if (context.mounted) DeviceUtils.showFlushBar(context, "Kindly input the valid Product Name");
+      if (context.mounted) DeviceUtils.showFlushBar(context, "Input a valid Product Name");
       return false;
     }
 

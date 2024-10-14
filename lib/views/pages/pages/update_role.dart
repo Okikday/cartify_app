@@ -22,6 +22,7 @@ class _UpdateRoleState extends ConsumerState<UpdateRole> {
   @override
   Widget build(BuildContext context,) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(centerTitle: true, title: const Text("Turn a vendor"),),
 
       body: SingleChildScrollView(

@@ -34,7 +34,8 @@ class _SettingsState extends ConsumerState<Settings> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     
-    return Scaffold( 
+    return Scaffold(
+      extendBody: true, 
       body: Column(
         children: [
           Container(
