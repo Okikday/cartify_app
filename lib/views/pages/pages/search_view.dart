@@ -18,7 +18,7 @@ class _SearchViewState extends ConsumerState<SearchView> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      extendBody: true,
+      
       body: Column(
         children: [
           const SizedBox(height: kToolbarHeight,),

@@ -8,7 +8,6 @@ class Messages extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      extendBody: true,
       appBar: AppBar(title: ConstantWidgets.text(context, "Messages"), centerTitle: true,),
 
       body: Column(

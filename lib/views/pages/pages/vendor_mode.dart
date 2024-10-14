@@ -31,7 +31,7 @@ class _VendorModeState extends ConsumerState<VendorMode> {
   Widget build(BuildContext context) {
     final bool isDarkMode = DeviceUtils.isDarkMode(context);
     return Scaffold(
-      extendBody: true,
+      
       bottomNavigationBar: NavigationBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         indicatorColor: CartifyColors.premiumGold,

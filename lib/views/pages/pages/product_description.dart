@@ -50,7 +50,7 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
         }
       },
       child: Scaffold(
-      extendBody: true,
+      
           body: NestedScrollView(
         headerSliverBuilder: (context, isScrolled) => [
           SliverAppBar(

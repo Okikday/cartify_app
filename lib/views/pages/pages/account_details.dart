@@ -43,7 +43,6 @@ class _AccountDetailsState extends ConsumerState<AccountDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
       body: Column(
         children: [
           const SizedBox(height: kToolbarHeight),

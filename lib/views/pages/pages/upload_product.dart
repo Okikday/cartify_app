@@ -64,7 +64,7 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
         }
       },
       child: Scaffold(
-      extendBody: true,
+      
         appBar: AppBar(
           centerTitle: true,
           title: ConstantWidgets.text(context, "Upload your product", fontSize: 14, fontWeight: FontWeight.bold),

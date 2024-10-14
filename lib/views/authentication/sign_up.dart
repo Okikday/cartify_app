@@ -14,7 +14,6 @@ class SignUp extends StatelessWidget {
      final double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      extendBody: true,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

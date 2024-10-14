@@ -8,7 +8,6 @@ class Notifications extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      extendBody: true,
       appBar: AppBar(title: ConstantWidgets.text(context, "Notifications"), centerTitle: true,),
 
       body: Column(

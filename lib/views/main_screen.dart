@@ -70,7 +70,6 @@ class _MainScreenState extends ConsumerState<MainScreen> with SingleTickerProvid
           }
         },
         child: Scaffold(
-        extendBody: true,
           bottomNavigationBar: BottomNavBar(
             currentIndex: currentIndex,
             onTap: (index) {

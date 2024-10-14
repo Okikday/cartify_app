@@ -23,7 +23,6 @@ class CheckUser extends ConsumerWidget {
     checkUser();
 
     return const Scaffold(
-      extendBody: true,
       body: Center(child: SizedBox(
         width: 200,
         height: 200,
