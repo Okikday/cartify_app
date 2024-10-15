@@ -1,6 +1,5 @@
 import 'package:cartify/app.dart';
 import 'package:cartify/data/hive_data/hive_data.dart';
-import 'package:cartify/models/products_models.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +13,6 @@ void main() async{
   await HiveData.initHiveData();
   final hiveData = HiveData();
   await hiveData.initSecureHiveData();
-  Hive.registerAdapter(ProductModelAdapter());
   
   runApp(const ProviderScope(child: App()));
   

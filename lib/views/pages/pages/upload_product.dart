@@ -7,6 +7,7 @@ import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
 import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/data/storage/product_data.dart';
+import 'package:cartify/services/vendor_services.dart';
 import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/utils/utilities_functions.dart';
@@ -18,7 +19,6 @@ import 'package:cartify/views/pages/pages/update_role.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cartify/services/product_services.dart';
 
 class UploadProduct extends ConsumerStatefulWidget {
   const UploadProduct({super.key});
@@ -357,7 +357,7 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
     if (context.mounted) showDialog(context: context, builder: (context) => const LoadingDialog());
 
     // Call the upload function
-    final String? result = await productServices.uploadProduct(
+    final String? result = await vendorServices.uploadProduct(
       productName: productName,
       imageFiles: imageFiles,
       productDetails: productDetails,

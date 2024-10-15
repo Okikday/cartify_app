@@ -1,46 +1,19 @@
 import 'package:hive/hive.dart';
 
-part 'products_models.g.dart';
-
 @HiveType(typeId: 0)
 class ProductModel {
-  @HiveField(0)
   final String id;
-
-  @HiveField(1)
   final String vendor;
-
-  @HiveField(2)
   final String name;
-
-  @HiveField(3)
   final List<dynamic> photo;
-
-  @HiveField(4)
   final String productDetails;
-
-  @HiveField(5)
   final String category;
-
-  @HiveField(6)
   final double price;
-
-  @HiveField(7)
   final int units;
-
-  @HiveField(8)
   final double discountPercentage;
-
-  @HiveField(9)
   final DateTime createdAt;
-
-  @HiveField(10)
   final DateTime updatedAt;
-
-  @HiveField(11)
   final Map<String, dynamic> averageRating;
-
-  @HiveField(12)
   final double? discountedPrice;
 
   ProductModel({

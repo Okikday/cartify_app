@@ -7,13 +7,15 @@ class LoadingShimmer extends StatelessWidget {
   final double height;
   final Widget? child;
   final ShimmerDirection shimmerDirection;
+  final double borderRadius;
 
   const LoadingShimmer({
     super.key,
     required this.width,
     this.height = 225,
     this.child,
-    this.shimmerDirection = ShimmerDirection.ltr
+    this.shimmerDirection = ShimmerDirection.ltr,
+    this.borderRadius = 24
   });
 
   @override
@@ -29,7 +31,7 @@ class LoadingShimmer extends StatelessWidget {
           width: width,
           height: height,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(borderRadius),
             color: Colors.white,
           ),
           child: child,

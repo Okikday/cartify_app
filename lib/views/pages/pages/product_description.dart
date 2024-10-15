@@ -94,7 +94,7 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
             ),
           ),
         ],
-        body: ProductDescBody(exampleProduct: widget.product, id: widget.product.id, productName: widget.product.name, price: "N${Formatter.parsePrice(widget.product.price,)}", description: widget.product.productDetails),
+        body: ProductDescBody(id: widget.product.id, productName: widget.product.name, price: "N${Formatter.parsePrice(widget.product.price,)}", description: widget.product.productDetails),
       )),
     );
   }
@@ -143,9 +143,6 @@ class DescriptionTitle extends StatelessWidget {
                 onPressed: () {},
                 icon: const Icon(
                   Icons.more_vert_rounded,
-                  shadows: [
-                    Shadow(color: Colors.black, blurRadius: 4),
-                  ],
                 ))
           ],
         ),
@@ -155,12 +152,11 @@ class DescriptionTitle extends StatelessWidget {
 }
 
 class ProductDescBody extends StatelessWidget {
-  final ProductModel exampleProduct;
   final String id;
   final String productName;
   final String price;
   final String description;
-  const ProductDescBody({super.key, required this.exampleProduct, required this.id, required this.productName, required this.price, required this.description});
+  const ProductDescBody({super.key, required this.id, required this.productName, required this.price, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +176,7 @@ class ProductDescBody extends StatelessWidget {
                 IconButton(
                   onPressed: () async{
                     final ProductData productData = ProductData();
-                    await productData.addToWishlists(exampleProduct);
+                    await productData.addToWishlists(id);
 
                   },
                   icon: const Icon(Icons.bookmark_add_outlined),

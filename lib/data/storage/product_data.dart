@@ -16,17 +16,17 @@ class ProductData {
   ];
 
   
-  Future<List<ProductModel>> getWishlists() async => await hiveData.getData(key: "wishlistsData") ?? [];
+  Future<List<String>> getWishlists() async => await hiveData.getData(key: "wishlistsData") ?? [];
 
-  Future<void> addToWishlists(ProductModel wishlist) async {
-    final List<ProductModel> wishlists = await getWishlists();
-    wishlists.add(wishlist);
+  Future<void> addToWishlists(String wishlistID) async {
+    final List<String> wishlists = await getWishlists();
+    wishlists.add(wishlistID);
     await hiveData.setData(key: "wishlistsData", value: wishlists);
   }
 
   Future<void> removeFromWishlists(String id) async {
-  final List<ProductModel> wishlists = await getWishlists();
-  wishlists.removeWhere((product) => product.id == id);
+  final List<String> wishlists = await getWishlists();
+  wishlists.removeWhere((product) => product == id);
   await hiveData.setData(key: "wishlistsData", value: wishlists);
 }
 

@@ -4,6 +4,7 @@ import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/page_elements/loading_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -86,7 +87,14 @@ class _AccountDetailsState extends ConsumerState<AccountDetails> {
                       ),
                     ],
                   ),
-                  child: userImage == null ? Image.asset("assets/images/user.png") : CachedNetworkImage(imageUrl: userImage!, fit: BoxFit.cover, ),
+                  child: userImage == null ? Image.asset("assets/images/user.png") : CachedNetworkImage(imageUrl: userImage!,  placeholder: (context, url) => const Center(
+                      child: LoadingShimmer(
+                        width: 160,
+                        height: 160,
+                        borderRadius: 80,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => const SizedBox(width: 160, height: 160, child: Center(child: Icon(Icons.error))), fit: BoxFit.cover, ),
                 ),
                 const SizedBox(
                   width: 24,

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,7 +66,7 @@ class _LoadingDialogState extends ConsumerState<LoadingDialog> {
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
       setState(() {
-        msgIndex = Random().nextInt(loadingMessages.length - 1);
+        msgIndex == loadingMessages.length-1 ? msgIndex = 0 : msgIndex++;
       });
     });
   }
@@ -99,7 +98,10 @@ class _LoadingDialogState extends ConsumerState<LoadingDialog> {
                     child: CircularProgressIndicator(strokeCap: StrokeCap.round),
                   ),
                   const SizedBox(height: 16),
-                  ConstantWidgets.text(context, loadingMessages[msgIndex]),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                    child: ConstantWidgets.text(context, loadingMessages[msgIndex]),
+                  ),
                 ],
               ),
             ),

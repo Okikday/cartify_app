@@ -2,6 +2,7 @@ import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/pages/notifications.dart';
+import 'package:cartify/views/pages/pages/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,7 +36,7 @@ class TopBar extends ConsumerWidget {
                   child: IconButton(
                     color: Colors.white,
                     icon: const Icon(Icons.search),
-                    onPressed: () {},
+                    onPressed: () => DeviceUtils.pushMaterialPage(context, const SearchView()),
                   ),
                 ),
               ),
