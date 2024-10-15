@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 const String getProductsUrl = "/api/v1/products";
+const String reviewProductUrl = "/api/v1/reviews";
 
 final productsFutureProvider = FutureProvider<List<ProductModel>?>((ref) async {
   final products = await productServices.getProducts();
@@ -69,13 +70,47 @@ class ProductServices {
   }
 
   // Function to Review a product
-  Future<String?> reviewProduct() async {
+  Future<String?> reviewProduct({
+    required String productId,
+    required int rating,
+    String review = ""
+
+  }) async {
     final String? apiKey = await userData.getUserApiKey();
     if (apiKey == null) {
       if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Account error. Try logging out and in again");
     }
 
+    try{
+      final Response response = await dio.post(
+      "$apiURL$reviewProductUrl/$productId",
+      data: {
+        'rating': rating,
+        "review": review,
+      },
+      options: Options(
+        validateStatus: (status) => true,
+          headers: {
+            'Authorization': "Bearer $apiKey",
+            "Content-Type": "application/json",
+          },
+      ),
+      queryParameters: {
+        "productId": productId,
+      },
+    );
 
+    if(response.statusCode == 201 || response.data['success'] == true){
+      return null;
+    }else{
+      debugPrint(response.statusMessage);
+      return "Unable to add review";
+    }
+
+    }catch(e){
+      debugPrint(e.toString());
+      return "Unable to add review";
+    }
   }
 
 }
