@@ -9,6 +9,7 @@ import 'package:cartify/utils/formatter.dart';
 import 'package:cartify/views/pages/elements/custom_overlay.dart';
 import 'package:cartify/views/pages/elements/image_interactive_view.dart';
 import 'package:cartify/views/pages/elements/product_for_you.dart';
+import 'package:cartify/views/pages/tabs/wishlists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -151,7 +152,7 @@ class DescriptionTitle extends StatelessWidget {
   }
 }
 
-class ProductDescBody extends StatelessWidget {
+class ProductDescBody extends ConsumerWidget {
   final String id;
   final String productName;
   final String price;
@@ -159,7 +160,7 @@ class ProductDescBody extends StatelessWidget {
   const ProductDescBody({super.key, required this.id, required this.productName, required this.price, required this.description});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Column(
@@ -177,7 +178,8 @@ class ProductDescBody extends StatelessWidget {
                   onPressed: () async{
                     final ProductData productData = ProductData();
                     await productData.addToWishlists(id);
-
+                    ref.refresh(wishlistProductFutureProvider); // Refresh data after removal
+                    if(context.mounted) DeviceUtils.showFlushBar(context, "Added product to Wishlists");
                   },
                   icon: const Icon(Icons.bookmark_add_outlined),
                   style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.royalBlue.withAlpha(50))),

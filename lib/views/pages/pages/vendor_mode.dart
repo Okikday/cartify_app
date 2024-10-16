@@ -1,6 +1,7 @@
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/views/pages/tabs/manage_products_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,46 +50,6 @@ class _VendorModeState extends ConsumerState<VendorMode> {
   }
 }
 
-class ManageProductsView extends ConsumerStatefulWidget {
-  const ManageProductsView({super.key});
-
-  @override
-  ConsumerState<ManageProductsView> createState() => _ManageProductsViewState();
-}
-
-class _ManageProductsViewState extends ConsumerState<ManageProductsView> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: kToolbarHeight + 24, child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Row(children: [
-          const BackButton(),
-          Expanded(child: ConstantWidgets.text(context, "Manage Products", fontSize: 16, fontWeight: FontWeight.bold)),
-        ],),),),
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.only(top: 6, bottom: 24),
-            itemCount: 20,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text('Product ${index + 1}'),
-                subtitle: Text('Product details here'),
-                trailing: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    
-                  },
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class RequestsView extends ConsumerStatefulWidget {
   const RequestsView({super.key});

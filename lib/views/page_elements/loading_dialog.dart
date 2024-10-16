@@ -100,7 +100,7 @@ class _LoadingDialogState extends ConsumerState<LoadingDialog> {
                   const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                    child: ConstantWidgets.text(context, loadingMessages[msgIndex]),
+                    child: ConstantWidgets.text(context, widget.msg ?? loadingMessages[msgIndex]),
                   ),
                 ],
               ),

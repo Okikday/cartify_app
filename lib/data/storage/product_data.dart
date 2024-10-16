@@ -1,5 +1,7 @@
+import 'package:cartify/app.dart';
 import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/models/products_models.dart';
+import 'package:cartify/utils/device_utils.dart';
 
 final ProductData productData = ProductData();
 
@@ -22,7 +24,11 @@ class ProductData {
 
   Future<void> addToWishlists(String wishlistID) async {
     final List<String> wishlists = await getWishlists();
-    wishlists.add(wishlistID);
+    if(!wishlists.contains(wishlistID)){
+      wishlists.add(wishlistID);
+    }else{
+      DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Product was already added");
+    }
     await hiveData.setData(key: "wishlistsData", value: wishlists);
   }
 

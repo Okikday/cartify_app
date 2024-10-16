@@ -3,6 +3,7 @@ import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/data/storage/product_data.dart';
 import 'package:cartify/models/products_models.dart';
 import 'package:cartify/services/product_services.dart';
+import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/elements/wishlist_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +34,7 @@ class Wishlists extends ConsumerStatefulWidget {
 
 class _WishlistsState extends ConsumerState<Wishlists> {
   final ProductData productData = ProductData();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,7 @@ class _WishlistsState extends ConsumerState<Wishlists> {
       displacement: 20,
       onRefresh: () async {
         ref.refresh(wishlistProductFutureProvider);
+        DeviceUtils.showFlushBar(context, "Refreshed Wishlists");
       },
       child: Column(
         children: [
@@ -73,7 +76,8 @@ class _WishlistsState extends ConsumerState<Wishlists> {
                         product: wishlists[index],
                         onRemove: () {
                           productData.removeFromWishlists(wishlists[index].id);
-                          ref.refresh(wishlistProductFutureProvider); // Refresh data after removal
+                          ref.refresh(wishlistProductFutureProvider);
+                          DeviceUtils.showFlushBar(context, "Removing product from Wishlist");
                         },
                       ),
                     ),

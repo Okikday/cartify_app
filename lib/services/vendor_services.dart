@@ -184,6 +184,9 @@ class VendorServices {
       if (response.statusCode == 200) {
         final List<dynamic> productsList = response.data['payload']['product'];
 
+        print(productsList.toString());
+
+
         // Convert the response to a list of ProductModel
         return productsList.map((json) => ProductModel.fromMap(json)).toList();
       } else if (response.statusCode == 404) {
@@ -191,7 +194,7 @@ class VendorServices {
         if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "You haven't uploaded any product yet");
         return null;
       } else {
-        debugPrint("Error fetching products: ${response.statusMessage}");
+        debugPrint("Error fetching products: ${response.data}");
         if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Failed to load vendor products!");
         return null;
       }
