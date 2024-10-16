@@ -50,22 +50,26 @@ class ProductServices {
   }
 
   // Function to fetch a product using its ID
-  Future<dynamic> getProductByID({required String id}) async {
+  Future<ProductModel?> getProductByID({required String id}) async {
+    
     try {
       final Response response = await dio.get("$apiURL$getProductsUrl/$id");
 
       if (response.statusCode == 200) {
-        final ProductModel product = response.data['payload'];
-        // ignore: avoid_print
-        print("Gotten product: $product");
+        ProductModel productAsModel = ProductModel.fromMap(response.data['payload']['product'][0]);
 
-        return product;
+        return productAsModel;
       } else if (response.statusCode == 400) {
-        return "Invalid Product ID";
+        if(globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Invalid Product ID");
+        return null;
+      }else{
+         if(globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Invalid Product ID");
+        return null;
       }
     } catch (e) {
       debugPrint("Error fetching product: $e");
-      return "Error loading product";
+      if(globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Error loading product");
+        return null;
     }
   }
 

@@ -7,6 +7,23 @@ import 'package:cartify/views/pages/elements/wishlist_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final wishlistProductFutureProvider = FutureProvider<List<ProductModel>>((ref) async {
+  final ProductData productData = ProductData();
+  List<ProductModel> tempWishlist = [];
+  try {
+    List<String> getWishlists = await productData.getWishlists();
+    for (String id in getWishlists) {
+      final product = await productServices.getProductByID(id: id);
+      if (product is ProductModel) {
+        tempWishlist.add(product);
+      }
+    }
+  } catch (e) {
+    print("Error loading wishlists: $e");
+  }
+  return tempWishlist;
+});
+
 class Wishlists extends ConsumerStatefulWidget {
   const Wishlists({super.key});
 
@@ -16,44 +33,15 @@ class Wishlists extends ConsumerStatefulWidget {
 
 class _WishlistsState extends ConsumerState<Wishlists> {
   final ProductData productData = ProductData();
-  List<String> getWishlists = [];
-  List<ProductModel> wishlists = [];
-
-  @override
-  void initState() {
-    super.initState();
-    loadWishlists();
-  }
-
-  loadWishlists() async {
-    getWishlists = await productData.getWishlists();
-    wishlists = [];
-
-    for (int i = 0; i < getWishlists.length; i++) {
-      final dynamic product = await productServices.getProductByID(id: getWishlists[i]);
-      if (product is ProductModel) {
-        wishlists[i] = product;
-        setState(() => wishlists);
-      }else{
-        break;
-      }
-    }
-
-    //setState(() => wishlists);
-  }
 
   @override
   Widget build(BuildContext context) {
+    final wishlistAsyncValue = ref.watch(wishlistProductFutureProvider);
+
     return RefreshIndicator(
       displacement: 20,
-      onRefresh: () async{
-        getWishlists = await productData.getWishlists();
-        if(getWishlists.length == wishlists.length){
-
-        }else{
-          loadWishlists();
-        }
-        
+      onRefresh: () async {
+        ref.refresh(wishlistProductFutureProvider);
       },
       child: Column(
         children: [
@@ -70,35 +58,52 @@ class _WishlistsState extends ConsumerState<Wishlists> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           Expanded(
-              child: wishlists.isEmpty
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.bookmark_outline_sharp,
-                          size: 64,
-                          color: CartifyColors.lightGray,
-                        ),
-                        ConstantWidgets.text(
-                          context,
-                          "No wishlist added yet",
-                        ),
-                      ],
-                    )
-                  : ListView.builder(
-                      itemCount: wishlists.length,
-                      itemBuilder: (context, index) => Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: WishlistCard(
-                            product: wishlists[index],
-                          )))),
+            child: wishlistAsyncValue.when(
+              data: (wishlists) {
+                if (wishlists.isEmpty) {
+                  return _buildEmptyWishlist(context);
+                } else {
+                  return ListView.builder(
+                    itemCount: wishlists.length,
+                    itemBuilder: (context, index) => Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      child: WishlistCard(
+                        product: wishlists[index],
+                        onRemove: () {
+                          productData.removeFromWishlists(wishlists[index].id);
+                          ref.refresh(wishlistProductFutureProvider); // Refresh data after removal
+                        },
+                      ),
+                    ),
+                  );
+                }
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stackTrace) => const Center(child: Text("Error loading wishlist")),
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildEmptyWishlist(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Icon(
+          Icons.bookmark_outline_sharp,
+          size: 64,
+          color: CartifyColors.lightGray,
+        ),
+        ConstantWidgets.text(
+          context,
+          "No wishlist added yet",
+        ),
+      ],
     );
   }
 }

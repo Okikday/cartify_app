@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
+import 'package:cartify/data/storage/product_data.dart';
 import 'package:cartify/models/products_models.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/utils/formatter.dart';
@@ -10,10 +11,14 @@ import 'package:flutter/material.dart';
 
 class WishlistCard extends StatelessWidget {
   final ProductModel product;
+  final void Function()? onRemove;
+  final void Function()? onAddToCart;
 
   const WishlistCard({
     super.key,
     required this.product,
+    this.onRemove,
+    this.onAddToCart,
   });
 
   @override
@@ -51,7 +56,7 @@ class WishlistCard extends StatelessWidget {
                             width: 30,
                             height: 30,
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: onRemove,
                               icon: Icon(
                                 Icons.cancel_sharp,
                                 color: isDarkMode ? CartifyColors.lightGray : Colors.white,

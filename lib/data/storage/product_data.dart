@@ -1,6 +1,8 @@
 import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/models/products_models.dart';
 
+final ProductData productData = ProductData();
+
 class ProductData {
   final HiveData hiveData = HiveData();
 

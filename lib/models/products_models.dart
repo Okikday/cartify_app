@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 @HiveType(typeId: 0)
 class ProductModel {
   final String id;
-  final String vendor;
+  final dynamic vendor;
   final String name;
   final List<dynamic> photo;
   final String productDetails;

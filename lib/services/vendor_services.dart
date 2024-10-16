@@ -13,6 +13,7 @@ import 'package:flutter/foundation.dart';
 const String uploadProductUrl = "/api/v1/vendor/product";
 const String updateProductUrl = "/api/v1/vendor/product";
 const String getVendorProductUrl = "/api/v1/vendor/products";
+const String deleteProductsUrl = "/api/v1/vendor/products";
 
 final VendorServices vendorServices = VendorServices();
 
@@ -147,10 +148,11 @@ class VendorServices {
 
   // Function to fetch vendor products
   Future<List<ProductModel>?> getVendorProducts() async {
-    try {
-      final String? role = await hiveData.getData(key: 'role');
+    
+    final String? role = await hiveData.getData(key: 'role');
       if (role == null) {
         if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "User role not set. Try logging in again");
+        return null;
       }
 
       if (role.toString() != "vendor") {
@@ -158,12 +160,17 @@ class VendorServices {
           DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const UpdateRole());
           DeviceUtils.showFlushBar(globalNavKey.currentContext!, "You are not yet a vendor. Try updating role");
         }
+        return null;
       }
 
       final String? apiKey = await userData.getUserApiKey();
       if (apiKey == null) {
         if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Account error. Try logging out and in again");
+        return null;
       }
+      
+    try {
+      
 
       final Response response = await dio.get(
         "$apiURL$getVendorProductUrl",
@@ -193,5 +200,41 @@ class VendorServices {
       if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Failed to load vendor products!");
       return null;
     }
+  }
+
+
+  Future<String?> deleteVendorProducts({
+    required String productId,
+  }) async{
+    final String? role = await hiveData.getData(key: 'role');
+      if (role == null) return "User role not set. Try logging in again";
+
+      if (role.toString() != "vendor") {
+        if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const UpdateRole());
+        return "You are not yet a vendor. Try updating role";
+      }
+
+      final String? apiKey = await userData.getUserApiKey();
+      if (apiKey == null) return "Account error. Try logging out and in again";
+
+      try{
+        final Response response = await dio.delete(
+          "$apiURL$deleteProductsUrl",
+          data: {
+            "productIds": [productId]
+          },
+          options: Options(
+          validateStatus: (status) => true,
+          headers: {
+          'Authorization': "Bearer $apiKey",
+        }),
+
+        );
+
+        return null; //Adjust
+
+      }catch(e){
+        return e.toString();
+      }
   }
 }
