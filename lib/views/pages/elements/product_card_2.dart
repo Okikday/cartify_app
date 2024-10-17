@@ -28,7 +28,7 @@ class ProductCard2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.sizeOf(context).width;
     final bool isDarkMode = DeviceUtils.isDarkMode(context);
     return CustomBox(
         onTap: onTap,

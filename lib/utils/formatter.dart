@@ -1,11 +1,6 @@
 import 'package:intl/intl.dart';
 
 class Formatter {
-  void parseDateTime(String dateString) {
-    DateTime dateTime = DateTime.parse(dateString);
-
-    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(dateTime);
-  }
 
   static String parsePrice(double price, {bool asInt = false}) {
     if (price > 0) {
@@ -29,4 +24,26 @@ class Formatter {
     }
     return "0";
   }
+
+  static String timeAgo(DateTime dateTime) {
+  final now = DateTime.now();
+  final difference = now.difference(dateTime);
+
+  if (difference.inDays > 1) {
+    return '${difference.inDays} days ago';
+  } else if (difference.inDays == 1) {
+    return '1 day ago';
+  } else if (difference.inHours > 1) {
+    return '${difference.inHours} hours ago';
+  } else if (difference.inHours == 1) {
+    return '1 hour ago';
+  } else if (difference.inMinutes > 1) {
+    return '${difference.inMinutes} minutes ago';
+  } else if (difference.inMinutes == 1) {
+    return '1 minute ago';
+  } else {
+    return 'just now';
+  }
+}
+
 }

@@ -87,7 +87,7 @@ class _AccountDetailsState extends ConsumerState<AccountDetails> {
                       ),
                     ],
                   ),
-                  child: userImage == null ? Image.asset("assets/images/user.png") : CachedNetworkImage(imageUrl: userImage!,  placeholder: (context, url) => const Center(
+                  child: userImage == null ? Image.asset("assets/images/user.png", width: 160, height: 160,) : CachedNetworkImage(imageUrl: userImage!,  placeholder: (context, url) => const Center(
                       child: LoadingShimmer(
                         width: 160,
                         height: 160,

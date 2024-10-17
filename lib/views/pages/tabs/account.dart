@@ -32,9 +32,6 @@ class _AccountState extends ConsumerState<Account> {
         if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const Settings());
       }
     },
-    {'icon' : Icons.upload, 'title': "Upload product", 'onTap':(){
-      if (globalNavKey.currentContext!.mounted) DeviceUtils.pushMaterialPage(globalNavKey.currentContext!, const UploadProduct());
-    }},
     {'icon': Icons.key, 'title': "Change Password"},
 
     {'icon': Icons.help_outline_rounded, 'title': "Support"},
@@ -54,8 +51,8 @@ class _AccountState extends ConsumerState<Account> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.sizeOf(context).width;
+    final double screenHeight = MediaQuery.sizeOf(context).height;
     final bool isDarkMode = DeviceUtils.isDarkMode(context);
     return SizedBox(
       child: Column(

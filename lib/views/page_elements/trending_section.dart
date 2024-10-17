@@ -42,7 +42,7 @@ class _TrendingSectionState extends ConsumerState<TrendingSection> {
   Widget build(BuildContext context) {
     gridType = ref.watch(layoutSettingProvider).trendingGridType;
     final productsAsyncValue = ref.watch(productsFutureProvider);
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.sizeOf(context).width;
 
     return productsAsyncValue.when(
       data: (products) => gridType == 1

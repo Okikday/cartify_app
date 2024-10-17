@@ -9,6 +9,8 @@ class CustomDropdownMenu extends StatelessWidget {
   final Widget? trailingIcon;
   final double? width;
   final TextStyle? textStyle;
+  final TextEditingController? controller;
+  final dynamic initialSelection;
   const CustomDropdownMenu({
     super.key,
     this.hintText = "Dropdown",
@@ -19,6 +21,8 @@ class CustomDropdownMenu extends StatelessWidget {
     this.trailingIcon,
     this.width,
     this.textStyle,
+    this.controller,
+    this.initialSelection,
   });
 
   @override
@@ -31,6 +35,8 @@ class CustomDropdownMenu extends StatelessWidget {
       ).toList();
 
     return DropdownMenu(
+      initialSelection: initialSelection,
+      controller: controller,
       onSelected: (value) => onselected == null ? (){} : onselected!(value),
       hintText: hintText,
       label: menuLabel,

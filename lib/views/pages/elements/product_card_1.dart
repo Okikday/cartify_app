@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
+import 'package:cartify/common/widgets/custom_popup_menu_button.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/page_elements/loading_shimmer.dart';
 import 'package:cartify/views/pages/elements/custom_box.dart';
@@ -29,7 +30,7 @@ class ProductCard1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.sizeOf(context).width;
     final bool isDarkMode = DeviceUtils.isDarkMode(context);
     return CustomBox(
       onTap: onTap,
@@ -153,13 +154,10 @@ class ProductCard1 extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.more_horiz_rounded,
-                      color: isDarkMode ? Colors.white : Colors.black,
-                    ),
-                  ),
+                  CircleAvatar(
+              backgroundColor: CartifyColors.royalBlue.withAlpha(20),
+              child: CustomPopupMenuButton(icon: const Icon(Icons.more_horiz_rounded), onSelected: (value){}, onopened: (){}, oncanceled: (){}, menuItems: const ["Cancel","Add to Wishlists", "Hide suggestion", "Report product"],))
+          
                   // SizedBox(
                   //   width: 36, height: 36,
                   //   child: IconButton(

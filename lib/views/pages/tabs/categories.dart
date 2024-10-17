@@ -17,7 +17,7 @@ class Categories extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: ConstantWidgets.text(
               context,
-              "What would you like to shop?",
+              "What would you like to shop? (non-functional)",
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),

@@ -54,7 +54,7 @@ class _UploadProductState extends ConsumerState<UploadProduct> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.sizeOf(context).width;
 
     return PopScope(
       canPop: ref.watch(simpleWidgetProvider).isProductInfoImageTabVisible == false,

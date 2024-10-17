@@ -20,7 +20,7 @@ class ProductForYou extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery.sizeOf(context).width;
     final productsAsyncValue = ref.watch(productsFutureProvider);
 
     return SizedBox(
@@ -62,6 +62,7 @@ class ProductForYou extends ConsumerWidget {
                       first: index == 0,
                       last: index == products.length - 1,
                       onClick: () {
+                        print("Vendor: ${product.vendor}");
                         DeviceUtils.pushMaterialPage(
                             context,
                             ProductDescription(product: product,)

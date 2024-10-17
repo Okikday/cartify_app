@@ -1,6 +1,8 @@
 import 'package:cartify/utils/device_utils.dart';
 import 'package:flutter/material.dart';
 
+
+// Automatically disposes focusNode and Controller
 class CustomTextfield extends StatefulWidget {
   final String? hint; // Shows hint
   final String? label; // Shows Label
@@ -122,10 +124,10 @@ class _CustomTextfieldState extends State<CustomTextfield> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.screenWidth != null
-          ? MediaQuery.of(context).size.width * (widget.screenWidth! / 100)
+          ? MediaQuery.sizeOf(context).width * (widget.screenWidth! / 100)
           : widget.pixelWidth,
       height: widget.screenHeight != null
-          ? MediaQuery.of(context).size.height * (widget.screenHeight! / 100)
+          ? MediaQuery.sizeOf(context).height * (widget.screenHeight! / 100)
           : widget.pixelHeight,
       child: TextField(
         enabled: widget.isEnabled,

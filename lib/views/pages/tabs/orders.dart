@@ -25,7 +25,7 @@ class _OrdersState extends ConsumerState<Orders> with WidgetsBindingObserver{
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.sizeOf(context).width;
     final bool isDarkMode = DeviceUtils.isDarkMode(context);
     
     return Column(
@@ -37,7 +37,7 @@ class _OrdersState extends ConsumerState<Orders> with WidgetsBindingObserver{
             alignment: Alignment.centerLeft,
             child: ConstantWidgets.text(
               context,
-              "Cart",
+              "Orders(non-functional)",
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),

@@ -42,8 +42,8 @@ class _ImageInteractiveViewState extends ConsumerState<ImageInteractiveView> wit
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenHeight = MediaQuery.sizeOf(context).height;
 
     return AnimatedBuilder(
         animation: scaleAnim,

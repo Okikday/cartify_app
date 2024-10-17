@@ -2,6 +2,8 @@ import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/tabs/manage_products_view.dart';
+import 'package:cartify/views/pages/tabs/orders_requests_view.dart';
+import 'package:cartify/views/pages/tabs/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,7 +19,7 @@ class _VendorModeState extends ConsumerState<VendorMode> {
 
   static const List<Widget> _pages = <Widget>[
     ManageProductsView(),
-    RequestsView(),
+    OrderRequestsView(),
     ProfileView(),
     EarningsView(),
   ];
@@ -51,89 +53,6 @@ class _VendorModeState extends ConsumerState<VendorMode> {
 }
 
 
-class RequestsView extends ConsumerStatefulWidget {
-  const RequestsView({super.key});
-
-  @override
-  ConsumerState<RequestsView> createState() => _RequestsViewState();
-}
-
-class _RequestsViewState extends ConsumerState<RequestsView> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: kToolbarHeight + 24, child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Row(children: [
-          const BackButton(),
-          Expanded(child: ConstantWidgets.text(context, "Requests", fontSize: 16, fontWeight: FontWeight.bold)),
-        ],),),),
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.only(top: 6, bottom: 24),
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text('Request ${index + 1}'),
-                subtitle: Text('Request details here'),
-                trailing: ElevatedButton(
-                  child: Text('Approve'),
-                  onPressed: () {
-                    
-                  },
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ProfileView extends ConsumerStatefulWidget {
-  const ProfileView({super.key});
-
-  @override
-  ConsumerState<ProfileView> createState() => _ProfileViewState();
-}
-
-class _ProfileViewState extends ConsumerState<ProfileView> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: kToolbarHeight + 24, child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Row(children: [
-          const BackButton(),
-          Expanded(child: ConstantWidgets.text(context, "Profile", fontSize: 16, fontWeight: FontWeight.bold)),
-        ],),),),
-        Expanded(
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 16),
-                CircleAvatar(radius: 50, child: Icon(Icons.person, size: 50)),
-                const SizedBox(height: 16),
-                Text('Vendor Name', style: TextStyle(fontSize: 24)),
-                const SizedBox(height: 8),
-                Text('Vendor Email', style: TextStyle(fontSize: 18)),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  child: Text('Edit Profile'),
-                  onPressed: () {
-                    
-                  },
-                ),
-              ],
-            ),
-          ),),
-      ],
-    );
-  }
-}
 
 class EarningsView extends ConsumerStatefulWidget {
   const EarningsView({super.key});
@@ -156,12 +75,13 @@ class _EarningsViewState extends ConsumerState<EarningsView> {
         Expanded(
           child: Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 16),
-                Text('Total Earnings: \$2000', style: TextStyle(fontSize: 24)),
+                ConstantWidgets.text(context, 'Total Earnings: N120,000', fontSize: 24),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  child: Text('Withdraw'),
+                  child: const Text('Withdraw'),
                   onPressed: () {
                     
                   },

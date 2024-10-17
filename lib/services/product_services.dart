@@ -12,7 +12,7 @@ const String getProductsUrl = "/api/v1/products";
 const String reviewProductUrl = "/api/v1/reviews";
 
 final productsFutureProvider = FutureProvider<List<ProductModel>?>((ref) async {
-  final products = await productServices.getProducts();
+  final products = await productServices.getProducts(page: 1);
   if (products != null) products.shuffle();
   return products;
 });
@@ -24,9 +24,19 @@ class ProductServices {
   final UserData userData = UserData();
 
   // Function to fetch products
-  Future<List<ProductModel>?> getProducts() async {
+  Future<List<ProductModel>?> getProducts({
+    int page = 1,
+    int limit = 10,
+  }) async {
     try {
-      final Response response = await dio.get("$apiURL$getProductsUrl");
+      final Response response = await dio.get(
+        "$apiURL$getProductsUrl",
+        queryParameters: {
+          'version': "v1",
+          'page': page,
+          'limit': limit,
+        }
+        );
 
       if (response.statusCode == 200) {
         final List<dynamic> productsList = response.data['payload']['product'];

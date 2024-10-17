@@ -73,7 +73,7 @@ class _LoadingDialogState extends ConsumerState<LoadingDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.sizeOf(context).width;
 
     return PopScope(
       canPop: widget.canPop,

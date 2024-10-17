@@ -23,7 +23,7 @@ class WishlistCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.sizeOf(context).width;
     final bool isDarkMode = DeviceUtils.isDarkMode(context);
     return CustomBox(
       child: Padding(
@@ -34,12 +34,14 @@ class WishlistCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 500),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: CachedNetworkImage(imageUrl: product.photo.first),
-                    )),
+                Center(
+                  child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: screenWidth * 0.35, maxHeight: 500),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(imageUrl: product.photo.first),
+                      )),
+                ),
                 const SizedBox(
                   width: 8,
                 ),
@@ -48,24 +50,26 @@ class WishlistCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ConstantWidgets.text(context, product.name, fontSize: 14, fontWeight: FontWeight.bold),
-                          SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: IconButton(
-                              onPressed: onRemove,
-                              icon: Icon(
-                                Icons.cancel_sharp,
-                                color: isDarkMode ? CartifyColors.lightGray : Colors.white,
-                                size: 28,
+                      ClipRRect(
+                        child: Row(
+                          children: [
+                            Expanded(child: ConstantWidgets.text(context, product.name, fontSize: 13, fontWeight: FontWeight.bold, )),
+                        
+                            SizedBox(
+                              width: 48,
+                              height: 30,
+                              child: IconButton(
+                                onPressed: onRemove,
+                                icon: Icon(
+                                  Icons.cancel_sharp,
+                                  color: isDarkMode ? CartifyColors.lightGray : Colors.white,
+                                  size: 28,
+                                ),
+                                padding: const EdgeInsets.only(left: 20, right: 6),
                               ),
-                              padding: const EdgeInsets.all(0),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 8,

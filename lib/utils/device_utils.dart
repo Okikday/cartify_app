@@ -103,7 +103,7 @@ class DeviceUtils {
   }
 
     static bool isDeviceBig(BuildContext context) {
-    if (MediaQuery.of(context).size.width > 500) {
+    if (MediaQuery.sizeOf(context).width > 500) {
       debugPrint("Device is big");
       return true;
     }

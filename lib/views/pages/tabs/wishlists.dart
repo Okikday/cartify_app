@@ -21,6 +21,7 @@ final wishlistProductFutureProvider = FutureProvider<List<ProductModel>>((ref) a
     }
   } catch (e) {
     print("Error loading wishlists: $e");
+    tempWishlist = [];
   }
   return tempWishlist;
 });
@@ -35,6 +36,14 @@ class Wishlists extends ConsumerStatefulWidget {
 class _WishlistsState extends ConsumerState<Wishlists> {
   final ProductData productData = ProductData();
   
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      ref.refresh(wishlistProductFutureProvider);
+      DeviceUtils.showFlushBar(context, "Checking for wishlists updates");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
+import 'package:cartify/common/widgets/custom_popup_menu_button.dart';
 import 'package:cartify/data/storage/product_data.dart';
 import 'package:cartify/models/products_models.dart';
 import 'package:cartify/states/simple_widget_states.dart';
@@ -41,7 +44,7 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenHeight = MediaQuery.sizeOf(context).height;
 
     return PopScope(
       canPop: ref.watch(simpleWidgetProvider).isProductInfoImageTabVisible == false,
@@ -95,7 +98,7 @@ class _ProductDescriptionState extends ConsumerState<ProductDescription> with Si
             ),
           ),
         ],
-        body: ProductDescBody(id: widget.product.id, productName: widget.product.name, price: "N${Formatter.parsePrice(widget.product.price,)}", description: widget.product.productDetails),
+        body: ProductDescBody(product: widget.product,),
       )),
     );
   }
@@ -138,13 +141,9 @@ class DescriptionTitle extends StatelessWidget {
                       ],
               ),
             ),
-            IconButton(
-                style: ButtonStyle(
-                    shadowColor: const WidgetStatePropertyAll(Colors.black), backgroundColor: WidgetStatePropertyAll(CartifyColors.royalBlue.withAlpha(50))),
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.more_vert_rounded,
-                ))
+            CircleAvatar(
+              backgroundColor: CartifyColors.royalBlue.withAlpha(50),
+              child: CustomPopupMenuButton(onSelected: (value){}, onopened: (){}, oncanceled: (){}, menuItems: const ["Contact vendor", "Flag Product", "Report an issue"],))
           ],
         ),
       ),
@@ -153,11 +152,8 @@ class DescriptionTitle extends StatelessWidget {
 }
 
 class ProductDescBody extends ConsumerWidget {
-  final String id;
-  final String productName;
-  final String price;
-  final String description;
-  const ProductDescBody({super.key, required this.id, required this.productName, required this.price, required this.description});
+  final ProductModel product;
+  const ProductDescBody({super.key, required this.product});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -173,11 +169,11 @@ class ProductDescBody extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ConstantWidgets.text(context, productName, fontSize: 16, fontWeight: FontWeight.bold),
+                ConstantWidgets.text(context, product.name, fontSize: 16, fontWeight: FontWeight.bold),
                 IconButton(
                   onPressed: () async{
                     final ProductData productData = ProductData();
-                    await productData.addToWishlists(id);
+                    await productData.addToWishlists(product.id);
                     ref.refresh(wishlistProductFutureProvider); // Refresh data after removal
                     if(context.mounted) DeviceUtils.showFlushBar(context, "Added product to Wishlists");
                   },
@@ -195,14 +191,34 @@ class ProductDescBody extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ConstantWidgets.text(context, price, color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+                ConstantWidgets.text(context, Formatter.parsePrice(product.price, asInt: true), color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+                Visibility(
+                  visible: product.discountPercentage > 0,
+                  child: Container(
+                    clipBehavior: Clip.hardEdge,
+                    padding: const EdgeInsets.fromLTRB(8, 4, 6, 2),
+                    margin: const EdgeInsets.only(top: 4),
+                    decoration: BoxDecoration(
+                        color: CartifyColors.royalBlue.withAlpha(75),
+                        borderRadius: BorderRadius.circular(4),
+                        boxShadow: [BoxShadow(blurRadius: 2, offset: const Offset(2, 2), color: Colors.black.withOpacity(0.5))]),
+                    child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4), child: ConstantWidgets.text(context, "${product.discountPercentage.truncate()}% off", color: Colors.white)),
+                  ),
+                ),
                 ConstantWidgets.text(context, "Rate Product",
                     textDecoration: TextDecoration.underline, color: CartifyColors.premiumGold, decorationColor: CartifyColors.premiumGold)
               ],
             ),
           ),
           const SizedBox(
-            height: 24,
+            height: 16,
+          ),
+          Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: ConstantWidgets.text(context, product.category, fonstStyle: FontStyle.italic, color: CartifyColors.lightGray, darkColor: CartifyColors.battleshipGrey),
+          ),
+          const SizedBox(
+            height: 12,
           ),
           Divider(
             color: CartifyColors.premiumGold.withAlpha(50),
@@ -223,7 +239,7 @@ class ProductDescBody extends ConsumerWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
-                child: ConstantWidgets.text(context, description),
+                child: ConstantWidgets.text(context, product.productDetails),
               ),
               const SizedBox(
                 height: 16,
@@ -243,14 +259,32 @@ class ProductDescBody extends ConsumerWidget {
                 ),
               ),
               const SizedBox(
-                height: 24,
+                height: 16,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: Row(children: [
+                  CircleAvatar(radius: 20,child: CachedNetworkImage(imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgpPwM5mR5lNHGg9vxaoUgcnAIBOJumsoJrg&s",),),
+                  const SizedBox(width: 8,),
+                  ConstantWidgets.text(context, "Vendor name", fontSize: 16, fontWeight: FontWeight.bold),
+                ],),
+              ),
+              const SizedBox(
+                height: 16,
               ),
               const ReviewBox(),
               const SizedBox(
+                height: 16,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: ConstantWidgets.text(context, "Uploaded ${Formatter.timeAgo(product.createdAt)}"),
+              ),
+              const SizedBox(
                 height: 24,
               ),
-              const ProductForYou(
-                topic: "Similar items",
+              ProductForYou(
+                topic: "Similar items on ${product.category.toLowerCase()}",
               )
             ],
           ),
@@ -267,7 +301,7 @@ class ReviewBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.sizeOf(context).width;
     return Container(
       color: CartifyColors.royalBlue.withAlpha(50),
       padding: const EdgeInsets.all(16),
