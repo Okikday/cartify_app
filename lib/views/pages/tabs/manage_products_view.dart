@@ -119,7 +119,7 @@ class _ManageProductsViewState extends ConsumerState<ManageProductsView> {
                                 },
                               )
                             : Center(
-                                child: ConstantWidgets.text(context, "No Products found for current vendor!"),
+                                child: ConstantWidgets.text(context, "No Products found for current vendor!. If you think this is a mistake, Try logging in again."),
                               ),
                         error: (obj, error) => Center(
                               child: Column(
@@ -128,7 +128,7 @@ class _ManageProductsViewState extends ConsumerState<ManageProductsView> {
                                     Icons.error,
                                     size: 64,
                                   ),
-                                  ConstantWidgets.text(context, "Unable to load vendor Products")
+                                  ConstantWidgets.text(context, "Unable to load vendor Products. Try connecting or logging in again")
                                 ],
                               ),
                             ),

@@ -264,7 +264,7 @@ class ProductDescBody extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: Row(children: [
-                  CircleAvatar(radius: 20,child: CachedNetworkImage(imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgpPwM5mR5lNHGg9vxaoUgcnAIBOJumsoJrg&s",),),
+                  CircleAvatar(radius: 20,child: CachedNetworkImage(imageUrl: product.vendor['photo'].toString(),),),
                   const SizedBox(width: 8,),
                   ConstantWidgets.text(context, "Vendor name", fontSize: 16, fontWeight: FontWeight.bold),
                 ],),
