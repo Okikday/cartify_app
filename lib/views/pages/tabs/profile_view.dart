@@ -1,5 +1,4 @@
 import 'package:cartify/common/constants/constant_widgets.dart';
-import 'package:cartify/views/pages/pages/vendor_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,7 +33,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                 ConstantWidgets.text(context, "Vendor Email", fontSize: 16),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  child: Text('Edit Profile'),
+                  child: const Text('Edit Profile'),
                   onPressed: () {
                     
                   },

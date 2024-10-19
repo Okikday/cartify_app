@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
-import 'package:cartify/data/storage/product_data.dart';
 import 'package:cartify/models/products_models.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/utils/formatter.dart';

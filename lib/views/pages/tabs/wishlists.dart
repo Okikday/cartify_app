@@ -20,6 +20,7 @@ final wishlistProductFutureProvider = FutureProvider<List<ProductModel>>((ref) a
       }
     }
   } catch (e) {
+    // ignore: avoid_print
     print("Error loading wishlists: $e");
     tempWishlist = [];
   }
@@ -40,6 +41,7 @@ class _WishlistsState extends ConsumerState<Wishlists> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
+      // ignore: unused_result
       ref.refresh(wishlistProductFutureProvider);
       DeviceUtils.showFlushBar(context, "Checking for wishlists updates");
     });
@@ -52,6 +54,7 @@ class _WishlistsState extends ConsumerState<Wishlists> {
     return RefreshIndicator(
       displacement: 20,
       onRefresh: () async {
+        // ignore: unused_result
         ref.refresh(wishlistProductFutureProvider);
         DeviceUtils.showFlushBar(context, "Refreshed Wishlists");
       },
@@ -85,6 +88,7 @@ class _WishlistsState extends ConsumerState<Wishlists> {
                         product: wishlists[index],
                         onRemove: () {
                           productData.removeFromWishlists(wishlists[index].id);
+                          // ignore: unused_result
                           ref.refresh(wishlistProductFutureProvider);
                           DeviceUtils.showFlushBar(context, "Removing product from Wishlist");
                         },

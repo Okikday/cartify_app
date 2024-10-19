@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cartify/app.dart';
 import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/data/private_storage/user_data.dart';
@@ -40,7 +42,7 @@ class ProductServices {
 
       if (response.statusCode == 200) {
         final List<dynamic> productsList = response.data['payload']['product'];
-
+        log(productsList.toString());
         // Convert the response to a list of ProductModel
         return productsList.map((json) => ProductModel.fromMap(json)).toList();
       } else if (response.statusCode == 404) {

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 const String addProductToCartUrl = "/api/v1/carts";
 const String getUserCartsUrl = "/api/v1/carts";
+const String removeProductFromCartsUrl = "/api/v1/carts";
 
 
 class CartServices {
@@ -51,7 +52,7 @@ class CartServices {
     }
   }
 
-  Future<List<ProductModel>?> getUserCarts() async{
+  Future<List?> getUserCarts() async{
     final String? role = await hiveData.getData(key: 'role');
       if (role == null) {
         if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "User role not set. Try logging in again");
@@ -66,7 +67,7 @@ class CartServices {
 
     try{
       final Response response = await dio.get(
-      "$apiURL$addProductToCartUrl",
+      "$apiURL$getUserCartsUrl",
       options: Options(
         validateStatus: (status) => true,
         headers: {
@@ -75,21 +76,57 @@ class CartServices {
       ),
     );
 
-
     
-    if(response.statusCode == 200){
-      final List<dynamic> productsList = response.data['payload']['product'];
-
-        // Convert the response to a list of ProductModel
-        return productsList.map((json) => ProductModel.fromMap(json)).toList();
+    if(response.statusCode == 200 || response.data['success'] == true){
+      final productsList = response.data['payload']["0"]["products"];
+      
+        return productsList;
     }else if(response.statusCode == 404){
       debugPrint("No Products available");
         if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "User hasn't added product to Carts");
+        return null;
     }else{
       if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Unable to load cart");
+      return null;
     }
     }catch(e){
       if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, e.toString());
+      return null;
     }
+  }
+
+  Future<String?> removeProductFromCarts({
+    required String productId,
+  }) async{
+    final String? role = await hiveData.getData(key: 'role');
+      if (role == null) return "User role not set. Try logging in again";
+
+      final String? apiKey = await userData.getUserApiKey();
+      if (apiKey == null) return "Account error. Try logging out and in again";
+
+      try{
+        final Response response = await dio.delete(
+          "$apiURL$removeProductFromCartsUrl/$productId",
+          queryParameters: {
+            'version': "v1",
+            'productId': productId
+          },
+          options: Options(
+          validateStatus: (status) => true,
+          headers: {
+          'Authorization': "Bearer $apiKey",
+        }),
+
+        );
+
+        if(response.statusCode == 200 || response.data['success'] == true){
+          return null;
+        }else{
+          return "Error: ${response.data['message']}";
+        }
+
+      }catch(e){
+        return e.toString();
+      }
   }
 }

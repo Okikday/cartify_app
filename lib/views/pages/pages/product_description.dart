@@ -1,11 +1,14 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cartify/app.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
+import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/common/widgets/custom_popup_menu_button.dart';
 import 'package:cartify/data/storage/product_data.dart';
 import 'package:cartify/models/products_models.dart';
+import 'package:cartify/services/cart_services.dart';
 import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/utils/formatter.dart';
@@ -157,104 +160,60 @@ class ProductDescBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ConstantWidgets.text(context, product.name, fontSize: 16, fontWeight: FontWeight.bold),
-                IconButton(
-                  onPressed: () async{
-                    final ProductData productData = ProductData();
-                    await productData.addToWishlists(product.id);
-                    ref.refresh(wishlistProductFutureProvider); // Refresh data after removal
-                    if(context.mounted) DeviceUtils.showFlushBar(context, "Added product to Wishlists");
-                  },
-                  icon: const Icon(Icons.bookmark_add_outlined),
-                  style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.royalBlue.withAlpha(50))),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 28),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ConstantWidgets.text(context, Formatter.parsePrice(product.price, asInt: true), color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
-                Visibility(
-                  visible: product.discountPercentage > 0,
-                  child: Container(
-                    clipBehavior: Clip.hardEdge,
-                    padding: const EdgeInsets.fromLTRB(8, 4, 6, 2),
-                    margin: const EdgeInsets.only(top: 4),
-                    decoration: BoxDecoration(
-                        color: CartifyColors.royalBlue.withAlpha(75),
-                        borderRadius: BorderRadius.circular(4),
-                        boxShadow: [BoxShadow(blurRadius: 2, offset: const Offset(2, 2), color: Colors.black.withOpacity(0.5))]),
-                    child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4), child: ConstantWidgets.text(context, "${product.discountPercentage.truncate()}% off", color: Colors.white)),
-                  ),
-                ),
-                ConstantWidgets.text(context, "Rate Product",
-                    textDecoration: TextDecoration.underline, color: CartifyColors.premiumGold, decorationColor: CartifyColors.premiumGold)
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: ConstantWidgets.text(context, product.category, fonstStyle: FontStyle.italic, color: CartifyColors.lightGray, darkColor: CartifyColors.battleshipGrey),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          Divider(
-            color: CartifyColors.premiumGold.withAlpha(50),
-            thickness: 4,
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
+      clipBehavior: Clip.hardEdge,
+      children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
             children: [
+              const SizedBox(
+                height: 24,
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
-                child: ConstantWidgets.text(context, "Description", fontSize: 15, fontWeight: FontWeight.bold, color: CartifyColors.premiumGold),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ConstantWidgets.text(context, product.name, fontSize: 16, fontWeight: FontWeight.bold),
+                    IconButton(
+                      onPressed: () async{
+                        final ProductData productData = ProductData();
+                        await productData.addToWishlists(product.id);
+                        // ignore: unused_result
+                        ref.refresh(wishlistProductFutureProvider); // Refresh data after removal
+                        if(context.mounted) DeviceUtils.showFlushBar(context, "Added product to Wishlists");
+                      },
+                      icon: const Icon(Icons.bookmark_add_outlined),
+                      style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(CartifyColors.royalBlue.withAlpha(50))),
+                    )
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 12,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: ConstantWidgets.text(context, product.productDetails),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Column(
+                padding: const EdgeInsets.only(left: 16, right: 28),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    for (int i = 0; i < 4; i++)
-                      Row(
-                        children: [
-                          SizedBox(width: 125, child: ConstantWidgets.text(context, "property:", color: CartifyColors.lightGray)),
-                          ConstantWidgets.text(context, "value", color: CartifyColors.lightGray),
-                        ],
-                      )
+                    ConstantWidgets.text(context, Formatter.parsePrice(product.price, asInt: true), color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+                    Visibility(
+                      visible: product.discountPercentage > 0,
+                      child: Container(
+                        clipBehavior: Clip.hardEdge,
+                        padding: const EdgeInsets.fromLTRB(8, 4, 6, 2),
+                        margin: const EdgeInsets.only(top: 4),
+                        decoration: BoxDecoration(
+                            color: CartifyColors.royalBlue.withAlpha(75),
+                            borderRadius: BorderRadius.circular(4),
+                            boxShadow: [BoxShadow(blurRadius: 2, offset: const Offset(2, 2), color: Colors.black.withOpacity(0.5))]),
+                        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4), child: ConstantWidgets.text(context, "${product.discountPercentage.truncate()}% off", color: Colors.white)),
+                      ),
+                    ),
+                    ConstantWidgets.text(context, "Rate Product",
+                        textDecoration: TextDecoration.underline, color: CartifyColors.premiumGold, decorationColor: CartifyColors.premiumGold)
                   ],
                 ),
               ),
@@ -262,34 +221,106 @@ class ProductDescBody extends ConsumerWidget {
                 height: 16,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Row(children: [
-                  CircleAvatar(radius: 20,child: CachedNetworkImage(imageUrl: product.vendor['photo'].toString(),),),
-                  const SizedBox(width: 8,),
-                  ConstantWidgets.text(context, "Vendor name", fontSize: 16, fontWeight: FontWeight.bold),
-                ],),
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: ConstantWidgets.text(context, product.category, fonstStyle: FontStyle.italic, color: CartifyColors.lightGray, darkColor: CartifyColors.battleshipGrey),
               ),
               const SizedBox(
-                height: 16,
+                height: 12,
               ),
-              const ReviewBox(),
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: ConstantWidgets.text(context, "Uploaded ${Formatter.timeAgo(product.createdAt)}"),
+              Divider(
+                color: CartifyColors.premiumGold.withAlpha(50),
+                thickness: 4,
               ),
               const SizedBox(
-                height: 24,
+                height: 12,
               ),
-              ProductForYou(
-                topic: "Similar items on ${product.category.toLowerCase()}",
-              )
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: ConstantWidgets.text(context, "Description", fontSize: 15, fontWeight: FontWeight.bold, color: CartifyColors.premiumGold),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: ConstantWidgets.text(context, product.productDetails),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Column(
+                      children: [
+                        for (int i = 0; i < 4; i++)
+                          Row(
+                            children: [
+                              SizedBox(width: 125, child: ConstantWidgets.text(context, "property:", color: CartifyColors.lightGray)),
+                              ConstantWidgets.text(context, "value", color: CartifyColors.lightGray),
+                            ],
+                          )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Row(children: [
+                      CircleAvatar(radius: 20,child: CachedNetworkImage(imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgpPwM5mR5lNHGg9vxaoUgcnAIBOJumsoJrg&s",),),
+                      const SizedBox(width: 8,),
+                      ConstantWidgets.text(context, "Vendor name", fontSize: 16, fontWeight: FontWeight.bold),
+                    ],),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const ReviewBox(),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: ConstantWidgets.text(context, "Uploaded ${Formatter.timeAgo(product.createdAt)}"),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  ProductForYou(
+                    topic: "Similar items on ${product.category.toLowerCase()}",
+                  )
+                ],
+              ),
             ],
           ),
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: MediaQuery.paddingOf(context).bottom + 4,
+          left: 24,
+          right: 24,
+          child: Container(
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(color: Colors.white.withOpacity(0.25), offset: const Offset(2, 2), blurRadius: 4)
+            ]),
+            child: CustomElevatedButton(elevation: 64, label: "Add to Cart", textSize: 15, backgroundColor: CartifyColors.richBlack, borderRadius: 8, screenWidth: 90, onClick: () async{
+              if(context.mounted) Navigator.pop(context);
+              if(globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(context, "Adding to Cart...");
+              final String? outcomeAddToCart = await CartServices().addProductToCart(productId: product.id, quantity: 1);
+              if(outcomeAddToCart == null){
+                if(globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, "Successfully added to Cart");
+              }else{
+                if(globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, outcomeAddToCart.toString());
+              }
+              
+              
+              
+            },),
+          ))
+      ],
     );
   }
 }

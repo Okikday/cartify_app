@@ -62,7 +62,6 @@ class ProductForYou extends ConsumerWidget {
                       first: index == 0,
                       last: index == products.length - 1,
                       onClick: () {
-                        print("Vendor: ${product.vendor}");
                         DeviceUtils.pushMaterialPage(
                             context,
                             ProductDescription(product: product,)

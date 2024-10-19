@@ -1,34 +1,46 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_elevated_button.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
+import 'package:cartify/models/products_models.dart';
 import 'package:cartify/states/simple_widget_states.dart';
 import 'package:cartify/utils/device_utils.dart';
+import 'package:cartify/utils/formatter.dart';
+import 'package:cartify/views/page_elements/loading_shimmer.dart';
 import 'package:cartify/views/pages/elements/custom_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PurchaseCard extends ConsumerStatefulWidget {
+class CartCard extends ConsumerStatefulWidget {
   final double screenWidth;
-  const PurchaseCard({super.key, required this.screenWidth});
+  final Map product;
+  final void Function() onCancelButtonClick;
+  const CartCard({
+    super.key, 
+    required this.screenWidth,
+    required this.product,
+    required this.onCancelButtonClick,
+    
+  });
 
   @override
-  ConsumerState<PurchaseCard> createState() => _PurchaseCardState();
+  ConsumerState<CartCard> createState() => _CartCardState();
 }
 
-class _PurchaseCardState extends ConsumerState<PurchaseCard> {
+class _CartCardState extends ConsumerState<CartCard> {
   final FocusNode focusNode = FocusNode();
-  
+
   @override
   void initState() {
     super.initState();
     focusNode.addListener(listener);
   }
 
-  void listener(){
-    if(focusNode.hasFocus == true){
+  void listener() {
+    if (focusNode.hasFocus == true) {
       ref.refresh(simpleWidgetProvider).isOrdersBottomBarBuyNowVisible = false;
-    }else{
+    } else {
       ref.refresh(simpleWidgetProvider).isOrdersBottomBarBuyNowVisible = true;
     }
   }
@@ -39,7 +51,6 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
     //focusNode is automatically disposed by CustomTextField
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +68,17 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
                     constraints: BoxConstraints(maxWidth: widget.screenWidth * 0.35, maxHeight: 500),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.asset("assets/images/iphone_15_pm.jpg"),
+                      child: CachedNetworkImage(
+                    imageUrl: widget.product['photo'],
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Center(
+                      child: LoadingShimmer(
+                        width: 200,
+                        height: 200,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => SizedBox(width: widget.screenWidth * 0.35, height: widget.screenWidth, child: const Center(child: Icon(Icons.error))),
+                  ),
                     )),
                 const SizedBox(
                   width: 8,
@@ -70,12 +91,12 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ConstantWidgets.text(context, "iPhone 15 pro Max", fontSize: 14, fontWeight: FontWeight.bold),
+                          Expanded(child: ConstantWidgets.text(context, widget.product['name'], fontSize: 14, fontWeight: FontWeight.bold)),
                           SizedBox(
-                            width: 30,
+                            width: 40,
                             height: 30,
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: widget.onCancelButtonClick,
                               icon: Icon(
                                 Icons.cancel_sharp,
                                 color: isDarkMode ? CartifyColors.lightGray : Colors.white,
@@ -89,11 +110,12 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
                       const SizedBox(
                         height: 8,
                       ),
-                      ConstantWidgets.text(context, "Mobile phone", color: CartifyColors.royalBlue),
-                      ConstantWidgets.text(context, "#1,700,000", color: CartifyColors.premiumGold),
-                      Container(
-                        child: ConstantWidgets.text(context, "Descriptions"),
+                      ConstantWidgets.text(context, "category", color: CartifyColors.royalBlue),
+                      
+                      const SizedBox(
+                        height: 8,
                       ),
+                      ConstantWidgets.text(context, "Quantity:", color: CartifyColors.premiumGold),
                       const SizedBox(
                         height: 8,
                       ),
@@ -102,6 +124,7 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
                           IconButton(onPressed: () {}, icon: const Icon(Icons.remove_circle_outline_rounded)),
                           CustomTextfield(
                             focusNode: focusNode,
+                            isEnabled: false,
                             keyboardType: const TextInputType.numberWithOptions(),
                             backgroundColor: const Color.fromARGB(26, 211, 211, 211),
                             contentPadding: const EdgeInsets.all(2),
@@ -121,13 +144,13 @@ class _PurchaseCardState extends ConsumerState<PurchaseCard> {
                         height: 8,
                       ),
                       CustomElevatedButton(
-                        label: "Add to Cart",
+                        label: "Add to Orders",
                         borderRadius: 8,
                         textSize: 14,
                         side: BorderSide(width: 2, color: CartifyColors.aliceBlue.withAlpha(50)),
                         backgroundColor: CartifyColors.royalBlue,
                         onClick: () {
-                          DeviceUtils.showFlushBar(context, "Say hi");
+                          DeviceUtils.showFlushBar(context, "Can't add to Orders rn");
                         },
                       ),
                     ],

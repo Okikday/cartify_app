@@ -29,8 +29,17 @@ class _SearchViewState extends ConsumerState<SearchView> {
             ],
           ),
           Expanded(
-            child: Container(
-              child: Center(child: ConstantWidgets.text(context, "Input a text to search")),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ConstantWidgets.text(context, "Input a text to search"),
+                const SizedBox(height: 8,),
+                InkWell(
+                  child: ConstantWidgets.text(context, "Tap this", color: CartifyColors.lightGray),
+                  onTap: (){DeviceUtils.showFlushBar(context, "Double Tap to see a Trick 😉");},
+                  onDoubleTap: () => DeviceUtils.showFlushBar(context, "Lol, What trick were you expecting to see 💀"),
+                )
+              ],
             ),
           ),
         ],

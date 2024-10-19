@@ -72,7 +72,7 @@ class VerifyCode extends StatelessWidget {
             ),
 
             
-            Container(height: 45, color:  Colors.blue, child: Text("Box would be here"),),
+            Container(height: 45, color:  Colors.blue, child: const Text("Box would be here"),),
 
             SizedBox(
               height: screenHeight * 0.05,

@@ -1,4 +1,3 @@
-import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/data/test_data.dart';
 import 'package:cartify/services/product_services.dart';
 import 'package:cartify/services/test_api.dart';

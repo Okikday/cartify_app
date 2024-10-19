@@ -39,7 +39,6 @@ class UserServices {
       );
 
       if(response.statusCode == 200 && response.data['success'] == true){
-        response.toString();
         //hiveData.setData(key: 'role', value: 'vendor');
         return null;
       }else{

@@ -34,7 +34,7 @@ class BottomNavBar extends StatelessWidget {
           activeIcon: Icon(Icons.category),
         ),
         BottomNavigationBarItem(
-          icon: Icon(FluentIcons.cart_16_regular), label: "Orders", tooltip: "Orders tab",
+          icon: Icon(FluentIcons.cart_16_regular), label: "Carts", tooltip: "Carts tab",
           activeIcon: Icon(FluentIcons.cart_16_filled)
         ),
         BottomNavigationBarItem(

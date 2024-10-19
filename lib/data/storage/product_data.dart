@@ -1,6 +1,5 @@
 import 'package:cartify/app.dart';
 import 'package:cartify/data/hive_data/hive_data.dart';
-import 'package:cartify/models/products_models.dart';
 import 'package:cartify/utils/device_utils.dart';
 
 final ProductData productData = ProductData();

@@ -1,4 +1,3 @@
-import 'package:cartify/common/constants/constant_widgets.dart';
 import 'package:cartify/common/styles/colors.dart';
 import 'package:cartify/common/widgets/custom_textfield.dart';
 import 'package:cartify/states/simple_widget_states.dart';

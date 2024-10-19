@@ -46,6 +46,7 @@ class _ManageProductsViewState extends ConsumerState<ManageProductsView> {
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async {
+                // ignore: unused_result
                 ref.refresh(vendorProductsFutureProvider);
                 DeviceUtils.showFlushBar(context, "Refreshing vendor products");
               },
@@ -119,7 +120,7 @@ class _ManageProductsViewState extends ConsumerState<ManageProductsView> {
                                 },
                               )
                             : Center(
-                                child: ConstantWidgets.text(context, "No Products found for current vendor!. If you think this is a mistake, Try logging in again."),
+                                child: ConstantWidgets.text(align: TextAlign.center, context, "No Products found for current vendor!. If you think this is a mistake, Try logging in again."),
                               ),
                         error: (obj, error) => Center(
                               child: Column(

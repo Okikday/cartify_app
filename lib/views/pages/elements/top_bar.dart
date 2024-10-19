@@ -58,9 +58,9 @@ class TopBar extends ConsumerWidget {
                         top: 4,
                         right: 8,
                         child: CircleAvatar(
-                          child: ConstantWidgets.text(context, "1", fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),
                           backgroundColor: Colors.red,
                           radius: 8,
+                          child: ConstantWidgets.text(context, "1", fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),
                         ))
                   ],
                 ),

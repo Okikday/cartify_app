@@ -406,6 +406,7 @@ class _UpdateProductState extends ConsumerState<UpdateProduct> {
                           category: category,
                           units: units,
                           discountPercentage: discountPercentage);
+                      // ignore: unused_result
                       ref.refresh(vendorProductsFutureProvider);
                     }),
 
@@ -447,6 +448,7 @@ class _UpdateProductState extends ConsumerState<UpdateProduct> {
                                           } else {
                                             if (globalNavKey.currentContext!.mounted) DeviceUtils.showFlushBar(globalNavKey.currentContext!, outcome);
                                           }
+                                          // ignore: unused_result
                                           ref.refresh(vendorProductsFutureProvider);
                                         },
                                         child: ConstantWidgets.text(context, "Remove", color: Colors.red),

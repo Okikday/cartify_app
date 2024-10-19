@@ -6,9 +6,9 @@ import 'package:cartify/data/hive_data/hive_data.dart';
 import 'package:cartify/utils/device_utils.dart';
 import 'package:cartify/views/pages/elements/logout_dialog.dart';
 import 'package:cartify/views/pages/pages/account_details.dart';
+import 'package:cartify/views/pages/pages/messages.dart';
 import 'package:cartify/views/pages/pages/settings.dart';
 import 'package:cartify/views/pages/pages/update_role.dart';
-import 'package:cartify/views/pages/pages/upload_product.dart';
 import 'package:cartify/views/pages/pages/vendor_mode.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +103,9 @@ class _AccountState extends ConsumerState<Account> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
-                  onTap: (){},
+                  onTap: (){
+                    DeviceUtils.pushMaterialPage(context, const Messages());
+                  },
                   borderRadius: BorderRadius.circular(16),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
@@ -129,7 +131,7 @@ class _AccountState extends ConsumerState<Account> {
                   ),
                 ),
                 InkWell(
-                  onTap: (){ },
+                  onTap: () => DeviceUtils.showFlushBar(context, "Lol!"),
                   borderRadius: BorderRadius.circular(16),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),

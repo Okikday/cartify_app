@@ -8,7 +8,6 @@ import 'package:cartify/utils/formatter.dart';
 import 'package:cartify/views/page_elements/loading_shimmer.dart';
 import 'package:cartify/views/pages/elements/product_card_1.dart';
 import 'package:cartify/views/pages/elements/product_card_2.dart';
-import 'package:cartify/views/pages/elements/product_for_you.dart';
 import 'package:cartify/views/pages/pages/product_description.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
